@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+# CRIT spec pre-commit hook
+# Runs the unified test suite and blocks the commit if any MUST-level rule fails.
+# Generates a dated Markdown report in tests/reports/.
+
+set -e
+
+echo "=== CRIT pre-commit: running spec conformance tests ==="
+go run ./tests/cmd/crit-test --report tests/reports
+
+echo "=== CRIT pre-commit: validating samples schema ==="
+check-jsonschema --schemafile schemas/crit-samples-v0.1.0.schema.json tests/CRIT-samples.json
+
+echo ""
+echo "CRIT conformance tests passed."
