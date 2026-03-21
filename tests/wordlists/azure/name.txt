@@ -1,0 +1,14 @@
+myvm01
+prod-storage-account
+webapp-frontend
+sql-server-prod
+aks-prod-cluster
+keyvault-main
+redis-cache-01
+cosmosdb-prod
+eventhub-ns-01
+loadbalancer-public
+nsg-web-tier
+appgw-frontend
+funcapp-processor
+loganalytics-ws01

@@ -1,0 +1,10 @@
+rg-prod-eastus
+rg-staging-westeurope
+rg-dev-centralus
+my-resource-group
+contoso-production
+webapp-resources
+data-platform-rg
+network-rg-01
+security-monitoring
+aks-cluster-resources
