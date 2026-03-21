@@ -9,7 +9,7 @@
 <rfc
   xmlns:xi="http://www.w3.org/2001/XInclude"
   category="info"
-  docName="draft-vulnetix-crit-00"
+  docName="draft-vulnetix-crit-01"
   ipr="trust200902"
   submissionType="independent"
   xml:lang="en"
@@ -18,7 +18,7 @@
   <front>
     <title abbrev="CRIT">Cloud Resource Identifier Templates (CRIT)</title>
 
-    <seriesInfo name="Internet-Draft" value="draft-vulnetix-crit-00"/>
+    <seriesInfo name="Internet-Draft" value="draft-vulnetix-crit-01"/>
 
     <author fullname="Christopher Daniel Langton" initials="CD" surname="Langton">
       <organization>Vulnetix</organization>
