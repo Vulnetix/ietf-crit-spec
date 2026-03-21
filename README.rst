@@ -6,18 +6,9 @@ A machine-readable format for identifying cloud resources affected by known
 vulnerabilities.
 
 | **Specification:** ``draft-vulnetix-crit-01`` (Independent Submission, Informational)
-| **Read the spec:** `build/draft-vulnetix-crit-01.html <build/draft-vulnetix-crit-01.html>`_ (HTML) ·
-  `build/draft-vulnetix-crit-01.txt <build/draft-vulnetix-crit-01.txt>`_ (plain text)
+| **Read:** ``build/draft-vulnetix-crit-01.html`` -- **Edit:** ``drafts/draft-vulnetix-crit-01.xml``
 | **Author:** Christopher Daniel Langton, Vulnetix
 | **Status:** Active development
-
-.. note::
-
-   **Readers** -- the rendered specification lives in ``build/``.
-   Open ``build/draft-vulnetix-crit-01.html`` for the formatted version.
-
-   **Contributors** -- the editable XML source lives in ``drafts/``.
-   See `For IETF Spec Editors`_ below for build and PR instructions.
 
 
 Abstract
@@ -47,6 +38,11 @@ and the dictionary JSON Schema at build time -- no external files required.
 
 .. code-block:: bash
 
+   # Homebrew
+   brew install vulnetix/tap/crit-validate   # first time
+   brew upgrade crit-validate                # update
+
+   # Go
    go install github.com/Vulnetix/ietf-crit-spec/cmd/crit-validate@latest
 
 Then point it at a directory of CVE records:
