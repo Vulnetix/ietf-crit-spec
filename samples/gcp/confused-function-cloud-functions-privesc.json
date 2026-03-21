@@ -1,0 +1,50 @@
+{
+  "crit_version": "0.2.0",
+  "id": "e7f8a9b0-c1d2-3456-0123-567890123456",
+  "vuln_id": "TRA-2024-20",
+  "provider": "gcp",
+  "service": "cloud_functions",
+  "resource_type": "function",
+  "resource_lifecycle": "ephemeral",
+  "shared_responsibility": "shared",
+  "vex_status": "fixed",
+  "template": "//cloudfunctions.googleapis.com/projects/{project}/locations/{location}/functions/{function}",
+  "template_format": "gcp_resource_name",
+  "temporal": {
+    "vulnerability_introduced_date": "2018-07-24",
+    "vulnerability_introduced_date_estimated": true,
+    "vuln_published_date": "2024-07-22",
+    "provider_acknowledged_date": "2024-06-05",
+    "provider_fix_date": "2024-06-15"
+  },
+  "fix_propagation": "config_change",
+  "existing_deployments_remain_vulnerable": true,
+  "provider_fix_version": {
+    "version_type": "runtime_version",
+    "comparison": "date_gte",
+    "build_date": "2024-06-15",
+    "note": "GCP changed default Cloud Build service account behavior for new projects. Existing functions retain the over-privileged default. Customers must configure a custom service account for Cloud Build."
+  },
+  "remediation_actions": [
+    {
+      "sequence": 1,
+      "type": "config_change",
+      "title": "Configure custom Cloud Build service account for Cloud Functions",
+      "description": "1. Create a dedicated service account with minimal permissions:\n   gcloud iam service-accounts create cloudbuild-functions --display-name='Cloud Build for Functions'\n2. Grant only required roles (cloudfunctions.developer, storage.objectViewer).\n3. Update Cloud Functions to use the custom service account:\n   gcloud functions deploy {function} --build-service-account=cloudbuild-functions@{project}.iam.gserviceaccount.com\n4. Revoke the default Cloud Build service account's broad permissions.",
+      "auto_remediable": false,
+      "requires_downtime": false,
+      "stateful_impact": "none",
+      "compensating_control": false
+    }
+  ],
+  "detections": [
+    {
+      "provider": "gcp",
+      "service": "cloud_asset_inventory",
+      "query_language": "gcloud",
+      "query": "gcloud functions describe {function} --project={project} --region={location} --format='value(buildConfig.serviceAccount)' | grep -v 'cloudbuild.gserviceaccount.com'",
+      "detection_phase": "misconfiguration",
+      "description": "Checks that the Cloud Function's build service account is a custom service account rather than the default Cloud Build SA. Reverting to the default SA reopens the ConfusedFunction privilege escalation path."
+    }
+  ]
+}
