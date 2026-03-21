@@ -1,0 +1,5 @@
+.claude/
+tests/reports/
+tests/CRIT-samples.json
+crit-validate
+crit-test
