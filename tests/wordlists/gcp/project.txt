@@ -1,0 +1,10 @@
+my-project-123456
+prod-webapp-789012
+staging-env-345678
+data-pipeline-prod
+ml-training-dev
+gke-platform-prod
+security-tools-456
+analytics-warehouse
+iot-backend-prod
+internal-tools-789
