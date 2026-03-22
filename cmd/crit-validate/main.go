@@ -73,8 +73,7 @@ type ProviderMetadata struct {
 // ---------------------------------------------------------------------------
 
 type CRITRecord struct {
-	CritVersion                         string              `json:"crit_version"`
-	ID                                  string              `json:"id"`
+	VectorString                        string              `json:"vectorString"`
 	VulnID                              string              `json:"vuln_id"`
 	Provider                            string              `json:"provider"`
 	Service                             string              `json:"service"`
@@ -141,11 +140,8 @@ type Detection struct {
 }
 
 type ProviderAdvisory struct {
-	AdvisoryID         *string  `json:"advisory_id,omitempty"`
-	AdvisoryURL        *string  `json:"advisory_url,omitempty"`
-	ProviderSeverity   *string  `json:"provider_severity,omitempty"`
-	ProviderCVSSScore  *float64 `json:"provider_cvss_score,omitempty"`
-	ProviderCVSSVector *string  `json:"provider_cvss_vector,omitempty"`
+	AdvisoryID  *string `json:"advisory_id,omitempty"`
+	AdvisoryURL *string `json:"advisory_url,omitempty"`
 }
 
 // ---------------------------------------------------------------------------
@@ -924,7 +920,83 @@ func escapeMarkdown(s string) string {
 // Main
 // ---------------------------------------------------------------------------
 
+func runConvert(args []string) {
+	fs := flag.NewFlagSet("convert", flag.ExitOnError)
+	fromJSON := fs.String("from-json", "", "CRIT sample JSON file → vector string")
+	fromVector := fs.String("from-vector", "", "CRIT vector string → expanded JSON")
+	fs.Parse(args)
+
+	switch {
+	case *fromJSON != "":
+		data, err := os.ReadFile(*fromJSON)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error reading %s: %v\n", *fromJSON, err)
+			os.Exit(1)
+		}
+		var rec CRITRecord
+		if err := json.Unmarshal(data, &rec); err != nil {
+			fmt.Fprintf(os.Stderr, "Error parsing JSON: %v\n", err)
+			os.Exit(1)
+		}
+		pubEpoch := dateToEpoch(rec.Temporal.VulnPublishedDate)
+		var saEpoch int64
+		if rec.Temporal.ServiceAvailableDate != nil {
+			saEpoch = dateToEpoch(*rec.Temporal.ServiceAvailableDate)
+		}
+		v := critspec.CRITVector{
+			CRITVersion:    "0.2.0",
+			Provider:       rec.Provider,
+			VEXStatus:      rec.VexStatus,
+			FixPropagation: rec.FixPropagation,
+			SharedResp:     rec.SharedResponsibility,
+			Lifecycle:      rec.ResourceLifecycle,
+			ExistingVuln:   rec.ExistingDeploymentsRemainVulnerable,
+			VulnPublished:  pubEpoch,
+			ServiceAvail:   saEpoch,
+			VulnID:         rec.VulnID,
+			Service:        rec.Service,
+			ResourceType:   rec.ResourceType,
+		}
+		vec, err := critspec.ComputeVector(v)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error computing vector: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Println(vec)
+
+	case *fromVector != "":
+		parsed, warnings, err := critspec.ParseVector(*fromVector)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error parsing vector: %v\n", err)
+			os.Exit(1)
+		}
+		for _, w := range warnings {
+			fmt.Fprintf(os.Stderr, "warning: %s\n", w.Message)
+		}
+		out, _ := json.MarshalIndent(parsed, "", "  ")
+		fmt.Println(string(out))
+
+	default:
+		fmt.Fprintln(os.Stderr, "Error: specify --from-json or --from-vector")
+		fs.Usage()
+		os.Exit(1)
+	}
+}
+
+func dateToEpoch(date string) int64 {
+	t, err := time.Parse("2006-01-02", date)
+	if err != nil {
+		return 0
+	}
+	return t.Unix()
+}
+
 func main() {
+	if len(os.Args) > 1 && os.Args[1] == "convert" {
+		runConvert(os.Args[2:])
+		return
+	}
+
 	dataDir := flag.String("data", "", "Directory containing CVE JSON files (required)")
 	dictPath := flag.String("dictionary", "", "Custom dictionary file or directory of dictionary JSON files")
 	reportDir := flag.String("report", "", "Write dated Markdown report to this directory")

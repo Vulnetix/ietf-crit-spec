@@ -67,6 +67,10 @@ test-spec:
 test-validate-samples:
     check-jsonschema --schemafile schemas/crit-samples-v0.1.0.schema.json tests/CRIT-samples.json
 
+# Validate hand-authored CRIT record samples against the record schema
+test-validate-records:
+    check-jsonschema --schemafile schemas/crit-record-v0.2.0.schema.json samples/**/*.json
+
 # Validate CVE+CRIT data files against CVEListv5 format and CRIT spec rules
 test-cve-crit:
     go run ./cmd/crit-validate --data data --report tests/reports
@@ -75,8 +79,8 @@ test-cve-crit:
 test-clean:
     rm -rf tests/reports
 
-# Run full test suite: clean reports, run spec tests, validate schema, validate CVE data
-test: test-clean test-spec test-validate-samples test-cve-crit
+# Run full test suite: clean reports, run spec tests, validate schemas, validate CVE data
+test: test-clean test-spec test-validate-samples test-validate-records test-cve-crit
 
 # Download CVE records from cve.org and inject Vulnetix ADP container with x_crit data from samples
 fetch-cve-data:
