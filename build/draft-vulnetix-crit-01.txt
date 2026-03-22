@@ -9,7 +9,7 @@ Expires: 22 September 2026
 
 
                Cloud Resource Identifier Templates (CRIT)
-                         draft-vulnetix-crit-00
+                         draft-vulnetix-crit-01
 
 Abstract
 
@@ -75,37 +75,37 @@ Table of Contents
      1.1.  The Cloud-Shaped Hole in the Vulnerability Ecosystem  . .   4
      1.2.  The Cloud Resource Identity Problem . . . . . . . . . . .   4
      1.3.  The CSPM Consumer Problem . . . . . . . . . . . . . . . .   5
-     1.4.  The Absent Standard . . . . . . . . . . . . . . . . . . .   6
-     1.5.  Value Propositions  . . . . . . . . . . . . . . . . . . .   7
-     1.6.  Requirements Language . . . . . . . . . . . . . . . . . .   8
-   2.  Scope and Relationship to Provider Schemas  . . . . . . . . .   8
-   3.  The CRIT Variable System  . . . . . . . . . . . . . . . . . .   9
-     3.1.  Overview  . . . . . . . . . . . . . . . . . . . . . . . .   9
-     3.2.  Slot Syntax . . . . . . . . . . . . . . . . . . . . . . .   9
-     3.3.  The Four Slot States  . . . . . . . . . . . . . . . . . .   9
-       3.3.1.  Named Variable  . . . . . . . . . . . . . . . . . . .   9
-       3.3.2.  Wildcard  . . . . . . . . . . . . . . . . . . . . . .   9
-       3.3.3.  Empty . . . . . . . . . . . . . . . . . . . . . . . .  10
-       3.3.4.  Hardcoded . . . . . . . . . . . . . . . . . . . . . .  10
-     3.4.  Slot State Selection Rules  . . . . . . . . . . . . . . .  10
-   4.  CRIT Record Schema  . . . . . . . . . . . . . . . . . . . . .  11
-     4.1.  Envelope and Identity . . . . . . . . . . . . . . . . . .  11
-       4.1.1.  Natural Key and Uniqueness  . . . . . . . . . . . . .  12
-     4.2.  Resource Template . . . . . . . . . . . . . . . . . . . .  13
-     4.3.  Temporal Fields and Exposure Window . . . . . . . . . . .  13
-     4.4.  Fix Propagation and Remediation Actions . . . . . . . . .  15
-       4.4.1.  Resource Lifecycle  . . . . . . . . . . . . . . . . .  15
-       4.4.2.  Shared Responsibility . . . . . . . . . . . . . . . .  15
-       4.4.3.  Fix Propagation . . . . . . . . . . . . . . . . . . .  16
-       4.4.4.  Remediation Actions . . . . . . . . . . . . . . . . .  18
-     4.5.  Provider Fix Version  . . . . . . . . . . . . . . . . . .  19
-       4.5.1.  Envelope  . . . . . . . . . . . . . . . . . . . . . .  20
-       4.5.2.  Comparison Values . . . . . . . . . . . . . . . . . .  20
-       4.5.3.  AWS Version Types . . . . . . . . . . . . . . . . . .  21
-       4.5.4.  Azure Version Types . . . . . . . . . . . . . . . . .  21
-       4.5.5.  GCP Version Types . . . . . . . . . . . . . . . . . .  21
-       4.5.6.  Cloudflare Version Types  . . . . . . . . . . . . . .  22
-       4.5.7.  Oracle Version Types  . . . . . . . . . . . . . . . .  22
+     1.4.  The Absent Standard . . . . . . . . . . . . . . . . . . .   5
+     1.5.  Value Propositions  . . . . . . . . . . . . . . . . . . .   6
+     1.6.  Requirements Language . . . . . . . . . . . . . . . . . .   6
+   2.  Scope and Relationship to Provider Schemas  . . . . . . . . .   6
+   3.  The CRIT Variable System  . . . . . . . . . . . . . . . . . .   7
+     3.1.  Overview  . . . . . . . . . . . . . . . . . . . . . . . .   7
+     3.2.  Slot Syntax . . . . . . . . . . . . . . . . . . . . . . .   8
+     3.3.  The Four Slot States  . . . . . . . . . . . . . . . . . .   8
+       3.3.1.  Named Variable  . . . . . . . . . . . . . . . . . . .   8
+       3.3.2.  Wildcard  . . . . . . . . . . . . . . . . . . . . . .   8
+       3.3.3.  Empty . . . . . . . . . . . . . . . . . . . . . . . .   9
+       3.3.4.  Hardcoded . . . . . . . . . . . . . . . . . . . . . .   9
+     3.4.  Slot State Selection Rules  . . . . . . . . . . . . . . .   9
+   4.  CRIT Record Schema  . . . . . . . . . . . . . . . . . . . . .  10
+     4.1.  Envelope and Identity . . . . . . . . . . . . . . . . . .  10
+       4.1.1.  Natural Key and Uniqueness  . . . . . . . . . . . . .  11
+     4.2.  Resource Template . . . . . . . . . . . . . . . . . . . .  12
+     4.3.  Temporal Fields and Exposure Window . . . . . . . . . . .  12
+     4.4.  Fix Propagation and Remediation Actions . . . . . . . . .  14
+       4.4.1.  Resource Lifecycle  . . . . . . . . . . . . . . . . .  14
+       4.4.2.  Shared Responsibility . . . . . . . . . . . . . . . .  14
+       4.4.3.  Fix Propagation . . . . . . . . . . . . . . . . . . .  15
+       4.4.4.  Remediation Actions . . . . . . . . . . . . . . . . .  17
+     4.5.  Provider Fix Version  . . . . . . . . . . . . . . . . . .  18
+       4.5.1.  Envelope  . . . . . . . . . . . . . . . . . . . . . .  19
+       4.5.2.  Comparison Values . . . . . . . . . . . . . . . . . .  19
+       4.5.3.  AWS Version Types . . . . . . . . . . . . . . . . . .  20
+       4.5.4.  Azure Version Types . . . . . . . . . . . . . . . . .  20
+       4.5.5.  GCP Version Types . . . . . . . . . . . . . . . . . .  20
+       4.5.6.  Cloudflare Version Types  . . . . . . . . . . . . . .  21
+       4.5.7.  Oracle Version Types  . . . . . . . . . . . . . . . .  21
 
 
 
@@ -114,54 +114,54 @@ Langton                 Expires 22 September 2026               [Page 2]
 Internet-Draft                    CRIT                        March 2026
 
 
-     4.6.  Detection Fields  . . . . . . . . . . . . . . . . . . . .  22
-       4.6.1.  Detection Service Values  . . . . . . . . . . . . . .  23
-       4.6.2.  Query Language Values . . . . . . . . . . . . . . . .  24
-       4.6.3.  Detection Phase . . . . . . . . . . . . . . . . . . .  24
-       4.6.4.  Pending Detection Reasons . . . . . . . . . . . . . .  25
-     4.7.  Provider Advisory . . . . . . . . . . . . . . . . . . . .  26
-     4.8.  VEX Status  . . . . . . . . . . . . . . . . . . . . . . .  27
-   5.  Provider Template Reference . . . . . . . . . . . . . . . . .  28
-     5.1.  AWS ARN . . . . . . . . . . . . . . . . . . . . . . . . .  28
-     5.2.  Azure Resource ID . . . . . . . . . . . . . . . . . . . .  28
-     5.3.  GCP Resource Name . . . . . . . . . . . . . . . . . . . .  29
-     5.4.  Cloudflare Locator  . . . . . . . . . . . . . . . . . . .  29
-     5.5.  Oracle OCID . . . . . . . . . . . . . . . . . . . . . . .  29
-   6.  Variable Resolution Rules . . . . . . . . . . . . . . . . . .  30
-     6.1.  Resolution Order  . . . . . . . . . . . . . . . . . . . .  30
-     6.2.  Reserved Field Names  . . . . . . . . . . . . . . . . . .  30
-   7.  Exposure Window Computation . . . . . . . . . . . . . . . . .  31
-     7.1.  Definition  . . . . . . . . . . . . . . . . . . . . . . .  31
-     7.2.  Record-Level W_end  . . . . . . . . . . . . . . . . . . .  32
-     7.3.  The Deployed-Before-Fix Problem . . . . . . . . . . . . .  32
-     7.4.  Opt-In and Config Change Drift  . . . . . . . . . . . . .  33
-     7.5.  Rolling Replace Fleet Exposure  . . . . . . . . . . . . .  33
-     7.6.  Channel-Gated Exposure  . . . . . . . . . . . . . . . . .  33
-   8.  Conformance . . . . . . . . . . . . . . . . . . . . . . . . .  33
-     8.1.  Producer Conformance  . . . . . . . . . . . . . . . . . .  33
-     8.2.  Consumer Conformance  . . . . . . . . . . . . . . . . . .  34
-   9.  Upstream Schema Integration . . . . . . . . . . . . . . . . .  35
-     9.1.  Integration Strategy and Phasing  . . . . . . . . . . . .  35
-     9.2.  CVE List v5 ADP Container Integration . . . . . . . . . .  36
-       9.2.1.  Phase 1 -- x_crit Extension (Current) . . . . . . . .  36
-       9.2.2.  Phase 2 -- Native ADP Container (Proposed)  . . . . .  36
-       9.2.3.  CVEListv5 Field Mapping . . . . . . . . . . . . . . .  36
-     9.3.  OSV Schema Integration  . . . . . . . . . . . . . . . . .  37
-       9.3.1.  Naming Conventions  . . . . . . . . . . . . . . . . .  37
-       9.3.2.  Phase 1 -- database_specific Extension (Current)  . .  38
-       9.3.3.  OSV Field Mapping . . . . . . . . . . . . . . . . . .  38
-   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  39
-   11. Security Considerations . . . . . . . . . . . . . . . . . . .  39
-     11.1.  Detection Query Sensitivity  . . . . . . . . . . . . . .  39
-     11.2.  Exposure Window Date Sensitivity . . . . . . . . . . . .  39
-     11.3.  Compensating Control Disclosure  . . . . . . . . . . . .  39
-     11.4.  Template Wildcard Enumeration  . . . . . . . . . . . . .  39
-     11.5.  Provider Fix Version Trust . . . . . . . . . . . . . . .  40
-     11.6.  Natural Key Collision  . . . . . . . . . . . . . . . . .  40
-   12. CRIT Dictionary . . . . . . . . . . . . . . . . . . . . . . .  40
-     12.1.  Definition . . . . . . . . . . . . . . . . . . . . . . .  40
-     12.2.  Dictionary Entry Schema  . . . . . . . . . . . . . . . .  41
-     12.3.  Dictionary Conformance . . . . . . . . . . . . . . . . .  42
+     4.6.  Detection Fields  . . . . . . . . . . . . . . . . . . . .  21
+       4.6.1.  Detection Service Values  . . . . . . . . . . . . . .  22
+       4.6.2.  Query Language Values . . . . . . . . . . . . . . . .  23
+       4.6.3.  Detection Phase . . . . . . . . . . . . . . . . . . .  23
+       4.6.4.  Pending Detection Reasons . . . . . . . . . . . . . .  24
+     4.7.  Provider Advisory . . . . . . . . . . . . . . . . . . . .  25
+     4.8.  VEX Status  . . . . . . . . . . . . . . . . . . . . . . .  26
+   5.  Provider Template Reference . . . . . . . . . . . . . . . . .  27
+     5.1.  AWS ARN . . . . . . . . . . . . . . . . . . . . . . . . .  27
+     5.2.  Azure Resource ID . . . . . . . . . . . . . . . . . . . .  27
+     5.3.  GCP Resource Name . . . . . . . . . . . . . . . . . . . .  28
+     5.4.  Cloudflare Locator  . . . . . . . . . . . . . . . . . . .  28
+     5.5.  Oracle OCID . . . . . . . . . . . . . . . . . . . . . . .  28
+   6.  Variable Resolution Rules . . . . . . . . . . . . . . . . . .  29
+     6.1.  Resolution Order  . . . . . . . . . . . . . . . . . . . .  29
+     6.2.  Reserved Field Names  . . . . . . . . . . . . . . . . . .  29
+   7.  Exposure Window Computation . . . . . . . . . . . . . . . . .  30
+     7.1.  Definition  . . . . . . . . . . . . . . . . . . . . . . .  30
+     7.2.  Record-Level W_end  . . . . . . . . . . . . . . . . . . .  31
+     7.3.  The Deployed-Before-Fix Problem . . . . . . . . . . . . .  31
+     7.4.  Opt-In and Config Change Drift  . . . . . . . . . . . . .  32
+     7.5.  Rolling Replace Fleet Exposure  . . . . . . . . . . . . .  32
+     7.6.  Channel-Gated Exposure  . . . . . . . . . . . . . . . . .  32
+   8.  Conformance . . . . . . . . . . . . . . . . . . . . . . . . .  32
+     8.1.  Producer Conformance  . . . . . . . . . . . . . . . . . .  32
+     8.2.  Consumer Conformance  . . . . . . . . . . . . . . . . . .  33
+   9.  Upstream Schema Integration . . . . . . . . . . . . . . . . .  34
+     9.1.  Integration Strategy and Phasing  . . . . . . . . . . . .  34
+     9.2.  CVE List v5 ADP Container Integration . . . . . . . . . .  35
+       9.2.1.  Phase 1 -- x_crit Extension (Current) . . . . . . . .  35
+       9.2.2.  Phase 2 -- Native ADP Container (Proposed)  . . . . .  35
+       9.2.3.  CVEListv5 Field Mapping . . . . . . . . . . . . . . .  35
+     9.3.  OSV Schema Integration  . . . . . . . . . . . . . . . . .  36
+       9.3.1.  Naming Conventions  . . . . . . . . . . . . . . . . .  36
+       9.3.2.  Phase 1 -- database_specific Extension (Current)  . .  37
+       9.3.3.  OSV Field Mapping . . . . . . . . . . . . . . . . . .  37
+   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  38
+   11. Security Considerations . . . . . . . . . . . . . . . . . . .  38
+     11.1.  Detection Query Sensitivity  . . . . . . . . . . . . . .  38
+     11.2.  Exposure Window Date Sensitivity . . . . . . . . . . . .  38
+     11.3.  Compensating Control Disclosure  . . . . . . . . . . . .  38
+     11.4.  Template Wildcard Enumeration  . . . . . . . . . . . . .  38
+     11.5.  Provider Fix Version Trust . . . . . . . . . . . . . . .  39
+     11.6.  Natural Key Collision  . . . . . . . . . . . . . . . . .  39
+   12. CRIT Dictionary . . . . . . . . . . . . . . . . . . . . . . .  39
+     12.1.  Definition . . . . . . . . . . . . . . . . . . . . . . .  39
+     12.2.  Dictionary Entry Schema  . . . . . . . . . . . . . . . .  40
+     12.3.  Dictionary Conformance . . . . . . . . . . . . . . . . .  41
 
 
 
@@ -170,52 +170,52 @@ Langton                 Expires 22 September 2026               [Page 3]
 Internet-Draft                    CRIT                        March 2026
 
 
-     12.4.  Dictionary Versioning  . . . . . . . . . . . . . . . . .  42
-     12.5.  Spec Default CRIT Dictionary . . . . . . . . . . . . . .  43
-       12.5.1.  AWS Entries  . . . . . . . . . . . . . . . . . . . .  43
-       12.5.2.  Azure Entries  . . . . . . . . . . . . . . . . . . .  50
-       12.5.3.  GCP Entries  . . . . . . . . . . . . . . . . . . . .  56
-       12.5.4.  Cloudflare Entries . . . . . . . . . . . . . . . . .  60
-       12.5.5.  Oracle Cloud Entries . . . . . . . . . . . . . . . .  62
-   13. References  . . . . . . . . . . . . . . . . . . . . . . . . .  65
-     13.1.  Normative References . . . . . . . . . . . . . . . . . .  65
-     13.2.  Informative References . . . . . . . . . . . . . . . . .  66
+     12.4.  Dictionary Versioning  . . . . . . . . . . . . . . . . .  41
+     12.5.  Spec Default CRIT Dictionary . . . . . . . . . . . . . .  42
+       12.5.1.  AWS Entries  . . . . . . . . . . . . . . . . . . . .  42
+       12.5.2.  Azure Entries  . . . . . . . . . . . . . . . . . . .  49
+       12.5.3.  GCP Entries  . . . . . . . . . . . . . . . . . . . .  55
+       12.5.4.  Cloudflare Entries . . . . . . . . . . . . . . . . .  59
+       12.5.5.  Oracle Cloud Entries . . . . . . . . . . . . . . . .  61
+   13. References  . . . . . . . . . . . . . . . . . . . . . . . . .  64
+     13.1.  Normative References . . . . . . . . . . . . . . . . . .  64
+     13.2.  Informative References . . . . . . . . . . . . . . . . .  65
    Appendix A.  Complete CRIT Record Example -- AWS RDS MySQL
-           (Informative) . . . . . . . . . . . . . . . . . . . . . .  67
-   Appendix B.  Open Issues (Informative)  . . . . . . . . . . . . .  69
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  69
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  69
+           (Informative) . . . . . . . . . . . . . . . . . . . . . .  66
+   Appendix B.  Open Issues (Informative)  . . . . . . . . . . . . .  68
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  68
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  68
 
 1.  Introduction
 
 1.1.  The Cloud-Shaped Hole in the Vulnerability Ecosystem
 
-   The vulnerability ecosystem has a cloud-shaped hole in it.
+   CPE (Common Platform Enumeration [CPE23]) and PURL (Package URL)
+   share a foundational assumption: the vulnerable thing is a package —
+   something with a static name, a version string, and a registry entry.
+   Cloud infrastructure resources have none of these properties.  An RDS
+   instance, an EKS cluster, a Cloudflare Worker — none has a package
+   name, a semver string, or a registry URL.  They are identified by
+   provider-native runtime identifiers whose components include
+   consumer-specific variables that do not exist until a resource is
+   deployed.
 
-   CPE (Common Platform Enumeration [CPE23]) was designed to describe
-   software products and operating systems.  It has been in use for
-   decades and underpins much of the vulnerability management toolchain.
-   But CPE was never meaningfully adopted by developers or in developer
-   tooling -- it lives in security scanners and NVD data feeds, not in
-   build systems or package manifests.  PURL (Package URL) addressed
-   this directly: by mirroring the naming conventions of package
-   ecosystems themselves, PURL achieved organic adoption and became the
-   linking mechanism between security data and software composition
-   analysis in a way CPE never could.
-
-   But both CPE and PURL share a foundational assumption: that the thing
-   with the vulnerability is a package.  That assumption fails
-   completely for cloud infrastructure resources.
+   Applying a static identifier scheme to cloud resources does not
+   reduce the matching problem; it relocates it.  The identifier
+   resolves, but exposure determination still requires the deployment
+   date, propagation type, consumer action state, and configuration
+   history that no static identifier carries.
 
 1.2.  The Cloud Resource Identity Problem
 
-   An AWS RDS instance is not a package.  Neither is an Azure managed
-   Kubernetes cluster, a Cloudflare Worker, or a GCP Cloud SQL instance.
-   These resources are identified by provider-native API identifiers --
-   ARNs, Azure Resource IDs, GCP Resource Names, OCIDs -- that have no
-   analogue in any package registry.  When a vulnerability affects one
-   of these resource types, there is no package name to look up, no
-   version range to express in semver, and no registry URL to reference.
+   Cloud resources are identified by provider-native runtime identifiers
+   — ARNs, Azure Resource IDs, GCP Resource Names, OCIDs, Cloudflare
+   Locators.  These have no analogue in any package registry.
+
+   The PURL cloud type proposed in Section 9.1 is the correct PURL-
+   ecosystem integration point when a single-string embedding is
+   required.
+
 
 
 
@@ -226,93 +226,24 @@ Langton                 Expires 22 September 2026               [Page 4]
 Internet-Draft                    CRIT                        March 2026
 
 
-   PURL's generic type (pkg:generic/) can be forced to describe a cloud
-   resource, but this carries implicit baggage: the generic type
-   conventionally implies a build-from-source artifact.  Treating a live
-   cloud resource as a build-from-source package is semantically
-   incoherent and creates downstream confusion in tooling designed
-   around that assumption.  PURL is the right answer for SCA and package
-   ecosystems.  It is not the right answer for cloud resource
-   vulnerabilities.
-
-   CPE is surprisingly more flexible: a Cloud CPE Dictionary can be
-   defined that maps cloud provider services to CPE names, and this
-   approach has been used.  But CPE alone still does not solve the
-   matching problem -- knowing that cpe:2.3:a:amazon:rds:*:*:*:*:*:*:*:*
-   is affected tells a consumer nothing about how to retrieve the set of
-   affected resources from AWS APIs, what identifier format those APIs
-   use, or what action is required on existing running instances.
-
 1.3.  The CSPM Consumer Problem
 
-   The primary consumer of this specification is a CSPM (Cloud Security
-   Posture Management) tool or vendor.  Understanding their problem
-   clarifies why existing approaches are insufficient.
+   Cloud resources are not versioned.  Affected status is a function of
+   deployment date, fix propagation type, consumer action taken, and
+   configuration state — not a version comparison.
 
-   A CSPM tool must continuously evaluate a customer's cloud inventory
-   against known vulnerabilities.  To do this, it must solve two
-   distinct problems.
+   A static identifier (CPE or PURL) carries none of those four factors.
+   Having no CPE or PURL is functionally identical to having both, for
+   cloud resource vulnerability matching.
 
-   *Problem 1 -- Vulnerability matching:* Given a CVE record, determine
-   which cloud resource types it affects.  CVE records frequently lack
-   CPE entirely; when CPE is present, it is often incomplete or
-   inconsistently applied to cloud services.  Vendors such as Anchore
-   have invested significant engineering effort in synthesising CPE
-   strings from CVE records that lack them and have open-sourced the
-   results -- a community workaround that confirms the baseline data is
-   structurally deficient for this use case.
+   Discovery requires interpolation: the identifier for a specific
+   resource instance contains consumer-specific variables (account,
+   region, resource ID) that must be substituted at resolution time.
+   This is why CRIT is a template engine, not an identifier.
 
-   *Problem 2 -- Inventory correlation:* Given that a resource type is
-   affected, determine which specific running resources in a customer's
-   environment match the vulnerability -- and whether each one is
-   currently exposed.
-
-   For package vulnerabilities this is a version range query: is the
-   installed version within the affected range?  Cloud resources do not
-   work this way.  An RDS instance does not have a version in any
-   meaningful sense.  An EKS node group does not declare a semver string
-   that can be compared against a fixed bound.  A Lambda function's
-   exposure depends on which runtime build it last loaded, which is not
-   a property the function itself declares.  Affected status for a cloud
-
-
-
-Langton                 Expires 22 September 2026               [Page 5]
-
-Internet-Draft                    CRIT                        March 2026
-
-
-   resource is a function of multiple contextual factors simultaneously:
-   when the resource was deployed relative to when a fix became
-   available, whether the fix propagates automatically or requires
-   consumer action, whether the resource type supports in-place
-   remediation or must be destroyed and recreated, and whether a
-   configuration change applied after deployment has since been
-   reverted.
-
-   This means "affected" and "fixed" are not binary states derivable
-   from a version comparison.  A resource can be in a state where the
-   provider fix is available, the fix version has been deployed to the
-   service, and the resource is still fully exposed -- because it was
-   deployed before the fix and the propagation type is
-   rebuild_and_redeploy rather than automatic.  A different resource of
-   the same type, deployed the day after the fix, is clean.  Both are
-   running the same service.  Neither has a version number.
-
-   A CPE or PURL string does not capture any of this.  The CSPM tool
-   must model it, and every CSPM tool models it differently.
-
-   The result is a fragmented landscape in which every CSPM vendor and
-   cloud security tool has built a proprietary, bespoke solution to this
-   translation problem -- whether they start from CPE, from PURL, or
-   from provider advisories text.  These solutions differ in
-   completeness, quality, and coverage.  They require constant
-   maintenance as cloud providers release new services and modify
-   existing ones.  They represent significant upfront investment for new
-   entrants.  And critically, they are not a differentiator: no customer
-   chooses a CSPM tool because of the quality of its internal cloud
-   identifier mapping logic.  This is pure undifferentiated
-   infrastructure that every tool must rebuild independently.
+   Every CSPM tool currently rebuilds this logic independently.  This is
+   undifferentiated infrastructure.  CRIT is the standard that
+   eliminates that duplication.
 
 1.4.  The Absent Standard
 
@@ -331,68 +262,45 @@ Internet-Draft                    CRIT                        March 2026
    *  Encodes the information a CSPM tool needs to match vulnerabilities
       against inventory without requiring bespoke translation logic.
 
-
-
-Langton                 Expires 22 September 2026               [Page 6]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    *  Captures the remediation semantics specific to cloud
       infrastructure: fix propagation type, whether existing deployed
       resources remain vulnerable after a fix is available, what action
       a consumer must take, and what the exposure window is.
 
-   CRIT proposes to be that convention.  Risk-based prioritization
-   signals such as EPSS ([EPSS]) and CISA KEV remain complementary
-   inputs to consumer tooling.  CRIT is not a vulnerability database.
-   It is not a replacement for CVE, CPE, or PURL.  It is a
-   parameterisation layer over provider-defined identifier schemas that
-   gives the vulnerability ecosystem a machine-readable, standardised
-   way to express cloud resource scope -- and gives CSPM tools, cloud
-   security vendors, and VNAs a common format to produce and consume.
-
-1.5.  Value Propositions
-
-   *For CSPM vendors and cloud security tools:* Replace bespoke internal
-   identifier mapping with a published standard.  CRIT records provide
-   the provider-native resource identifier templates, fix propagation
-   semantics, and exposure window fields needed to evaluate a customer's
-   inventory against a vulnerability without building and maintaining
-   proprietary translation logic.  New services and providers are
-   handled by updating the CRIT corpus, not by each tool independently
-   re-solving the mapping problem.
-
-   *For customers and cloud operators:* A standardised format means that
-   the quality and completeness of cloud vulnerability matching is no
-   longer a function of which vendor's proprietary solution happens to
-   cover which services.  Customers can evaluate tools against a common
-   baseline.
-
-   *For Vulnerability Numbering Authorities and the CVE Program:* A
-   defined schema for cloud resource scope means that cloud-affecting
-   vulnerabilities can be formally in-scope for CNAs assigning CVEs,
-   with structured affected-resource data in ADP containers rather than
-   prose descriptions that downstream tooling cannot parse.
-
-   *For the open source and standards community:* CRIT integrates with
-   CVEListv5 ([CVEListv5]) ADP containers and OSV schema ([OSV-Schema])
-   using the extension mechanisms those formats already define, with a
-   proposed path to native integration.  It does not require either
-   upstream format to change; it enriches them.
+   CRIT is that convention.  Risk-based prioritisation signals such as
+   EPSS ([EPSS]) and CISA KEV remain complementary inputs to consumer
+   tooling.  CRIT is a parameterisation layer over provider-defined
+   identifier schemas that gives the vulnerability ecosystem a machine-
+   readable, standardised way to express cloud resource scope — and
+   gives CSPM tools, cloud security vendors, and VNAs a common format to
+   produce and consume.
 
 
 
-
-
-
-
-
-
-Langton                 Expires 22 September 2026               [Page 7]
+Langton                 Expires 22 September 2026               [Page 5]
 
 Internet-Draft                    CRIT                        March 2026
 
+
+1.5.  Value Propositions
+
+   This specification provides the provider-native resource identifier
+   templates, fix propagation semantics, and exposure window fields
+   required to evaluate cloud inventory against a known vulnerability
+   without bespoke translation logic.
+
+   A conformant CRIT corpus provides a common baseline against which
+   consumer tooling coverage can be evaluated independently of vendor
+   implementation.
+
+   This specification defines a structured schema for cloud resource
+   scope suitable for use in ADP containers, enabling cloud-affecting
+   vulnerabilities to be formally represented with machine-readable
+   affected-resource data rather than prose descriptions.
+
+   CRIT integrates with CVEListv5 ([CVEListv5]) ADP containers and OSV
+   schema ([OSV-Schema]) using their existing extension mechanisms.  It
+   does not require either upstream format to change.
 
 1.6.  Requirements Language
 
@@ -407,6 +315,28 @@ Internet-Draft                    CRIT                        March 2026
    CRITs operate as a parameterisation layer over externally-defined
    resource identifier schemas.  The authoritative definition of each
    identifier format is owned by its respective provider:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Langton                 Expires 22 September 2026               [Page 6]
+
+Internet-Draft                    CRIT                        March 2026
+
 
      +============+============================+=====================+
      | Provider   | Identifier Type            | Normative Reference |
@@ -429,6 +359,12 @@ Internet-Draft                    CRIT                        March 2026
    that, after variable resolution, is a valid identifier according to
    the applicable provider schema.
 
+   A CRIT template MUST NOT use pkg:generic/ or any PURL type that
+   implies a build-from-source artifact to represent a cloud
+   infrastructure resource.  Such usage introduces ambiguous semantics
+   in tooling designed around the build-artifact assumption and is
+   explicitly out of scope for this specification.
+
    This specification does not cover:
 
    *  How CRIT records are extracted from vulnerability data sources.
@@ -439,20 +375,24 @@ Internet-Draft                    CRIT                        March 2026
 
    *  Source corpus processing.
 
-
-
-
-
-
-
-Langton                 Expires 22 September 2026               [Page 8]
-
-Internet-Draft                    CRIT                        March 2026
-
-
 3.  The CRIT Variable System
 
 3.1.  Overview
+
+   A CRIT record is a template engine for cloud-native resources:
+   discovery requires interpolation of consumer-specific variables at
+   resolution time, which no static identifier can express.
+
+
+
+
+
+
+
+Langton                 Expires 22 September 2026               [Page 7]
+
+Internet-Draft                    CRIT                        March 2026
+
 
    A CRIT template string is a provider identifier format with zero or
    more variable slots.  Each slot expresses one of four states.  The
@@ -498,18 +438,18 @@ Internet-Draft                    CRIT                        March 2026
 
    Syntax: {field-name=*}
 
-
-
-
-Langton                 Expires 22 September 2026               [Page 9]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    The slot represents "any value" and is used for inventory matching
    across a population of resources.  A wildcard MUST NOT be used as a
    live identifier against a provider API; it is a query pattern only.
    A consumer MAY expand a wildcard by enumerating known values from
+
+
+
+Langton                 Expires 22 September 2026               [Page 8]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    their inventory.  A consumer MUST record when a wildcard remains
    unexpanded, as an unexpanded wildcard indicates incomplete inventory
    coverage.
@@ -555,15 +495,16 @@ Internet-Draft                    CRIT                        March 2026
    2.  If the provider schema specifies the field is structurally absent
        or inapplicable for this resource type: *empty*.
 
+   3.  If the field represents a cross-resource population query rather
+       than a specific resource: *wildcard*.
 
 
-Langton                 Expires 22 September 2026              [Page 10]
+
+
+Langton                 Expires 22 September 2026               [Page 9]
 
 Internet-Draft                    CRIT                        March 2026
 
-
-   3.  If the field represents a cross-resource population query rather
-       than a specific resource: *wildcard*.
 
    4.  Otherwise: *named variable*.
 
@@ -610,17 +551,17 @@ Internet-Draft                    CRIT                        March 2026
      |                       |          |        | key for record-   |
      |                       |          |        | level             |
      |                       |          |        | referencing.      |
+     +-----------------------+----------+--------+-------------------+
+     | vuln_id               | REQUIRED | string | The vulnerability |
+     |                       |          |        | this record       |
 
 
 
-Langton                 Expires 22 September 2026              [Page 11]
+Langton                 Expires 22 September 2026              [Page 10]
 
 Internet-Draft                    CRIT                        March 2026
 
 
-     +-----------------------+----------+--------+-------------------+
-     | vuln_id               | REQUIRED | string | The vulnerability |
-     |                       |          |        | this record       |
      |                       |          |        | relates to.  MUST |
      |                       |          |        | match exactly one |
      |                       |          |        | vulnerability per |
@@ -661,19 +602,6 @@ Internet-Draft                    CRIT                        March 2026
    records MAY share the same natural key.  A producer MUST enforce this
    uniqueness constraint before emitting records.
 
-
-
-
-
-
-
-
-
-Langton                 Expires 22 September 2026              [Page 12]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    When a single vulnerability affects multiple resource types within
    the same service, or the same resource type across multiple
    providers, the correct representation is multiple CRIT records each
@@ -681,6 +609,14 @@ Internet-Draft                    CRIT                        March 2026
    propagation mechanism, and detection entries.  The vuln_id field is
    the join key allowing a consumer to retrieve the complete set of
    records for a given vulnerability.
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 11]
+
+Internet-Draft                    CRIT                        March 2026
+
 
    Example: a Kubernetes vulnerability affecting EKS, AKS, and GKE
    yields three records:
@@ -725,7 +661,15 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 13]
+
+
+
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 12]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -781,7 +725,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 14]
+Langton                 Expires 22 September 2026              [Page 13]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -837,7 +781,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 15]
+Langton                 Expires 22 September 2026              [Page 14]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -893,7 +837,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 16]
+Langton                 Expires 22 September 2026              [Page 15]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -949,7 +893,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 17]
+Langton                 Expires 22 September 2026              [Page 16]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1005,7 +949,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 18]
+Langton                 Expires 22 September 2026              [Page 17]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1061,7 +1005,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 19]
+Langton                 Expires 22 September 2026              [Page 18]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1117,7 +1061,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 20]
+Langton                 Expires 22 September 2026              [Page 19]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1173,7 +1117,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 21]
+Langton                 Expires 22 September 2026              [Page 20]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1229,7 +1173,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 22]
+Langton                 Expires 22 September 2026              [Page 21]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1285,7 +1229,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 23]
+Langton                 Expires 22 September 2026              [Page 22]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1341,7 +1285,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 24]
+Langton                 Expires 22 September 2026              [Page 23]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1397,7 +1341,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 25]
+Langton                 Expires 22 September 2026              [Page 24]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1453,7 +1397,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 26]
+Langton                 Expires 22 September 2026              [Page 25]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1509,7 +1453,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 27]
+Langton                 Expires 22 September 2026              [Page 26]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1565,7 +1509,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 28]
+Langton                 Expires 22 September 2026              [Page 27]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1621,7 +1565,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 29]
+Langton                 Expires 22 September 2026              [Page 28]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1677,7 +1621,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 30]
+Langton                 Expires 22 September 2026              [Page 29]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1733,7 +1677,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 31]
+Langton                 Expires 22 September 2026              [Page 30]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1789,7 +1733,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 32]
+Langton                 Expires 22 September 2026              [Page 31]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1845,7 +1789,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 33]
+Langton                 Expires 22 September 2026              [Page 32]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1901,7 +1845,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 34]
+Langton                 Expires 22 September 2026              [Page 33]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1957,7 +1901,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 35]
+Langton                 Expires 22 September 2026              [Page 34]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2013,7 +1957,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 36]
+Langton                 Expires 22 September 2026              [Page 35]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2069,7 +2013,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 37]
+Langton                 Expires 22 September 2026              [Page 36]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2125,7 +2069,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 38]
+Langton                 Expires 22 September 2026              [Page 37]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2181,7 +2125,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 39]
+Langton                 Expires 22 September 2026              [Page 38]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2237,7 +2181,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 40]
+Langton                 Expires 22 September 2026              [Page 39]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2293,7 +2237,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 41]
+Langton                 Expires 22 September 2026              [Page 40]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2349,7 +2293,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 42]
+Langton                 Expires 22 September 2026              [Page 41]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2405,7 +2349,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 43]
+Langton                 Expires 22 September 2026              [Page 42]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2461,7 +2405,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 44]
+Langton                 Expires 22 September 2026              [Page 43]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2517,7 +2461,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 45]
+Langton                 Expires 22 September 2026              [Page 44]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2573,7 +2517,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 46]
+Langton                 Expires 22 September 2026              [Page 45]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2629,7 +2573,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 47]
+Langton                 Expires 22 September 2026              [Page 46]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2685,7 +2629,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 48]
+Langton                 Expires 22 September 2026              [Page 47]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2741,7 +2685,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 49]
+Langton                 Expires 22 September 2026              [Page 48]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2797,7 +2741,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 50]
+Langton                 Expires 22 September 2026              [Page 49]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2853,7 +2797,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 51]
+Langton                 Expires 22 September 2026              [Page 50]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2909,7 +2853,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 52]
+Langton                 Expires 22 September 2026              [Page 51]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -2965,7 +2909,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 53]
+Langton                 Expires 22 September 2026              [Page 52]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3021,7 +2965,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 54]
+Langton                 Expires 22 September 2026              [Page 53]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3077,7 +3021,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 55]
+Langton                 Expires 22 September 2026              [Page 54]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3133,7 +3077,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 56]
+Langton                 Expires 22 September 2026              [Page 55]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3189,7 +3133,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 57]
+Langton                 Expires 22 September 2026              [Page 56]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3245,7 +3189,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 58]
+Langton                 Expires 22 September 2026              [Page 57]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3301,7 +3245,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 59]
+Langton                 Expires 22 September 2026              [Page 58]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3357,7 +3301,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 60]
+Langton                 Expires 22 September 2026              [Page 59]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3413,7 +3357,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 61]
+Langton                 Expires 22 September 2026              [Page 60]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3469,7 +3413,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 62]
+Langton                 Expires 22 September 2026              [Page 61]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3525,7 +3469,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 63]
+Langton                 Expires 22 September 2026              [Page 62]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3581,7 +3525,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 64]
+Langton                 Expires 22 September 2026              [Page 63]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3637,7 +3581,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 65]
+Langton                 Expires 22 September 2026              [Page 64]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3693,7 +3637,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 66]
+Langton                 Expires 22 September 2026              [Page 65]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3749,7 +3693,7 @@ Appendix A.  Complete CRIT Record Example -- AWS RDS MySQL (Informative)
 
 
 
-Langton                 Expires 22 September 2026              [Page 67]
+Langton                 Expires 22 September 2026              [Page 66]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3805,7 +3749,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 68]
+Langton                 Expires 22 September 2026              [Page 67]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3861,4 +3805,4 @@ Author's Address
 
 
 
-Langton                 Expires 22 September 2026              [Page 69]
+Langton                 Expires 22 September 2026              [Page 68]

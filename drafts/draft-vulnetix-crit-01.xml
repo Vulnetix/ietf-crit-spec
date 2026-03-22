@@ -74,122 +74,59 @@
       <section anchor="background-hole">
         <name>The Cloud-Shaped Hole in the Vulnerability Ecosystem</name>
         <t>
-          The vulnerability ecosystem has a cloud-shaped hole in it.
+          CPE (<xref target="CPE23">Common Platform Enumeration</xref>) and PURL (Package
+          URL) share a foundational assumption: the vulnerable thing is a package —
+          something with a static name, a version string, and a registry entry. Cloud
+          infrastructure resources have none of these properties. An RDS instance, an
+          EKS cluster, a Cloudflare Worker — none has a package name, a semver string,
+          or a registry URL. They are identified by provider-native runtime identifiers
+          whose components include consumer-specific variables that do not exist until a
+          resource is deployed.
         </t>
         <t>
-          CPE (<xref target="CPE23">Common Platform Enumeration</xref>) was designed to describe software products
-          and operating systems. It has been in use for decades and underpins much of
-          the vulnerability management toolchain. But CPE was never meaningfully adopted
-          by developers or in developer tooling -- it lives in security scanners and NVD
-          data feeds, not in build systems or package manifests. PURL (Package URL)
-          addressed this directly: by mirroring the naming conventions of package
-          ecosystems themselves, PURL achieved organic adoption and became the linking
-          mechanism between security data and software composition analysis in a way CPE
-          never could.
-        </t>
-        <t>
-          But both CPE and PURL share a foundational assumption: that the thing with the
-          vulnerability is a package. That assumption fails completely for cloud
-          infrastructure resources.
+          Applying a static identifier scheme to cloud resources does not reduce the
+          matching problem; it relocates it. The identifier resolves, but exposure
+          determination still requires the deployment date, propagation type, consumer
+          action state, and configuration history that no static identifier carries.
         </t>
       </section>
 
       <section anchor="background-identity">
         <name>The Cloud Resource Identity Problem</name>
         <t>
-          An AWS RDS instance is not a package. Neither is an Azure managed Kubernetes
-          cluster, a Cloudflare Worker, or a GCP Cloud SQL instance. These resources are
-          identified by provider-native API identifiers -- ARNs, Azure Resource IDs, GCP
-          Resource Names, OCIDs -- that have no analogue in any package registry. When a
-          vulnerability affects one of these resource types, there is no package name to
-          look up, no version range to express in semver, and no registry URL to
-          reference.
+          Cloud resources are identified by provider-native runtime identifiers — ARNs,
+          Azure Resource IDs, GCP Resource Names, OCIDs, Cloudflare Locators. These have
+          no analogue in any package registry.
         </t>
         <t>
-          PURL's generic type (<tt>pkg:generic/</tt>) can be forced to describe a cloud
-          resource, but this carries implicit baggage: the generic type conventionally
-          implies a build-from-source artifact. Treating a live cloud resource as a
-          build-from-source package is semantically incoherent and creates downstream
-          confusion in tooling designed around that assumption. PURL is the right answer
-          for SCA and package ecosystems. It is not the right answer for cloud resource
-          vulnerabilities.
-        </t>
-        <t>
-          CPE is surprisingly more flexible: a Cloud CPE Dictionary can be defined that
-          maps cloud provider services to CPE names, and this approach has been used.
-          But CPE alone still does not solve the matching problem -- knowing that
-          <tt>cpe:2.3:a:amazon:rds:*:*:*:*:*:*:*:*</tt> is affected tells a consumer
-          nothing about how to retrieve the set of affected resources from AWS APIs, what
-          identifier format those APIs use, or what action is required on existing
-          running instances.
+          The PURL <tt>cloud</tt> type proposed in <xref target="ui-strategy"/> is the
+          correct PURL-ecosystem integration point when a single-string embedding is
+          required.
         </t>
       </section>
 
       <section anchor="background-cspm">
         <name>The CSPM Consumer Problem</name>
         <t>
-          The primary consumer of this specification is a CSPM (Cloud Security Posture
-          Management) tool or vendor. Understanding their problem clarifies why existing
-          approaches are insufficient.
+          Cloud resources are not versioned. Affected status is a function of deployment
+          date, fix propagation type, consumer action taken, and configuration state —
+          not a version comparison.
         </t>
         <t>
-          A CSPM tool must continuously evaluate a customer's cloud inventory against
-          known vulnerabilities. To do this, it must solve two distinct problems.
+          A static identifier (CPE or PURL) carries none of those four factors. Having
+          no CPE or PURL is functionally identical to having both, for cloud resource
+          vulnerability matching.
         </t>
         <t>
-          <strong>Problem 1 -- Vulnerability matching:</strong> Given a CVE record,
-          determine which cloud resource types it affects. CVE records frequently lack
-          CPE entirely; when CPE is present, it is often incomplete or inconsistently
-          applied to cloud services. Vendors such as Anchore have invested significant
-          engineering effort in synthesising CPE strings from CVE records that lack them
-          and have open-sourced the results -- a community workaround that confirms the
-          baseline data is structurally deficient for this use case.
+          Discovery requires interpolation: the identifier for a specific resource
+          instance contains consumer-specific variables (account, region, resource ID)
+          that must be substituted at resolution time. This is why CRIT is a template
+          engine, not an identifier.
         </t>
         <t>
-          <strong>Problem 2 -- Inventory correlation:</strong> Given that a resource
-          type is affected, determine which specific running resources in a customer's
-          environment match the vulnerability -- and whether each one is currently
-          exposed.
-        </t>
-        <t>
-          For package vulnerabilities this is a version range query: is the installed
-          version within the affected range? Cloud resources do not work this way. An
-          RDS instance does not have a version in any meaningful sense. An EKS node
-          group does not declare a semver string that can be compared against a fixed
-          bound. A Lambda function's exposure depends on which runtime build it last
-          loaded, which is not a property the function itself declares. Affected status
-          for a cloud resource is a function of multiple contextual factors
-          simultaneously: when the resource was deployed relative to when a fix became
-          available, whether the fix propagates automatically or requires consumer
-          action, whether the resource type supports in-place remediation or must be
-          destroyed and recreated, and whether a configuration change applied after
-          deployment has since been reverted.
-        </t>
-        <t>
-          This means "affected" and "fixed" are not binary states derivable from a
-          version comparison. A resource can be in a state where the provider fix is
-          available, the fix version has been deployed to the service, and the resource
-          is still fully exposed -- because it was deployed before the fix and the
-          propagation type is <tt>rebuild_and_redeploy</tt> rather than
-          <tt>automatic</tt>. A different resource of the same type, deployed the day
-          after the fix, is clean. Both are running the same service. Neither has a
-          version number.
-        </t>
-        <t>
-          A CPE or PURL string does not capture any of this. The CSPM tool must model
-          it, and every CSPM tool models it differently.
-        </t>
-        <t>
-          The result is a fragmented landscape in which every CSPM vendor and cloud
-          security tool has built a proprietary, bespoke solution to this translation
-          problem -- whether they start from CPE, from PURL, or from
-          provider advisories text. These solutions differ in
-          completeness, quality, and coverage. They require constant maintenance as
-          cloud providers release new services and modify existing ones. They represent
-          significant upfront investment for new entrants. And critically, they are not
-          a differentiator: no customer chooses a CSPM tool because of the quality of
-          its internal cloud identifier mapping logic. This is pure undifferentiated
-          infrastructure that every tool must rebuild independently.
+          Every CSPM tool currently rebuilds this logic independently. This is
+          undifferentiated infrastructure. CRIT is the standard that eliminates that
+          duplication.
         </t>
       </section>
 
@@ -215,44 +152,37 @@
           window is.</li>
         </ul>
         <t>
-          CRIT proposes to be that convention. Risk-based prioritization signals such as EPSS (<xref target="EPSS"/>) and CISA KEV remain complementary inputs to consumer tooling. CRIT is not a vulnerability database. It
-          is not a replacement for CVE, CPE, or PURL. It is a parameterisation layer
-          over provider-defined identifier schemas that gives the vulnerability ecosystem
-          a machine-readable, standardised way to express cloud resource scope -- and
-          gives CSPM tools, cloud security vendors, and VNAs a common format to produce
-          and consume.
+          CRIT is that convention. Risk-based prioritisation signals such as EPSS
+          (<xref target="EPSS"/>) and CISA KEV remain complementary inputs to consumer
+          tooling. CRIT is a parameterisation layer over provider-defined identifier
+          schemas that gives the vulnerability ecosystem a machine-readable, standardised
+          way to express cloud resource scope — and gives CSPM tools, cloud security
+          vendors, and VNAs a common format to produce and consume.
         </t>
       </section>
 
       <section anchor="background-value">
         <name>Value Propositions</name>
         <t>
-          <strong>For CSPM vendors and cloud security tools:</strong> Replace bespoke
-          internal identifier mapping with a published standard. CRIT records provide
-          the provider-native resource identifier templates, fix propagation semantics,
-          and exposure window fields needed to evaluate a customer's inventory against a
-          vulnerability without building and maintaining proprietary translation logic.
-          New services and providers are handled by updating the CRIT corpus, not by
-          each tool independently re-solving the mapping problem.
+          This specification provides the provider-native resource identifier templates,
+          fix propagation semantics, and exposure window fields required to evaluate
+          cloud inventory against a known vulnerability without bespoke translation
+          logic.
         </t>
         <t>
-          <strong>For customers and cloud operators:</strong> A standardised format
-          means that the quality and completeness of cloud vulnerability matching is no
-          longer a function of which vendor's proprietary solution happens to cover
-          which services. Customers can evaluate tools against a common baseline.
+          A conformant CRIT corpus provides a common baseline against which consumer
+          tooling coverage can be evaluated independently of vendor implementation.
         </t>
         <t>
-          <strong>For Vulnerability Numbering Authorities and the CVE Program:</strong>
-          A defined schema for cloud resource scope means that cloud-affecting
-          vulnerabilities can be formally in-scope for CNAs assigning CVEs, with
-          structured affected-resource data in ADP containers rather than prose
-          descriptions that downstream tooling cannot parse.
+          This specification defines a structured schema for cloud resource scope
+          suitable for use in ADP containers, enabling cloud-affecting vulnerabilities
+          to be formally represented with machine-readable affected-resource data rather
+          than prose descriptions.
         </t>
         <t>
-          <strong>For the open source and standards community:</strong> CRIT integrates
-          with CVEListv5 (<xref target="CVEListv5"/>) ADP containers and OSV schema (<xref target="OSV-Schema"/>) using the extension mechanisms
-          those formats already define, with a proposed path to native integration. It
-          does not require either upstream format to change; it enriches them.
+          CRIT integrates with CVEListv5 (<xref target="CVEListv5"/>) ADP containers
+          and OSV schema (<xref target="OSV-Schema"/>) using their existing extension
+          mechanisms. It does not require either upstream format to change.
         </t>
       </section>
 
@@ -298,6 +228,13 @@
         after variable resolution, is a valid identifier according to the applicable
         provider schema.
       </t>
+      <t>
+        A CRIT template <bcp14>MUST NOT</bcp14> use <tt>pkg:generic/</tt> or any PURL
+        type that implies a build-from-source artifact to represent a cloud
+        infrastructure resource. Such usage introduces ambiguous semantics in tooling
+        designed around the build-artifact assumption and is explicitly out of scope for
+        this specification.
+      </t>
       <t>This specification does not cover:</t>
       <ul>
         <li>How CRIT records are extracted from vulnerability data sources.</li>
@@ -313,6 +250,11 @@
 
       <section anchor="vs-overview">
         <name>Overview</name>
+        <t>
+          A CRIT record is a template engine for cloud-native resources: discovery
+          requires interpolation of consumer-specific variables at resolution time,
+          which no static identifier can express.
+        </t>
         <t>
           A CRIT template string is a provider identifier format with zero or more
           variable slots. Each slot expresses one of four states. The choice of state
