@@ -73,6 +73,42 @@ Flags:
 ``--quiet``                      Suppress console output (only write report)
 ===============================  ====================================================
 
+Convert between CRIT vector strings and JSON:
+
+.. code-block:: bash
+
+   # JSON sample → vector string
+   crit-validate convert --from-json samples/aws/cve-2024-6387-ec2-openssh.json
+
+   # Vector string → expanded JSON
+   crit-validate convert --from-vector "CRITv0.2.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1187740800#CVE-2024-6387:ec2:instance"
+
+
+CRIT Vector String
+==================
+
+Each CRIT record carries a ``vectorString`` field -- a compact, deterministic
+encoding of the record's classification and identity, modelled on CVSS vector
+strings:
+
+.. code-block:: text
+
+   CRITv0.2.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance
+
+The vector has two parts separated by ``#``:
+
+- **Metrics** (before ``#``): abbreviated enum values in fixed order --
+  Cloud Provider (CP), VEX Status (VS), Fix Propagation (FP),
+  Shared Responsibility (SR), Resource Lifecycle (RL),
+  Existing Vulnerable (EV), Published Date epoch (PP),
+  Service Available Date epoch (SA).
+- **Qualifiers** (after ``#``): positional colon-separated literal values --
+  vuln_id, service, resource_type.
+
+Unknown metrics are tolerated by consumers for forward compatibility.
+See the specification Section 4.1.2 for the full ABNF grammar and
+metric registry tables.
+
 
 The Vision
 ==========
@@ -422,7 +458,7 @@ Conformance Testing
 
 All spec conformance rules live in a single tool at
 ``tests/cmd/crit-test/main.go``. It generates template samples from
-dictionaries + wordlists, then runs 48 rules in two suites:
+dictionaries + wordlists, then runs 60 rules in two suites:
 
 - **Template Rules (20)** -- slot syntax, provider-specific constraints,
   template format validity, dictionary conformance
@@ -518,9 +554,9 @@ Two Go programs drive the test infrastructure:
 
 **crit-test** (``tests/cmd/crit-test/main.go``)
    Unified spec conformance test runner. Generates interpolated template
-   samples from dictionaries + wordlists, then runs 48 rules in two suites:
+   samples from dictionaries + wordlists, then runs 60 rules in two suites:
    20 template-level rules (slot syntax, provider constraints, format validity)
-   and 28 record-level rules (dates, natural keys, fix propagation, remediation
+   and 40 record-level rules (dates, natural keys, fix propagation, remediation
    sequencing, CVSS validation, detection requirements, pending detection
    reason validation). Produces a single
    consolidated Markdown report with Mermaid charts.
@@ -599,7 +635,7 @@ Repository Structure
        crit-samples-v0.1.0.schema.json
      tests/                     Go test infrastructure
        cmd/
-         crit-test/               Unified conformance runner (48 rules, single report)
+         crit-test/               Unified conformance runner (60 rules, single report)
        wordlists/                Provider-specific synthetic test data
        CRIT-samples.json         Generated test samples (not committed)
        reports/                  Dated conformance reports

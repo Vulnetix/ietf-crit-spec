@@ -72,40 +72,40 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   4
-     1.1.  The Cloud-Shaped Hole in the Vulnerability Ecosystem  . .   4
-     1.2.  The Cloud Resource Identity Problem . . . . . . . . . . .   4
-     1.3.  The CSPM Consumer Problem . . . . . . . . . . . . . . . .   5
-     1.4.  The Absent Standard . . . . . . . . . . . . . . . . . . .   5
-     1.5.  Value Propositions  . . . . . . . . . . . . . . . . . . .   6
-     1.6.  Requirements Language . . . . . . . . . . . . . . . . . .   6
-   2.  Scope and Relationship to Provider Schemas  . . . . . . . . .   6
-   3.  The CRIT Variable System  . . . . . . . . . . . . . . . . . .   7
-     3.1.  Overview  . . . . . . . . . . . . . . . . . . . . . . . .   7
-     3.2.  Slot Syntax . . . . . . . . . . . . . . . . . . . . . . .   8
-     3.3.  The Four Slot States  . . . . . . . . . . . . . . . . . .   8
-       3.3.1.  Named Variable  . . . . . . . . . . . . . . . . . . .   8
-       3.3.2.  Wildcard  . . . . . . . . . . . . . . . . . . . . . .   8
-       3.3.3.  Empty . . . . . . . . . . . . . . . . . . . . . . . .   9
-       3.3.4.  Hardcoded . . . . . . . . . . . . . . . . . . . . . .   9
-     3.4.  Slot State Selection Rules  . . . . . . . . . . . . . . .   9
-   4.  CRIT Record Schema  . . . . . . . . . . . . . . . . . . . . .  10
-     4.1.  Envelope and Identity . . . . . . . . . . . . . . . . . .  10
-       4.1.1.  Natural Key and Uniqueness  . . . . . . . . . . . . .  11
-     4.2.  Resource Template . . . . . . . . . . . . . . . . . . . .  12
-     4.3.  Temporal Fields and Exposure Window . . . . . . . . . . .  12
-     4.4.  Fix Propagation and Remediation Actions . . . . . . . . .  14
-       4.4.1.  Resource Lifecycle  . . . . . . . . . . . . . . . . .  14
-       4.4.2.  Shared Responsibility . . . . . . . . . . . . . . . .  14
-       4.4.3.  Fix Propagation . . . . . . . . . . . . . . . . . . .  15
-       4.4.4.  Remediation Actions . . . . . . . . . . . . . . . . .  17
-     4.5.  Provider Fix Version  . . . . . . . . . . . . . . . . . .  18
-       4.5.1.  Envelope  . . . . . . . . . . . . . . . . . . . . . .  19
-       4.5.2.  Comparison Values . . . . . . . . . . . . . . . . . .  19
-       4.5.3.  AWS Version Types . . . . . . . . . . . . . . . . . .  20
-       4.5.4.  Azure Version Types . . . . . . . . . . . . . . . . .  20
-       4.5.5.  GCP Version Types . . . . . . . . . . . . . . . . . .  20
-       4.5.6.  Cloudflare Version Types  . . . . . . . . . . . . . .  21
-       4.5.7.  Oracle Version Types  . . . . . . . . . . . . . . . .  21
+     1.1.  Overview  . . . . . . . . . . . . . . . . . . . . . . . .   4
+     1.2.  The Identifier Gap  . . . . . . . . . . . . . . . . . . .   5
+     1.3.  Cloud Resource Exposure Model . . . . . . . . . . . . . .   5
+     1.4.  CRIT Approach . . . . . . . . . . . . . . . . . . . . . .   6
+     1.5.  Conventions and Terminology . . . . . . . . . . . . . . .   6
+       1.5.1.  Requirements Language . . . . . . . . . . . . . . . .   6
+       1.5.2.  Terminology . . . . . . . . . . . . . . . . . . . . .   7
+   2.  Scope and Relationship to Provider Schemas  . . . . . . . . .  10
+   3.  The CRIT Variable System  . . . . . . . . . . . . . . . . . .  10
+     3.1.  Overview  . . . . . . . . . . . . . . . . . . . . . . . .  11
+     3.2.  Slot Syntax . . . . . . . . . . . . . . . . . . . . . . .  11
+     3.3.  The Four Slot States  . . . . . . . . . . . . . . . . . .  11
+       3.3.1.  Named Variable  . . . . . . . . . . . . . . . . . . .  11
+       3.3.2.  Wildcard  . . . . . . . . . . . . . . . . . . . . . .  12
+       3.3.3.  Empty . . . . . . . . . . . . . . . . . . . . . . . .  12
+       3.3.4.  Hardcoded . . . . . . . . . . . . . . . . . . . . . .  12
+     3.4.  Slot State Selection Rules  . . . . . . . . . . . . . . .  12
+   4.  CRIT Record Schema  . . . . . . . . . . . . . . . . . . . . .  13
+     4.1.  Envelope and Identity . . . . . . . . . . . . . . . . . .  13
+       4.1.1.  Natural Key and Uniqueness  . . . . . . . . . . . . .  14
+       4.1.2.  CRIT Vector String  . . . . . . . . . . . . . . . . .  15
+     4.2.  Resource Template . . . . . . . . . . . . . . . . . . . .  21
+     4.3.  Temporal Fields and Exposure Window . . . . . . . . . . .  22
+     4.4.  Fix Propagation and Remediation Actions . . . . . . . . .  23
+       4.4.1.  Resource Lifecycle  . . . . . . . . . . . . . . . . .  23
+       4.4.2.  Shared Responsibility . . . . . . . . . . . . . . . .  24
+       4.4.3.  Fix Propagation . . . . . . . . . . . . . . . . . . .  25
+       4.4.4.  Remediation Actions . . . . . . . . . . . . . . . . .  27
+     4.5.  Provider Fix Version  . . . . . . . . . . . . . . . . . .  28
+       4.5.1.  Envelope  . . . . . . . . . . . . . . . . . . . . . .  28
+       4.5.2.  Comparison Values . . . . . . . . . . . . . . . . . .  29
+       4.5.3.  AWS Version Types . . . . . . . . . . . . . . . . . .  30
+       4.5.4.  Azure Version Types . . . . . . . . . . . . . . . . .  30
+       4.5.5.  GCP Version Types . . . . . . . . . . . . . . . . . .  30
 
 
 
@@ -114,54 +114,54 @@ Langton                 Expires 22 September 2026               [Page 2]
 Internet-Draft                    CRIT                        March 2026
 
 
-     4.6.  Detection Fields  . . . . . . . . . . . . . . . . . . . .  21
-       4.6.1.  Detection Service Values  . . . . . . . . . . . . . .  22
-       4.6.2.  Query Language Values . . . . . . . . . . . . . . . .  23
-       4.6.3.  Detection Phase . . . . . . . . . . . . . . . . . . .  23
-       4.6.4.  Pending Detection Reasons . . . . . . . . . . . . . .  24
-     4.7.  Provider Advisory . . . . . . . . . . . . . . . . . . . .  25
-     4.8.  VEX Status  . . . . . . . . . . . . . . . . . . . . . . .  26
-   5.  Provider Template Reference . . . . . . . . . . . . . . . . .  27
-     5.1.  AWS ARN . . . . . . . . . . . . . . . . . . . . . . . . .  27
-     5.2.  Azure Resource ID . . . . . . . . . . . . . . . . . . . .  27
-     5.3.  GCP Resource Name . . . . . . . . . . . . . . . . . . . .  28
-     5.4.  Cloudflare Locator  . . . . . . . . . . . . . . . . . . .  28
-     5.5.  Oracle OCID . . . . . . . . . . . . . . . . . . . . . . .  28
-   6.  Variable Resolution Rules . . . . . . . . . . . . . . . . . .  29
-     6.1.  Resolution Order  . . . . . . . . . . . . . . . . . . . .  29
-     6.2.  Reserved Field Names  . . . . . . . . . . . . . . . . . .  29
-   7.  Exposure Window Computation . . . . . . . . . . . . . . . . .  30
-     7.1.  Definition  . . . . . . . . . . . . . . . . . . . . . . .  30
-     7.2.  Record-Level W_end  . . . . . . . . . . . . . . . . . . .  31
-     7.3.  The Deployed-Before-Fix Problem . . . . . . . . . . . . .  31
-     7.4.  Opt-In and Config Change Drift  . . . . . . . . . . . . .  32
-     7.5.  Rolling Replace Fleet Exposure  . . . . . . . . . . . . .  32
-     7.6.  Channel-Gated Exposure  . . . . . . . . . . . . . . . . .  32
-   8.  Conformance . . . . . . . . . . . . . . . . . . . . . . . . .  32
-     8.1.  Producer Conformance  . . . . . . . . . . . . . . . . . .  32
-     8.2.  Consumer Conformance  . . . . . . . . . . . . . . . . . .  33
-   9.  Upstream Schema Integration . . . . . . . . . . . . . . . . .  34
-     9.1.  Integration Strategy and Phasing  . . . . . . . . . . . .  34
-     9.2.  CVE List v5 ADP Container Integration . . . . . . . . . .  35
-       9.2.1.  Phase 1 -- x_crit Extension (Current) . . . . . . . .  35
-       9.2.2.  Phase 2 -- Native ADP Container (Proposed)  . . . . .  35
-       9.2.3.  CVEListv5 Field Mapping . . . . . . . . . . . . . . .  35
-     9.3.  OSV Schema Integration  . . . . . . . . . . . . . . . . .  36
-       9.3.1.  Naming Conventions  . . . . . . . . . . . . . . . . .  36
-       9.3.2.  Phase 1 -- database_specific Extension (Current)  . .  37
-       9.3.3.  OSV Field Mapping . . . . . . . . . . . . . . . . . .  37
-   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  38
-   11. Security Considerations . . . . . . . . . . . . . . . . . . .  38
-     11.1.  Detection Query Sensitivity  . . . . . . . . . . . . . .  38
-     11.2.  Exposure Window Date Sensitivity . . . . . . . . . . . .  38
-     11.3.  Compensating Control Disclosure  . . . . . . . . . . . .  38
-     11.4.  Template Wildcard Enumeration  . . . . . . . . . . . . .  38
-     11.5.  Provider Fix Version Trust . . . . . . . . . . . . . . .  39
-     11.6.  Natural Key Collision  . . . . . . . . . . . . . . . . .  39
-   12. CRIT Dictionary . . . . . . . . . . . . . . . . . . . . . . .  39
-     12.1.  Definition . . . . . . . . . . . . . . . . . . . . . . .  39
-     12.2.  Dictionary Entry Schema  . . . . . . . . . . . . . . . .  40
-     12.3.  Dictionary Conformance . . . . . . . . . . . . . . . . .  41
+       4.5.6.  Cloudflare Version Types  . . . . . . . . . . . . . .  30
+       4.5.7.  Oracle Version Types  . . . . . . . . . . . . . . . .  31
+     4.6.  Detection Fields  . . . . . . . . . . . . . . . . . . . .  31
+       4.6.1.  Detection Service Values  . . . . . . . . . . . . . .  32
+       4.6.2.  Query Language Values . . . . . . . . . . . . . . . .  33
+       4.6.3.  Detection Phase . . . . . . . . . . . . . . . . . . .  33
+       4.6.4.  Pending Detection Reasons . . . . . . . . . . . . . .  34
+     4.7.  Provider Advisory . . . . . . . . . . . . . . . . . . . .  35
+     4.8.  VEX Status  . . . . . . . . . . . . . . . . . . . . . . .  36
+   5.  Provider Template Reference . . . . . . . . . . . . . . . . .  36
+     5.1.  AWS ARN . . . . . . . . . . . . . . . . . . . . . . . . .  36
+     5.2.  Azure Resource ID . . . . . . . . . . . . . . . . . . . .  37
+     5.3.  GCP Resource Name . . . . . . . . . . . . . . . . . . . .  37
+     5.4.  Cloudflare Locator  . . . . . . . . . . . . . . . . . . .  38
+     5.5.  Oracle OCID . . . . . . . . . . . . . . . . . . . . . . .  38
+   6.  Variable Resolution Rules . . . . . . . . . . . . . . . . . .  38
+     6.1.  Resolution Order  . . . . . . . . . . . . . . . . . . . .  38
+     6.2.  Reserved Field Names  . . . . . . . . . . . . . . . . . .  39
+   7.  Exposure Window Computation . . . . . . . . . . . . . . . . .  40
+     7.1.  Definition  . . . . . . . . . . . . . . . . . . . . . . .  40
+     7.2.  Record-Level W_end  . . . . . . . . . . . . . . . . . . .  41
+     7.3.  The Deployed-Before-Fix Problem . . . . . . . . . . . . .  41
+     7.4.  Opt-In and Config Change Drift  . . . . . . . . . . . . .  42
+     7.5.  Rolling Replace Fleet Exposure  . . . . . . . . . . . . .  42
+     7.6.  Channel-Gated Exposure  . . . . . . . . . . . . . . . . .  42
+   8.  Conformance . . . . . . . . . . . . . . . . . . . . . . . . .  42
+     8.1.  Producer Conformance  . . . . . . . . . . . . . . . . . .  42
+     8.2.  Consumer Conformance  . . . . . . . . . . . . . . . . . .  43
+   9.  Upstream Schema Integration . . . . . . . . . . . . . . . . .  44
+     9.1.  Integration Strategy and Phasing  . . . . . . . . . . . .  44
+     9.2.  CVE List v5 ADP Container Integration . . . . . . . . . .  45
+       9.2.1.  Phase 1 -- x_crit Extension (Current) . . . . . . . .  45
+       9.2.2.  Phase 2 -- Native ADP Container (Proposed)  . . . . .  45
+       9.2.3.  CVEListv5 Field Mapping . . . . . . . . . . . . . . .  45
+     9.3.  OSV Schema Integration  . . . . . . . . . . . . . . . . .  46
+       9.3.1.  Naming Conventions  . . . . . . . . . . . . . . . . .  46
+       9.3.2.  Phase 1 -- database_specific Extension (Current)  . .  47
+       9.3.3.  OSV Field Mapping . . . . . . . . . . . . . . . . . .  47
+   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  48
+   11. Security Considerations . . . . . . . . . . . . . . . . . . .  48
+     11.1.  Detection Query Sensitivity  . . . . . . . . . . . . . .  48
+     11.2.  Exposure Window Date Sensitivity . . . . . . . . . . . .  48
+     11.3.  Compensating Control Disclosure  . . . . . . . . . . . .  48
+     11.4.  Template Wildcard Enumeration  . . . . . . . . . . . . .  49
+     11.5.  Provider Fix Version Trust . . . . . . . . . . . . . . .  49
+     11.6.  Natural Key Collision  . . . . . . . . . . . . . . . . .  49
+   12. CRIT Dictionary . . . . . . . . . . . . . . . . . . . . . . .  49
+     12.1.  Definition . . . . . . . . . . . . . . . . . . . . . . .  49
 
 
 
@@ -170,53 +170,53 @@ Langton                 Expires 22 September 2026               [Page 3]
 Internet-Draft                    CRIT                        March 2026
 
 
-     12.4.  Dictionary Versioning  . . . . . . . . . . . . . . . . .  41
-     12.5.  Spec Default CRIT Dictionary . . . . . . . . . . . . . .  42
-       12.5.1.  AWS Entries  . . . . . . . . . . . . . . . . . . . .  42
-       12.5.2.  Azure Entries  . . . . . . . . . . . . . . . . . . .  49
-       12.5.3.  GCP Entries  . . . . . . . . . . . . . . . . . . . .  55
-       12.5.4.  Cloudflare Entries . . . . . . . . . . . . . . . . .  59
-       12.5.5.  Oracle Cloud Entries . . . . . . . . . . . . . . . .  61
-   13. References  . . . . . . . . . . . . . . . . . . . . . . . . .  64
-     13.1.  Normative References . . . . . . . . . . . . . . . . . .  64
-     13.2.  Informative References . . . . . . . . . . . . . . . . .  65
+     12.2.  Dictionary Entry Schema  . . . . . . . . . . . . . . . .  50
+     12.3.  Dictionary Conformance . . . . . . . . . . . . . . . . .  51
+     12.4.  Dictionary Versioning  . . . . . . . . . . . . . . . . .  52
+     12.5.  Spec Default CRIT Dictionary . . . . . . . . . . . . . .  52
+       12.5.1.  AWS Entries  . . . . . . . . . . . . . . . . . . . .  52
+       12.5.2.  Azure Entries  . . . . . . . . . . . . . . . . . . .  60
+       12.5.3.  GCP Entries  . . . . . . . . . . . . . . . . . . . .  65
+       12.5.4.  Cloudflare Entries . . . . . . . . . . . . . . . . .  69
+       12.5.5.  Oracle Cloud Entries . . . . . . . . . . . . . . . .  71
+   13. References  . . . . . . . . . . . . . . . . . . . . . . . . .  74
+     13.1.  Normative References . . . . . . . . . . . . . . . . . .  74
+     13.2.  Informative References . . . . . . . . . . . . . . . . .  75
    Appendix A.  Complete CRIT Record Example -- AWS RDS MySQL
-           (Informative) . . . . . . . . . . . . . . . . . . . . . .  66
-   Appendix B.  Open Issues (Informative)  . . . . . . . . . . . . .  68
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  68
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  68
+           (Informative) . . . . . . . . . . . . . . . . . . . . . .  76
+   Appendix B.  Open Issues (Informative)  . . . . . . . . . . . . .  77
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  78
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  78
 
 1.  Introduction
 
-1.1.  The Cloud-Shaped Hole in the Vulnerability Ecosystem
+   This document specifies the Cloud Resource Identifier Templates
+   (CRIT) format, a machine-readable schema for describing cloud
+   infrastructure resources affected by known vulnerabilities.  CRIT
+   provides parameterised templates over provider-native identifier
+   schemas, together with fix propagation semantics, exposure window
+   computation rules, and detection metadata sufficient to drive
+   automated remediation workflows.
 
-   CPE (Common Platform Enumeration [CPE23]) and PURL (Package URL)
-   share a foundational assumption: the vulnerable thing is a package —
-   something with a static name, a version string, and a registry entry.
-   Cloud infrastructure resources have none of these properties.  An RDS
-   instance, an EKS cluster, a Cloudflare Worker — none has a package
-   name, a semver string, or a registry URL.  They are identified by
-   provider-native runtime identifiers whose components include
-   consumer-specific variables that do not exist until a resource is
-   deployed.
+1.1.  Overview
 
-   Applying a static identifier scheme to cloud resources does not
-   reduce the matching problem; it relocates it.  The identifier
-   resolves, but exposure determination still requires the deployment
-   date, propagation type, consumer action state, and configuration
-   history that no static identifier carries.
+   CPE [CPE23] and PURL [PURL] model the vulnerable entity as a build-
+   from-source artifact — something with a static name, a version
+   string, and a build-time identity that persists across deployment.
+   Cloud infrastructure resources do not have these properties.  An RDS
+   instance, an EKS cluster, and a Cloudflare Worker are each identified
+   by provider-native runtime identifiers whose components include
+   consumer-specific variables (account identifiers, region codes,
+   resource IDs) that do not exist until the resource is deployed.  No
+   package name, version string, or source repository URL applies.
 
-1.2.  The Cloud Resource Identity Problem
-
-   Cloud resources are identified by provider-native runtime identifiers
-   — ARNs, Azure Resource IDs, GCP Resource Names, OCIDs, Cloudflare
-   Locators.  These have no analogue in any package registry.
-
-   The PURL cloud type proposed in Section 9.1 is the correct PURL-
-   ecosystem integration point when a single-string embedding is
-   required.
-
-
+   CRIT defines a parameterised template system over these provider-
+   native identifier schemas, together with fix propagation semantics,
+   exposure window computation rules, and detection metadata.  It
+   integrates with CVEListv5 ([CVEListv5]) ADP containers and OSV schema
+   ([OSV-Schema]) using their existing extension mechanisms.  Risk-based
+   prioritisation signals such as EPSS ([EPSS]) remain complementary
+   inputs to consumer tooling.
 
 
 
@@ -226,54 +226,54 @@ Langton                 Expires 22 September 2026               [Page 4]
 Internet-Draft                    CRIT                        March 2026
 
 
-1.3.  The CSPM Consumer Problem
+1.2.  The Identifier Gap
 
-   Cloud resources are not versioned.  Affected status is a function of
-   deployment date, fix propagation type, consumer action taken, and
-   configuration state — not a version comparison.
+   CPE and PURL both assume the vulnerable entity is produced by a build
+   process — compiled from source, packaged into a distributable
+   artifact, and deployed by installing that artifact.  This assumption
+   holds for operating systems, libraries, and application binaries.  It
+   does not hold for cloud infrastructure resources.
 
-   A static identifier (CPE or PURL) carries none of those four factors.
-   Having no CPE or PURL is functionally identical to having both, for
-   cloud resource vulnerability matching.
+   A cloud resource is instantiated by a provider API call, not by
+   installing a package.  It is identified by a provider-native runtime
+   identifier — an ARN, an Azure Resource ID, a GCP Resource Name, an
+   OCID, or a Cloudflare Locator — that is assigned at creation time and
+   contains components specific to the consumer's account, region, and
+   deployment.  These identifiers have no analogue in any package
+   registry.  There is no source repository, no version string, and no
+   build manifest.
 
-   Discovery requires interpolation: the identifier for a specific
-   resource instance contains consumer-specific variables (account,
-   region, resource ID) that must be substituted at resolution time.
-   This is why CRIT is a template engine, not an identifier.
+   Representing a cloud resource as a pkg:generic/ PURL, a synthesised
+   CPE string, or a custom PURL type does not resolve this gap.  The
+   PURL specification [PURL] defines no registered type for cloud
+   infrastructure resources.  The pkg:cloud/ convention observed in the
+   OSV ecosystem (see Section 9.3.1) is not a registered PURL type.
+   Regardless of identifier scheme, the resulting string carries none of
+   the information required to determine whether a specific deployed
+   resource is affected: the deployment date relative to the fix, the
+   propagation mechanism, whether the consumer has taken the required
+   action, or whether a configuration change has since been reverted.
 
-   Every CSPM tool currently rebuilds this logic independently.  This is
-   undifferentiated infrastructure.  CRIT is the standard that
-   eliminates that duplication.
+1.3.  Cloud Resource Exposure Model
 
-1.4.  The Absent Standard
+   For package vulnerabilities, affected status is determined by a
+   version comparison: if the installed version falls within the
+   affected range, the package is vulnerable.  Cloud resources have no
+   equivalent comparison.  Affected status is a function of four factors
+   that must be evaluated simultaneously:
 
-   There is already an open cloud vulnerability database -- Wiz has MIT-
-   licensed theirs on GitHub, and there have been earlier attempts by
-   others.  But a database of vulnerabilities is not enough without a
-   numbering and matching convention that:
+   *  When the resource was deployed relative to when the provider fix
+      became available.
 
-   *  Assigns stable identifiers to cloud resource vulnerabilities so
-      that Vulnerability Numbering Authorities can treat cloud as in-
-      scope rather than out-of-scope.
+   *  The fix propagation type — whether the fix applies automatically,
+      requires a version update, requires a configuration change, or
+      requires the resource to be destroyed and recreated.
 
-   *  Expresses affected resource types in terms of the provider-native
-      identifiers that cloud APIs actually use.
+   *  Whether the consumer has taken the required action, if any.
 
-   *  Encodes the information a CSPM tool needs to match vulnerabilities
-      against inventory without requiring bespoke translation logic.
+   *  Whether a previously applied remediation has been reverted by
+      subsequent configuration drift.
 
-   *  Captures the remediation semantics specific to cloud
-      infrastructure: fix propagation type, whether existing deployed
-      resources remain vulnerable after a fix is available, what action
-      a consumer must take, and what the exposure window is.
-
-   CRIT is that convention.  Risk-based prioritisation signals such as
-   EPSS ([EPSS]) and CISA KEV remain complementary inputs to consumer
-   tooling.  CRIT is a parameterisation layer over provider-defined
-   identifier schemas that gives the vulnerability ecosystem a machine-
-   readable, standardised way to express cloud resource scope — and
-   gives CSPM tools, cloud security vendors, and VNAs a common format to
-   produce and consume.
 
 
 
@@ -282,51 +282,51 @@ Langton                 Expires 22 September 2026               [Page 5]
 Internet-Draft                    CRIT                        March 2026
 
 
-1.5.  Value Propositions
+   No static identifier carries these factors.  A CPE or PURL string
+   identifies what the resource is; it does not encode how the fix
+   reaches the resource or whether a specific instance has been
+   remediated.  Each consumer tool that evaluates cloud resource
+   exposure must independently model these semantics.
 
-   This specification provides the provider-native resource identifier
-   templates, fix propagation semantics, and exposure window fields
-   required to evaluate cloud inventory against a known vulnerability
-   without bespoke translation logic.
+   Discovery additionally requires interpolation.  The identifier for a
+   specific resource instance contains consumer-specific variables —
+   account, region, resource ID — that must be substituted at resolution
+   time.  A single CRIT template represents all instances of a resource
+   type; resolution produces the concrete identifier for a specific
+   instance.
 
-   A conformant CRIT corpus provides a common baseline against which
-   consumer tooling coverage can be evaluated independently of vendor
-   implementation.
+1.4.  CRIT Approach
 
-   This specification defines a structured schema for cloud resource
-   scope suitable for use in ADP containers, enabling cloud-affecting
-   vulnerabilities to be formally represented with machine-readable
-   affected-resource data rather than prose descriptions.
+   CRIT addresses the identifier gap by defining a parameterisation
+   layer over provider-native identifier schemas.  A CRIT record does
+   not invent a new identifier format.  It parameterises the identifier
+   format the provider already defines, expressing consumer-specific and
+   context-dependent values as variable slots within the provider's own
+   schema.
 
-   CRIT integrates with CVEListv5 ([CVEListv5]) ADP containers and OSV
-   schema ([OSV-Schema]) using their existing extension mechanisms.  It
-   does not require either upstream format to change.
+   Each CRIT record carries the fix propagation type, shared
+   responsibility model, temporal metadata, remediation actions, and
+   detection queries required for a consumer to evaluate exposure and
+   drive remediation for a specific vulnerability on a specific cloud
+   resource type.  The record is bound to exactly one vulnerability
+   identifier.  Cross-provider and multi-resource-type coverage of a
+   single vulnerability is expressed as a set of records sharing the
+   same vulnerability identifier, each independently specifying the
+   provider-specific semantics.
 
-1.6.  Requirements Language
+   CRIT does not replace CVE, CPE, or PURL.  It complements them by
+   providing the cloud resource scope, fix propagation semantics, and
+   exposure window computation that those schemes do not address.
+
+1.5.  Conventions and Terminology
+
+1.5.1.  Requirements Language
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
    "OPTIONAL" in this document are to be interpreted as described in
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
-
-2.  Scope and Relationship to Provider Schemas
-
-   CRITs operate as a parameterisation layer over externally-defined
-   resource identifier schemas.  The authoritative definition of each
-   identifier format is owned by its respective provider:
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -337,6 +337,180 @@ Langton                 Expires 22 September 2026               [Page 6]
 
 Internet-Draft                    CRIT                        March 2026
 
+
+1.5.2.  Terminology
+
+   The following terms are used throughout this document.
+
+   CRIT Record:
+      A JSON object conforming to this specification that describes the
+      scope, remediation, and detection characteristics of a single
+      vulnerability as it applies to a single cloud resource type.
+
+   CRIT Template:
+      A parameterised string in which variable slots represent consumer-
+      specific or context-dependent values.  After all slots are
+      resolved, the result is a valid provider-native resource
+      identifier.
+
+   CRIT Dictionary:
+      A machine-readable catalogue enumerating valid (provider, service,
+      resource_type) tuples with their corresponding templates and
+      metadata.  See Section 12.
+
+   CRIT Vector String:
+      A compact, deterministic, human-readable encoding of a CRIT
+      record's classification and identity fields, modelled on CVSS
+      vector strings.  See Section 4.1.2.
+
+   Natural Key:
+      The tuple (vuln_id, provider, service, resource_type) that
+      uniquely identifies a CRIT record within a conformant corpus.
+
+   Producer:
+      An entity that creates and emits CRIT records.
+
+   Consumer:
+      An entity that processes CRIT records to evaluate cloud resource
+      exposure, deploy detections, or drive remediation workflows.
+
+   Conformant Corpus:
+      A collection of CRIT records in which no two records share the
+      same natural key.
+
+   Provider:
+      A cloud service vendor.  This specification defines five
+      providers: aws, azure, gcp, cloudflare, and oracle.
+
+   Service:
+      A distinct offering within a provider's portfolio, identified by a
+      lowercase underscore-delimited key (e.g., ec2, kubernetes_engine,
+      waf).
+
+
+
+Langton                 Expires 22 September 2026               [Page 7]
+
+Internet-Draft                    CRIT                        March 2026
+
+
+   Resource Type:
+      A specific kind of resource within a service, identified by a key
+      matching the provider's API conventions (e.g., instance, cluster,
+      waf_ruleset).
+
+   Template Format:
+      The provider-native identifier schema used by a template: aws_arn,
+      azure_resource_id, gcp_resource_name, cloudflare_locator, or
+      oracle_ocid.
+
+   Variable Slot:
+      A delimited placeholder within a CRIT template, enclosed in
+      braces, that represents a value to be supplied or fixed.
+
+   Named Variable:
+      A slot whose value the consumer must supply at resolution time.
+      Syntax: {field-name}.
+
+   Wildcard:
+      A slot representing any value, used for inventory enumeration.
+      Syntax: {field-name=*}.
+
+   Hardcoded:
+      A slot with a fixed value determined by the provider schema.
+      Syntax: {field-name=value}.
+
+   Empty:
+      A slot for a field that is structurally present but semantically
+      inapplicable to the resource type.  Syntax: {field-name=}.
+
+   Slot Resolution:
+      The process of substituting concrete values into variable slots to
+      produce a live provider identifier.
+
+   Resource Lifecycle:
+      A classification of a resource type's operational behaviour with
+      respect to data durability and replacement.  See Section 4.4.1.
+
+   Shared Responsibility:
+      The remediation responsibility model describing whether the
+      provider, the consumer, or both must act to remediate a
+      vulnerability.  See Section 4.4.2.
+
+   VEX Status:
+      The Vulnerability Exploitability eXchange status of a record:
+      affected, fixed, not_affected, or under_investigation.  Aligns
+      with the OpenVEX ([OpenVEX]) and CSAF VEX ([CSAF-VEX])
+      vocabularies.  See Section 4.8.
+
+
+
+Langton                 Expires 22 September 2026               [Page 8]
+
+Internet-Draft                    CRIT                        March 2026
+
+
+   Fix Propagation:
+      The mechanism by which a provider-released fix reaches existing
+      deployed resources.  See Section 4.4.3.
+
+   Exposure Window:
+      The time interval [W_start, W_end] during which a specific
+      resource instance is vulnerable.  See Section 7.
+
+   Existing Deployments Remain Vulnerable:
+      A boolean indicating whether resources deployed before the
+      provider fix date remain in the exposure window absent explicit
+      consumer action.
+
+   Remediation Action:
+      An ordered step a consumer takes to remediate or mitigate a
+      vulnerability on a specific resource type.  See Section 4.4.4.
+
+   Compensating Control:
+      A remediation action that reduces exploitability but does not
+      fully remediate the vulnerability.
+
+   Detection Entry:
+      A log query, metric filter, or alerting rule for identifying
+      vulnerable configurations, active exploitation, or configuration
+      drift.  See Section 4.6.
+
+   Detection Phase:
+      The lifecycle stage of a detection: pre_fix, exploitation,
+      post_fix, or misconfiguration.  See Section 4.6.3.
+
+   Pending Reason:
+      An enumerated value indicating why a detection entry is a
+      placeholder without a functional query.  See Section 4.6.4.
+
+   Vulnerability Identifier:
+      A string uniquely identifying the vulnerability a CRIT record
+      relates to (e.g., CVE-2024-6387).
+
+   Provider Fix Date:
+      The date a provider made a fix generally available.
+
+   Vulnerability Published Date:
+      The date the vulnerability was publicly disclosed.
+
+   Service Available Date:
+      The date a provider's service became generally available, bounding
+      the earliest possible deployment of affected resources.
+
+
+
+
+Langton                 Expires 22 September 2026               [Page 9]
+
+Internet-Draft                    CRIT                        March 2026
+
+
+2.  Scope and Relationship to Provider Schemas
+
+   CRITs operate as a parameterisation layer over externally-defined
+   resource identifier schemas.  The authoritative definition of each
+   identifier format is owned by its respective provider:
 
      +============+============================+=====================+
      | Provider   | Identifier Type            | Normative Reference |
@@ -377,22 +551,22 @@ Internet-Draft                    CRIT                        March 2026
 
 3.  The CRIT Variable System
 
+
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 10]
+
+Internet-Draft                    CRIT                        March 2026
+
+
 3.1.  Overview
 
    A CRIT record is a template engine for cloud-native resources:
    discovery requires interpolation of consumer-specific variables at
    resolution time, which no static identifier can express.
-
-
-
-
-
-
-
-Langton                 Expires 22 September 2026               [Page 7]
-
-Internet-Draft                    CRIT                        March 2026
-
 
    A CRIT template string is a provider identifier format with zero or
    more variable slots.  Each slot expresses one of four states.  The
@@ -434,6 +608,16 @@ Internet-Draft                    CRIT                        March 2026
 
    Examples: {region}, {account}, {resource-id}.
 
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 11]
+
+Internet-Draft                    CRIT                        March 2026
+
+
 3.3.2.  Wildcard
 
    Syntax: {field-name=*}
@@ -442,14 +626,6 @@ Internet-Draft                    CRIT                        March 2026
    across a population of resources.  A wildcard MUST NOT be used as a
    live identifier against a provider API; it is a query pattern only.
    A consumer MAY expand a wildcard by enumerating known values from
-
-
-
-Langton                 Expires 22 September 2026               [Page 8]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    their inventory.  A consumer MUST record when a wildcard remains
    unexpanded, as an unexpanded wildcard indicates incomplete inventory
    coverage.
@@ -489,6 +665,15 @@ Internet-Draft                    CRIT                        March 2026
    A CRIT producer MUST select the slot state according to the following
    precedence:
 
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 12]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    1.  If the provider schema normatively fixes this field to a specific
        value for the resource type: *hardcoded*.
 
@@ -497,14 +682,6 @@ Internet-Draft                    CRIT                        March 2026
 
    3.  If the field represents a cross-resource population query rather
        than a specific resource: *wildcard*.
-
-
-
-
-Langton                 Expires 22 September 2026               [Page 9]
-
-Internet-Draft                    CRIT                        March 2026
-
 
    4.  Otherwise: *named variable*.
 
@@ -525,8 +702,7 @@ Internet-Draft                    CRIT                        March 2026
 4.1.  Envelope and Identity
 
    {
-     "crit_version": "0.2.0",
-     "id": "<uuid-v4>",
+     "vectorString": "<crit-vector>",
      "vuln_id": "<string>",
      "provider": "<enum>",
      "service": "<string>",
@@ -538,62 +714,61 @@ Internet-Draft                    CRIT                        March 2026
 
                          Figure 2: Envelope Fields
 
-     +=======================+==========+========+===================+
-     | Field                 | Required | Type   | Description       |
-     +=======================+==========+========+===================+
-     | crit_version          | REQUIRED | string | Semver string of  |
-     |                       |          |        | the CRIT spec     |
-     |                       |          |        | version this      |
-     |                       |          |        | record conforms   |
-     |                       |          |        | to.               |
-     +-----------------------+----------+--------+-------------------+
-     | id                    | REQUIRED | string | UUID v4 surrogate |
-     |                       |          |        | key for record-   |
-     |                       |          |        | level             |
-     |                       |          |        | referencing.      |
-     +-----------------------+----------+--------+-------------------+
-     | vuln_id               | REQUIRED | string | The vulnerability |
-     |                       |          |        | this record       |
 
 
 
-Langton                 Expires 22 September 2026              [Page 10]
+
+
+
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 13]
 
 Internet-Draft                    CRIT                        March 2026
 
 
-     |                       |          |        | relates to.  MUST |
-     |                       |          |        | match exactly one |
-     |                       |          |        | vulnerability per |
-     |                       |          |        | record.           |
-     +-----------------------+----------+--------+-------------------+
-     | provider              | REQUIRED | enum   | One of: aws,      |
-     |                       |          |        | azure, gcp,       |
-     |                       |          |        | cloudflare,       |
-     |                       |          |        | oracle.           |
-     +-----------------------+----------+--------+-------------------+
-     | service               | REQUIRED | string | Provider service  |
-     |                       |          |        | key (e.g.,        |
-     |                       |          |        | lambda, aks,      |
-     |                       |          |        | cloud_sql).       |
-     +-----------------------+----------+--------+-------------------+
-     | resource_type         | REQUIRED | string | Specific resource |
-     |                       |          |        | type within the   |
-     |                       |          |        | service (e.g.,    |
-     |                       |          |        | function,         |
-     |                       |          |        | cluster,          |
-     |                       |          |        | instance).        |
-     +-----------------------+----------+--------+-------------------+
-     | resource_lifecycle    | REQUIRED | enum   | See               |
-     |                       |          |        | Section 4.4.1.    |
-     +-----------------------+----------+--------+-------------------+
-     | shared_responsibility | REQUIRED | enum   | See               |
-     |                       |          |        | Section 4.4.2.    |
-     +-----------------------+----------+--------+-------------------+
-     | vex_status            | REQUIRED | enum   | See Section 4.8.  |
-     +-----------------------+----------+--------+-------------------+
+    +=======================+==========+========+====================+
+    | Field                 | Required | Type   | Description        |
+    +=======================+==========+========+====================+
+    | vectorString          | REQUIRED | string | Canonical CRIT     |
+    |                       |          |        | vector string      |
+    |                       |          |        | computed from      |
+    |                       |          |        | record fields.     |
+    |                       |          |        | See Section 4.1.2. |
+    +-----------------------+----------+--------+--------------------+
+    | vuln_id               | REQUIRED | string | The vulnerability  |
+    |                       |          |        | this record        |
+    |                       |          |        | relates to.  MUST  |
+    |                       |          |        | match exactly one  |
+    |                       |          |        | vulnerability per  |
+    |                       |          |        | record.            |
+    +-----------------------+----------+--------+--------------------+
+    | provider              | REQUIRED | enum   | One of: aws,       |
+    |                       |          |        | azure, gcp,        |
+    |                       |          |        | cloudflare,        |
+    |                       |          |        | oracle.            |
+    +-----------------------+----------+--------+--------------------+
+    | service               | REQUIRED | string | Provider service   |
+    |                       |          |        | key (e.g., lambda, |
+    |                       |          |        | aks, cloud_sql).   |
+    +-----------------------+----------+--------+--------------------+
+    | resource_type         | REQUIRED | string | Specific resource  |
+    |                       |          |        | type within the    |
+    |                       |          |        | service (e.g.,     |
+    |                       |          |        | function, cluster, |
+    |                       |          |        | instance).         |
+    +-----------------------+----------+--------+--------------------+
+    | resource_lifecycle    | REQUIRED | enum   | See Section 4.4.1. |
+    +-----------------------+----------+--------+--------------------+
+    | shared_responsibility | REQUIRED | enum   | See Section 4.4.2. |
+    +-----------------------+----------+--------+--------------------+
+    | vex_status            | REQUIRED | enum   | See Section 4.8.   |
+    +-----------------------+----------+--------+--------------------+
 
-                                  Table 2
+                                 Table 2
 
 4.1.1.  Natural Key and Uniqueness
 
@@ -601,6 +776,15 @@ Internet-Draft                    CRIT                        March 2026
    natural key of a CRIT record.  Within a conformant corpus, no two
    records MAY share the same natural key.  A producer MUST enforce this
    uniqueness constraint before emitting records.
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 14]
+
+Internet-Draft                    CRIT                        March 2026
+
 
    When a single vulnerability affects multiple resource types within
    the same service, or the same resource type across multiple
@@ -610,14 +794,6 @@ Internet-Draft                    CRIT                        March 2026
    the join key allowing a consumer to retrieve the complete set of
    records for a given vulnerability.
 
-
-
-
-Langton                 Expires 22 September 2026              [Page 11]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    Example: a Kubernetes vulnerability affecting EKS, AKS, and GKE
    yields three records:
 
@@ -626,6 +802,363 @@ Internet-Draft                    CRIT                        March 2026
    *  (CVE-2024-XXXX, azure, aks, cluster)
 
    *  (CVE-2024-XXXX, gcp, gke, cluster)
+
+   The natural key components are embedded in the CRIT vector string:
+   provider as the CP metric and vuln_id, service, resource_type as the
+   three positional qualifiers.  The vectorString is therefore a
+   canonical single-string encoding of the record's natural key combined
+   with its classification state.
+
+4.1.2.  CRIT Vector String
+
+   The CRIT vector string is a compact, deterministic, human-readable
+   encoding of a record's classification and identity fields.  Its
+   format is modelled on CVSS vector strings: a versioned prefix
+   followed by slash-delimited metric-value pairs and a qualifier
+   section.
+
+   The ABNF ([RFC5234]) grammar is:
+
+   crit-vector     = prefix "/" metrics "#" qualifiers
+   prefix          = "CRITv" semver
+   semver          = 1*DIGIT "." 1*DIGIT "." 1*DIGIT
+                     [ "-" 1*(ALPHA / DIGIT / ".") ]
+   metrics         = metric *("/" metric)
+   metric          = metric-key ":" metric-value
+   metric-key      = 2ALPHA
+   metric-value    = 1*(ALPHA / DIGIT)
+   qualifiers      = qual-value ":" qual-value ":" qual-value
+   qual-value      = 1*(ALPHA / DIGIT / "-" / "_" / ".")
+
+   Example:
+
+   CRITv0.2.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 15]
+
+Internet-Draft                    CRIT                        March 2026
+
+
+4.1.2.1.  Registered Metrics
+
+   A conformant CRIT vector string MUST include all registered metrics
+   listed below.  Registered metrics MUST appear in the canonical order
+   defined by this section.  A producer MAY append additional metrics
+   after the registered set and before the # delimiter; a consumer MUST
+   ignore unknown metric keys without error.
+
+   *Table 1: Cloud Provider (CP)*
+
+            +============+======+=============================+
+            | Value      | Code | Description                 |
+            +============+======+=============================+
+            | aws        | AW   | Amazon Web Services         |
+            +------------+------+-----------------------------+
+            | azure      | MA   | Microsoft Azure             |
+            +------------+------+-----------------------------+
+            | gcp        | GC   | Google Cloud Platform       |
+            +------------+------+-----------------------------+
+            | cloudflare | CF   | Cloudflare                  |
+            +------------+------+-----------------------------+
+            | oracle     | OC   | Oracle Cloud Infrastructure |
+            +------------+------+-----------------------------+
+
+                                  Table 3
+
+   *Table 2: VEX Status (VS)*
+
+     +=====================+======+==================================+
+     | Value               | Code | Description                      |
+     +=====================+======+==================================+
+     | affected            | AF   | Resource type is affected; no    |
+     |                     |      | fix available or not applied.    |
+     +---------------------+------+----------------------------------+
+     | fixed               | FX   | Provider fix is available;       |
+     |                     |      | provider_fix_date is set.        |
+     +---------------------+------+----------------------------------+
+     | not_affected        | NA   | Resource type is not affected or |
+     |                     |      | vulnerability is not reachable.  |
+     +---------------------+------+----------------------------------+
+     | under_investigation | UI   | Provider has acknowledged but    |
+     |                     |      | not confirmed status.            |
+     +---------------------+------+----------------------------------+
+
+                                  Table 4
+
+   *Table 3: Fix Propagation (FP)*
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 16]
+
+Internet-Draft                    CRIT                        March 2026
+
+
+   +======================+======+=====================================+
+   | Value                | Code | Description                         |
+   +======================+======+=====================================+
+   | automatic            | AU   | Provider applies fix                |
+   |                      |      | transparently.                      |
+   +----------------------+------+-------------------------------------+
+   | config_change        | CC   | Configuration change on             |
+   |                      |      | existing resource.                  |
+   +----------------------+------+-------------------------------------+
+   | opt_in               | OI   | Fix available but applies to        |
+   |                      |      | non-default option.                 |
+   +----------------------+------+-------------------------------------+
+   | version_update       | VU   | Consumer must update pinned         |
+   |                      |      | version or runtime.                 |
+   +----------------------+------+-------------------------------------+
+   | redeploy             | RD   | Consumer must redeploy using        |
+   |                      |      | existing configuration.             |
+   +----------------------+------+-------------------------------------+
+   | rebuild_and_redeploy | RR   | Consumer must rebuild artifact      |
+   |                      |      | with updated base.                  |
+   +----------------------+------+-------------------------------------+
+   | destroy_recreate     | DC   | Resource must be destroyed and      |
+   |                      |      | recreated.                          |
+   +----------------------+------+-------------------------------------+
+   | rolling_replace      | RL   | Fleet replacement with              |
+   |                      |      | coexistence during transition.      |
+   +----------------------+------+-------------------------------------+
+   | no_fix_available     | NF   | No vendor fix has been              |
+   |                      |      | released.                           |
+   +----------------------+------+-------------------------------------+
+
+                                  Table 5
+
+   *Table 4: Shared Responsibility (SR)*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 17]
+
+Internet-Draft                    CRIT                        March 2026
+
+
+    +==========================+======+==============================+
+    | Value                    | Code | Description                  |
+    +==========================+======+==============================+
+    | provider_only            | PO   | Provider is solely           |
+    |                          |      | responsible for remediation. |
+    +--------------------------+------+------------------------------+
+    | customer_action_required | CA   | Provider fix exists but      |
+    |                          |      | customer action is needed.   |
+    +--------------------------+------+------------------------------+
+    | customer_only            | CO   | Customer is solely           |
+    |                          |      | responsible.                 |
+    +--------------------------+------+------------------------------+
+    | shared                   | SH   | Remediation requires         |
+    |                          |      | coordinated provider and     |
+    |                          |      | customer action.             |
+    +--------------------------+------+------------------------------+
+
+                                 Table 6
+
+   *Table 5: Resource Lifecycle (RL)*
+
+       +======================+======+============================+
+       | Value                | Code | Description                |
+       +======================+======+============================+
+       | ephemeral            | EP   | Short-lived; replaced      |
+       |                      |      | rather than patched.       |
+       +----------------------+------+----------------------------+
+       | stateful_managed     | SM   | Long-lived; provider       |
+       |                      |      | manages OS and runtime.    |
+       +----------------------+------+----------------------------+
+       | stateful_customer    | SC   | Long-lived; customer       |
+       |                      |      | manages OS and runtime.    |
+       +----------------------+------+----------------------------+
+       | config_only          | CF   | No runtime; configuration- |
+       |                      |      | only resource.             |
+       +----------------------+------+----------------------------+
+       | global_control_plane | GC   | Shared control-plane       |
+       |                      |      | infrastructure.            |
+       +----------------------+------+----------------------------+
+
+                                 Table 7
+
+   *Table 6: Existing Deployments Remain Vulnerable (EV)*
+
+
+
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 18]
+
+Internet-Draft                    CRIT                        March 2026
+
+
+           +=======+======+====================================+
+           | Value | Code | Description                        |
+           +=======+======+====================================+
+           | true  | T    | Resources deployed before the fix  |
+           |       |      | remain vulnerable.                 |
+           +-------+------+------------------------------------+
+           | false | F    | Provider fix applies retroactively |
+           |       |      | to existing resources.             |
+           +-------+------+------------------------------------+
+
+                                  Table 8
+
+   *Table 7: Vulnerability Published Date (PP)*
+
+   Unix epoch timestamp (integer seconds).  REQUIRED.  The date the
+   vulnerability was publicly disclosed.  Corresponds to
+   temporal.vuln_published_date converted to epoch seconds.
+
+   *Table 8: Service Available Date (SA)*
+
+   Unix epoch timestamp (integer seconds).  REQUIRED.  The date the
+   cloud service became generally available.  Corresponds to
+   temporal.service_available_date converted to epoch seconds.
+
+4.1.2.2.  Qualifiers
+
+   Qualifiers appear after the # delimiter as positional colon-separated
+   values with no metric keys.  All three qualifiers are REQUIRED and
+   MUST appear in the following fixed order:
+
+          +==========+===============+==========================+
+          | Position | Field         | Description              |
+          +==========+===============+==========================+
+          | 1        | vuln_id       | Vulnerability identifier |
+          |          |               | (e.g., CVE-2024-6387).   |
+          +----------+---------------+--------------------------+
+          | 2        | service       | Provider service key.    |
+          +----------+---------------+--------------------------+
+          | 3        | resource_type | Provider resource type   |
+          |          |               | key.                     |
+          +----------+---------------+--------------------------+
+
+                                  Table 9
+
+4.1.2.3.  Computation and Validation
+
+   A conformant CRIT producer:
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 19]
+
+Internet-Draft                    CRIT                        March 2026
+
+
+   *  MUST compute vectorString from the record's own fields.
+
+   *  MUST include all registered metrics in canonical order (CP, VS,
+      FP, SR, RL, EV, PP, SA).
+
+   *  MUST use the CRIT specification version the record conforms to as
+      the semver prefix.
+
+   *  MUST use only registered abbreviation codes from the tables in
+      Section 4.1.2.1.
+
+   *  MUST ensure qualifier values match the corresponding record field
+      values exactly.
+
+   *  MAY append additional metrics after the registered set and before
+      the # delimiter.
+
+   A conformant CRIT consumer:
+
+   *  MUST validate all known metric keys and their values.
+
+   *  MUST ignore unknown metric keys without error.
+
+   *  MUST reject a vectorString missing any registered metric.
+
+   *  MUST reject a vectorString where registered metrics appear out of
+      canonical order.
+
+   *  SHOULD emit a warning when encountering unknown metric keys.
+
+4.1.2.4.  Information Scope
+
+   The CRIT vector string is a lossy encoding.  It carries 12 fields
+   from the full CRIT record; the remaining fields are not representable
+   in the vector and are discarded during conversion.
+
+   Fields carried in the vector string:
+
+   *  CRIT specification version (prefix).
+
+   *  Six enumerated classification fields: provider (CP), vex_status
+      (VS), fix_propagation (FP), shared_responsibility (SR),
+      resource_lifecycle (RL), existing_deployments_remain_vulnerable
+      (EV).
+
+   *  Two required temporal dates as epoch timestamps:
+      vuln_published_date (PP), service_available_date (SA).
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 20]
+
+Internet-Draft                    CRIT                        March 2026
+
+
+   *  Three identity qualifiers: vuln_id, service, resource_type.
+
+   Fields not carried in the vector string:
+
+   *  template and template_format — recoverable via dictionary lookup
+      from the (provider, service, resource_type) tuple embedded in the
+      vector qualifiers and CP metric.
+
+   *  Optional temporal dates: vulnerability_introduced_date,
+      provider_acknowledged_date, provider_fix_date,
+      customer_deadline_date, and related fields.  A producer MAY
+      include these as additional metrics appended after the registered
+      set.
+
+   *  Fix version details: version_type, comparison, version,
+      build_date, auto_upgrade, note.
+
+   *  Remediation actions: the complete remediation_actions array
+      including step-by-step instructions, downtime estimates, and
+      compensating control flags.
+
+   *  Detection entries: the complete detections array including
+      detection queries, query languages, detection phases, and pending
+      reasons.
+
+   *  Advisory metadata: advisory_id, advisory_url.
+
+   *  Any producer-appended additional metrics beyond the registered set
+      are also not preserved when converting from a full JSON record to
+      a vector string, unless the converter explicitly retains them.
+
+   A consumer MUST NOT treat a vectorString as a complete record
+   representation.  A consumer MUST use the full JSON record for
+   operational decisions that require fields not carried in the vector,
+   including but not limited to: deploying detection queries, executing
+   remediation actions, evaluating fix version comparisons, and
+   computing exposure windows.
 
 4.2.  Resource Template
 
@@ -637,6 +1170,14 @@ Internet-Draft                    CRIT                        March 2026
    |                 |          |        | variables are               |
    |                 |          |        | substituted, the result     |
    |                 |          |        | MUST be a valid provider    |
+
+
+
+Langton                 Expires 22 September 2026              [Page 21]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |                 |          |        | identifier for the          |
    |                 |          |        | declared template_format.   |
    +-----------------+----------+--------+-----------------------------+
@@ -647,32 +1188,13 @@ Internet-Draft                    CRIT                        March 2026
    |                 |          |        | oracle_ocid.                |
    +-----------------+----------+--------+-----------------------------+
 
-                                  Table 3
+                                  Table 10
 
 4.3.  Temporal Fields and Exposure Window
 
    These fields collectively define the bounds of exposure.  No single
    field closes the exposure window for a given consumer resource; see
    Section 7 for the formal computation.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Langton                 Expires 22 September 2026              [Page 12]
-
-Internet-Draft                    CRIT                        March 2026
-
 
    {
      "temporal": {
@@ -703,6 +1225,15 @@ Internet-Draft                    CRIT                        March 2026
       When true, vulnerability_introduced_date is an estimate.
       Consumers SHOULD surface this flag in exposure window reporting.
 
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 22]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    vuln_published_date (REQUIRED):
       Date the vulnerability record was first published.  MUST match the
       vulnerability record's datePublished field.
@@ -723,13 +1254,6 @@ Internet-Draft                    CRIT                        March 2026
       One of: cisa_kev, pci_dss, hipaa, sox, internal_policy, other.
       REQUIRED when customer_deadline_date is present.
 
-
-
-Langton                 Expires 22 September 2026              [Page 13]
-
-Internet-Draft                    CRIT                        March 2026
-
-
 4.4.  Fix Propagation and Remediation Actions
 
 4.4.1.  Resource Lifecycle
@@ -738,6 +1262,33 @@ Internet-Draft                    CRIT                        March 2026
    of the resource type with respect to data durability and replacement.
    This is a property of the resource type, not of any specific consumer
    deployment.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 23]
+
+Internet-Draft                    CRIT                        March 2026
+
 
    +======================+============================================+
    | Value                | Meaning                                    |
@@ -768,7 +1319,7 @@ Internet-Draft                    CRIT                        March 2026
    |                      | global forwarding rules.                   |
    +----------------------+--------------------------------------------+
 
-                                  Table 4
+                                  Table 11
 
 4.4.2.  Shared Responsibility
 
@@ -778,14 +1329,6 @@ Internet-Draft                    CRIT                        March 2026
     | provider_only            | Provider remediates transparently.  |
     |                          | The exposure window closes          |
     |                          | automatically at provider_fix_date  |
-
-
-
-Langton                 Expires 22 September 2026              [Page 14]
-
-Internet-Draft                    CRIT                        March 2026
-
-
     |                          | for all resources.                  |
     +--------------------------+-------------------------------------+
     | customer_action_required | A fix is available but the consumer |
@@ -795,13 +1338,21 @@ Internet-Draft                    CRIT                        March 2026
     +--------------------------+-------------------------------------+
     | customer_only            | Misconfiguration or insecure        |
     |                          | default.  No provider fix involved. |
+
+
+
+Langton                 Expires 22 September 2026              [Page 24]
+
+Internet-Draft                    CRIT                        March 2026
+
+
     |                          | No provider_fix_date.               |
     +--------------------------+-------------------------------------+
     | shared                   | Both provider and consumer action   |
     |                          | are required.                       |
     +--------------------------+-------------------------------------+
 
-                                 Table 5
+                                 Table 12
 
 4.4.3.  Fix Propagation
 
@@ -835,13 +1386,6 @@ Internet-Draft                    CRIT                        March 2026
       taken.  MUST be false only when fix_propagation is automatic AND
       shared_responsibility is provider_only.
 
-
-
-Langton                 Expires 22 September 2026              [Page 15]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    Fix propagation enum values:
 
    +======================+=======================+====================+
@@ -850,6 +1394,14 @@ Internet-Draft                    CRIT                        March 2026
    +======================+=======================+====================+
    | automatic            | Provider applies the  | Verify fix is      |
    |                      | fix transparently to  | active; no         |
+
+
+
+Langton                 Expires 22 September 2026              [Page 25]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |                      | all existing          | operational change |
    |                      | resources.            | required.          |
    +----------------------+-----------------------+--------------------+
@@ -890,20 +1442,21 @@ Internet-Draft                    CRIT                        March 2026
    |                      | transition.           |                    |
    +----------------------+-----------------------+--------------------+
    | no_fix_available     | Provider has not      | Apply compensating |
-
-
-
-Langton                 Expires 22 September 2026              [Page 16]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    |                      | released a fix.       | controls; monitor  |
    |                      | provider_fix_date     | advisory.          |
    |                      | MUST be absent.       |                    |
    +----------------------+-----------------------+--------------------+
 
-                                  Table 6
+                                  Table 13
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 26]
+
+Internet-Draft                    CRIT                        March 2026
+
 
 4.4.4.  Remediation Actions
 
@@ -946,14 +1499,6 @@ Internet-Draft                    CRIT                        March 2026
    |                                |        |consumer tool MAY        |
    |                                |        |automate this action     |
    |                                |        |without human approval.  |
-
-
-
-Langton                 Expires 22 September 2026              [Page 17]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    +--------------------------------+--------+-------------------------+
    |requires_downtime               |REQUIRED|Whether this action      |
    |                                |        |causes a service         |
@@ -961,6 +1506,14 @@ Internet-Draft                    CRIT                        March 2026
    +--------------------------------+--------+-------------------------+
    |stateful_impact                 |REQUIRED|One of: none,            |
    |                                |        |backup_recommended,      |
+
+
+
+Langton                 Expires 22 September 2026              [Page 27]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |                                |        |backup_restore_required, |
    |                                |        |data_migration_required. |
    +--------------------------------+--------+-------------------------+
@@ -980,7 +1533,7 @@ Internet-Draft                    CRIT                        March 2026
    |                                |        |not fixed.               |
    +--------------------------------+--------+-------------------------+
 
-                                  Table 7
+                                  Table 14
 
 4.5.  Provider Fix Version
 
@@ -1001,15 +1554,6 @@ Internet-Draft                    CRIT                        March 2026
    operator that together give a consumer everything needed to evaluate
    whether a deployed resource meets the fix threshold.
 
-
-
-
-
-Langton                 Expires 22 September 2026              [Page 18]
-
-Internet-Draft                    CRIT                        March 2026
-
-
 4.5.1.  Envelope
 
    +==============+==========+========================================+
@@ -1018,6 +1562,14 @@ Internet-Draft                    CRIT                        March 2026
    | version_type | REQUIRED | Discriminator.  Determines which       |
    |              |          | additional fields are present.  See    |
    |              |          | Sections Section 4.5.3 through         |
+
+
+
+Langton                 Expires 22 September 2026              [Page 28]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |              |          | Section 4.5.7.                         |
    +--------------+----------+----------------------------------------+
    | comparison   | REQUIRED | How a consumer evaluates whether a     |
@@ -1036,7 +1588,7 @@ Internet-Draft                    CRIT                        March 2026
    |              |          | channels.                              |
    +--------------+----------+----------------------------------------+
 
-                                 Table 8
+                                 Table 15
 
 4.5.2.  Comparison Values
 
@@ -1058,17 +1610,21 @@ Internet-Draft                    CRIT                        March 2026
      | channel_and_gte | Resource MUST be subscribed to a qualifying |
      |                 | release channel AND be at or above the      |
      |                 | specified version within that channel.      |
+     +-----------------+---------------------------------------------+
+
+                                  Table 16
 
 
 
-Langton                 Expires 22 September 2026              [Page 19]
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 29]
 
 Internet-Draft                    CRIT                        March 2026
 
-
-     +-----------------+---------------------------------------------+
-
-                                  Table 9
 
 4.5.3.  AWS Version Types
 
@@ -1109,19 +1665,6 @@ Internet-Draft                    CRIT                        March 2026
    STABLE).  The note field MUST enumerate channel-specific availability
    dates.
 
-
-
-
-
-
-
-
-
-Langton                 Expires 22 September 2026              [Page 20]
-
-Internet-Draft                    CRIT                        March 2026
-
-
 4.5.6.  Cloudflare Version Types
 
    Cloudflare Workers does not expose a semantic version.  Defined
@@ -1129,6 +1672,15 @@ Internet-Draft                    CRIT                        March 2026
    date_gte comparison against build_date), deployment_id (Pages or
    Workers deployments where the fix requires consumer-controlled
    redeployment).
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 30]
+
+Internet-Draft                    CRIT                        March 2026
+
 
 4.5.7.  Oracle Version Types
 
@@ -1173,7 +1725,15 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 21]
+
+
+
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 31]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1212,7 +1772,7 @@ Internet-Draft                    CRIT                        March 2026
      |                 |          | set.  See Section 4.6.4.         |
      +-----------------+----------+----------------------------------+
 
-                                  Table 10
+                                  Table 17
 
 4.6.1.  Detection Service Values
 
@@ -1229,7 +1789,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 22]
+Langton                 Expires 22 September 2026              [Page 32]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1239,7 +1799,7 @@ Internet-Draft                    CRIT                        March 2026
    | oracle     | oci_logging, cloud_guard                            |
    +------------+-----------------------------------------------------+
 
-                                 Table 11
+                                 Table 18
 
 4.6.2.  Query Language Values
 
@@ -1261,7 +1821,7 @@ Internet-Draft                    CRIT                        March 2026
      |                    | SIEM integrations)                      |
      +--------------------+-----------------------------------------+
 
-                                 Table 12
+                                 Table 19
 
 4.6.3.  Detection Phase
 
@@ -1285,7 +1845,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 23]
+Langton                 Expires 22 September 2026              [Page 33]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1317,7 +1877,7 @@ Internet-Draft                    CRIT                        March 2026
    |                  | reopening event.         |                    |
    +------------------+--------------------------+--------------------+
 
-                                 Table 13
+                                 Table 20
 
    A record with fix_propagation of opt_in or config_change MUST include
    at least one misconfiguration detection entry.
@@ -1341,7 +1901,7 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 24]
+Langton                 Expires 22 September 2026              [Page 34]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -1379,7 +1939,7 @@ Internet-Draft                    CRIT                        March 2026
      |                             | publication.                   |
      +-----------------------------+--------------------------------+
 
-                                 Table 14
+                                 Table 21
 
    A consumer MUST NOT deploy a detection entry that has pending_reason
    set.  A consumer SHOULD surface placeholder entries in operator-
@@ -1387,41 +1947,26 @@ Internet-Draft                    CRIT                        March 2026
 
 4.7.  Provider Advisory
 
-    +======================+==========+==============================+
-    | Field                | Required | Description                  |
-    +======================+==========+==============================+
-    | advisory_id          | OPTIONAL | Provider's own advisory      |
-    |                      |          | identifier (e.g.,            |
-    |                      |          | ALAS2-2024-2456, MSRC-       |
-    |                      |          | 2024-0034, GCP-SA-2024-001). |
+     +==============+==========+====================================+
+     | Field        | Required | Description                        |
+     +==============+==========+====================================+
+     | advisory_id  | OPTIONAL | Provider's own advisory identifier |
+     |              |          | (e.g., ALAS2-2024-2456, MSRC-      |
+     |              |          | 2024-0034, GCP-SA-2024-001).       |
+     +--------------+----------+------------------------------------+
 
 
 
-Langton                 Expires 22 September 2026              [Page 25]
+Langton                 Expires 22 September 2026              [Page 35]
 
 Internet-Draft                    CRIT                        March 2026
 
 
-    +----------------------+----------+------------------------------+
-    | advisory_url         | OPTIONAL | Direct URL to the provider's |
-    |                      |          | security advisory.           |
-    +----------------------+----------+------------------------------+
-    | provider_severity    | OPTIONAL | One of: critical, high,      |
-    |                      |          | medium, low, informational.  |
-    |                      |          | MAY differ from NVD CVSS     |
-    |                      |          | severity.                    |
-    +----------------------+----------+------------------------------+
-    | provider_cvss_score  | OPTIONAL | Provider's CVSS base score.  |
-    |                      |          | MUST be in [0.0, 10.0] when  |
-    |                      |          | present.                     |
-    +----------------------+----------+------------------------------+
-    | provider_cvss_vector | OPTIONAL | Provider's CVSS vector       |
-    |                      |          | string.  MUST conform to     |
-    |                      |          | CVSS v3.1 ([CVSS31]) or v4.0 |
-    |                      |          | format when present.         |
-    +----------------------+----------+------------------------------+
+     | advisory_url | OPTIONAL | Direct URL to the provider's       |
+     |              |          | security advisory.                 |
+     +--------------+----------+------------------------------------+
 
-                                 Table 15
+                                 Table 22
 
 4.8.  VEX Status
 
@@ -1447,16 +1992,7 @@ Internet-Draft                    CRIT                        March 2026
     |                     | affected status.                          |
     +---------------------+-------------------------------------------+
 
-                                  Table 16
-
-
-
-
-
-Langton                 Expires 22 September 2026              [Page 26]
-
-Internet-Draft                    CRIT                        March 2026
-
+                                  Table 23
 
    A consumer MUST treat vex_status as a record-level statement about
    provider fix availability, not as a per-resource remediation status.
@@ -1474,6 +2010,13 @@ Internet-Draft                    CRIT                        March 2026
 
    arn:aws:{service-prefix}:{region}:{account}:{resource-type}/{id}
    arn:aws:{service-prefix}:{region}:{account}:{resource-type}:{id}
+
+
+
+Langton                 Expires 22 September 2026              [Page 36]
+
+Internet-Draft                    CRIT                        March 2026
+
 
                                   Figure 4
 
@@ -1507,13 +2050,6 @@ Internet-Draft                    CRIT                        March 2026
 
                                   Figure 6
 
-
-
-Langton                 Expires 22 September 2026              [Page 27]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    {subscriptionId} and {name} are always named variables.
    {resourceGroup} is a named variable or wildcard.  {namespace} and
    {type} are always hardcoded (e.g., Microsoft.Compute/virtualMachines,
@@ -1530,6 +2066,13 @@ Internet-Draft                    CRIT                        March 2026
    {api} is always hardcoded (e.g., compute, container, sqladmin).
    {project} is always a named variable. {zone} is a named variable for
    zonal resources and empty ({zone=}) for global or regional resources.
+
+
+
+Langton                 Expires 22 September 2026              [Page 37]
+
+Internet-Draft                    CRIT                        March 2026
+
 
 5.4.  Cloudflare Locator
 
@@ -1559,17 +2102,6 @@ Internet-Draft                    CRIT                        March 2026
    named variable for regional resources and empty ({region=}) for
    global resources.
 
-
-
-
-
-
-
-Langton                 Expires 22 September 2026              [Page 28]
-
-Internet-Draft                    CRIT                        March 2026
-
-
 6.  Variable Resolution Rules
 
 6.1.  Resolution Order
@@ -1588,6 +2120,15 @@ Internet-Draft                    CRIT                        March 2026
    4.  Wildcard slots ({field=*}) MUST NOT be resolved to a live
        identifier.  For inventory enumeration, a consumer MAY enumerate
        known values to produce a set of resolved templates.
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 38]
+
+Internet-Draft                    CRIT                        March 2026
+
 
    After step 3, the resulting string MUST be a valid provider
    identifier conforming to the declared template_format.  A consumer
@@ -1618,14 +2159,6 @@ Internet-Draft                    CRIT                        March 2026
         | zone           | Provider availability zone or GCP     |
         |                | zone identifier.                      |
         +----------------+---------------------------------------+
-
-
-
-Langton                 Expires 22 September 2026              [Page 29]
-
-Internet-Draft                    CRIT                        March 2026
-
-
         | location       | GCP region or multi-region identifier |
         |                | as used in resource paths.            |
         +----------------+---------------------------------------+
@@ -1645,6 +2178,14 @@ Internet-Draft                    CRIT                        March 2026
         | service-prefix | AWS service prefix as used in ARN     |
         |                | construction.                         |
         +----------------+---------------------------------------+
+
+
+
+Langton                 Expires 22 September 2026              [Page 39]
+
+Internet-Draft                    CRIT                        March 2026
+
+
         | resource-type  | Resource type component within an     |
         |                | ARN.                                  |
         +----------------+---------------------------------------+
@@ -1656,7 +2197,7 @@ Internet-Draft                    CRIT                        March 2026
         | api            | GCP API host prefix.                  |
         +----------------+---------------------------------------+
 
-                                 Table 17
+                                 Table 24
 
 7.  Exposure Window Computation
 
@@ -1674,14 +2215,6 @@ Internet-Draft                    CRIT                        March 2026
    The CRIT exposure window is therefore defined over time and consumer
    action, not over version ranges.  A resource enters the window when
    it is deployed into a vulnerable configuration.  It exits the window
-
-
-
-Langton                 Expires 22 September 2026              [Page 30]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    when a qualifying remediation event is recorded -- which may be long
    after provider_fix_date for resources where
    existing_deployments_remain_vulnerable is true, or never, for
@@ -1694,6 +2227,20 @@ Internet-Draft                    CRIT                        March 2026
       is true, consumers SHOULD indicate this in user-facing reporting.
 
    *  W_end is determined per Section 7.2.
+
+
+
+
+
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 40]
+
+Internet-Draft                    CRIT                        March 2026
+
 
 7.2.  Record-Level W_end
 
@@ -1722,7 +2269,7 @@ Internet-Draft                    CRIT                        March 2026
    |for any other reason    |                                         |
    +------------------------+-----------------------------------------+
 
-                                 Table 18
+                                 Table 25
 
 7.3.  The Deployed-Before-Fix Problem
 
@@ -1730,13 +2277,6 @@ Internet-Draft                    CRIT                        March 2026
    window for a specific resource instance is NOT closed by
    provider_fix_date.  A consumer MUST apply the following logic per
    resource:
-
-
-
-Langton                 Expires 22 September 2026              [Page 31]
-
-Internet-Draft                    CRIT                        March 2026
-
 
    if resource.deployed_date < provider_fix_date
      AND existing_deployments_remain_vulnerable == true
@@ -1748,6 +2288,15 @@ Internet-Draft                    CRIT                        March 2026
    A consumer MUST record a per-resource remediation event to close the
    window for that resource.  A consumer MUST NOT mark a resource as
    remediated solely because provider_fix_date has passed.
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 41]
+
+Internet-Draft                    CRIT                        March 2026
+
 
 7.4.  Opt-In and Config Change Drift
 
@@ -1786,14 +2335,6 @@ Internet-Draft                    CRIT                        March 2026
 
    *  Apply slot state selection rules defined in Section 3.4.
 
-
-
-
-Langton                 Expires 22 September 2026              [Page 32]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    *  Apply AWS region hardcoding rules defined in Section 5.1.
 
    *  Set existing_deployments_remain_vulnerable = false only when
@@ -1806,6 +2347,13 @@ Internet-Draft                    CRIT                        March 2026
    *  Set fix_propagation = no_fix_available and omit provider_fix_date
       when no fix exists.
 
+
+
+Langton                 Expires 22 September 2026              [Page 42]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    *  Include at least one remediation_actions entry for every record
       where vex_status is affected or fixed.
 
@@ -1815,6 +2363,15 @@ Internet-Draft                    CRIT                        March 2026
       records where fix_propagation is opt_in or config_change.  A
       placeholder entry with pending_reason (Section 4.6.4) satisfies
       this requirement.
+
+   *  Compute vectorString as the canonical CRIT vector string from the
+      record's own fields per Section 4.1.2.
+
+   *  Encode temporal.vuln_published_date as the PP metric value in Unix
+      epoch seconds (UTC).
+
+   *  Encode temporal.service_available_date as the SA metric value in
+      Unix epoch seconds (UTC).
 
    A conformant CRIT producer SHOULD:
 
@@ -1842,16 +2399,16 @@ Internet-Draft                    CRIT                        March 2026
    *  Track per-resource remediation events separately from record-level
       vex_status.
 
+   *  Treat a misconfiguration-phase detection match as a window-
+      reopening event.
 
 
 
-Langton                 Expires 22 September 2026              [Page 33]
+
+Langton                 Expires 22 September 2026              [Page 43]
 
 Internet-Draft                    CRIT                        March 2026
 
-
-   *  Treat a misconfiguration-phase detection match as a window-
-      reopening event.
 
    *  Keep misconfiguration-phase detections active indefinitely once
       deployed.
@@ -1861,6 +2418,15 @@ Internet-Draft                    CRIT                        March 2026
 
    *  Prefer image_digest over image_tag for container_image version
       comparison when both are present.
+
+   *  Ignore unknown metric keys in a vectorString without error
+      (forward compatibility per Section 4.1.2.3).
+
+   *  Reject a vectorString missing any registered metric.
+
+   *  Not treat a vectorString as a complete record representation.  Use
+      the full JSON record for operational decisions requiring fields
+      not carried in the vector (see Section 4.1.2.4).
 
    A conformant CRIT consumer SHOULD:
 
@@ -1892,19 +2458,17 @@ Internet-Draft                    CRIT                        March 2026
    using native objects defined by the upstream schema wherever a
    semantic mapping exists.  Fields without a native mapping continue to
    use x_crit_* prefixed properties within the appropriate extension
-   points.  Phase 2 requires coordination with CVEProject and OpenSSF
-   but does not require either upstream schema to define new first-class
-   fields for all CRIT concepts.
 
 
 
-
-
-
-Langton                 Expires 22 September 2026              [Page 34]
+Langton                 Expires 22 September 2026              [Page 44]
 
 Internet-Draft                    CRIT                        March 2026
 
+
+   points.  Phase 2 requires coordination with CVEProject and OpenSSF
+   but does not require either upstream schema to define new first-class
+   fields for all CRIT concepts.
 
    A producer MUST NOT remove Phase 1 fields until: Phase 2 native
    fields have been published for at least one full release cycle of the
@@ -1948,19 +2512,19 @@ Internet-Draft                    CRIT                        March 2026
    resource_type:
       affected[].modules[] -- Array of resource type strings.
 
-   template:
-      affected[].platforms[] -- CRIT template strings as platform
-      descriptors.
 
 
 
 
 
-
-Langton                 Expires 22 September 2026              [Page 35]
+Langton                 Expires 22 September 2026              [Page 45]
 
 Internet-Draft                    CRIT                        March 2026
 
+
+   template:
+      affected[].platforms[] -- CRIT template strings as platform
+      descriptors.
 
    provider_fix_version (range bound):
       affected[].versions[].lessThan and changes[].at -- Range [0,
@@ -2007,22 +2571,21 @@ Internet-Draft                    CRIT                        March 2026
    tooling that does not recognise a cloud:* ecosystem MUST NOT reject
    records using it.
 
-   Package names use the convention <service>:<resource_type> (e.g.,
-   rds:db, aks:cluster, lambda:function).
 
 
-
-
-Langton                 Expires 22 September 2026              [Page 36]
+Langton                 Expires 22 September 2026              [Page 46]
 
 Internet-Draft                    CRIT                        March 2026
 
 
+   Package names use the convention <service>:<resource_type> (e.g.,
+   rds:db, aks:cluster, lambda:function).
+
    PURLs follow the form pkg:cloud/<provider>/<service>/<resource_type>
-   (e.g., pkg:cloud/aws/rds/db).  This follows the cloud type proposal
-   described in the PURL specification [PURL].  Until the cloud type is
-   formally registered with the PURL specification, this is treated as a
-   custom type.
+   (e.g., pkg:cloud/aws/rds/db).  The cloud type is observed in the OSV
+   ecosystem but is not a registered type in the PURL specification
+   [PURL].  This specification acknowledges its use for OSV integration
+   but does not define or govern the pkg:cloud/ type itself.
 
    OSV record IDs follow the convention: OSV-<year>-<ID>.
 
@@ -2064,15 +2627,15 @@ Internet-Draft                    CRIT                        March 2026
    provider_advisory.advisory_url:
       references[] with type: "ADVISORY".
 
-   vuln_id:
-      aliases[].
 
 
-
-Langton                 Expires 22 September 2026              [Page 37]
+Langton                 Expires 22 September 2026              [Page 47]
 
 Internet-Draft                    CRIT                        March 2026
 
+
+   vuln_id:
+      aliases[].
 
    Residual fields in ecosystem_specific:
       fix_propagation -> x_crit_fix_propagation;
@@ -2117,18 +2680,21 @@ Internet-Draft                    CRIT                        March 2026
    compensating control details in contexts where that information
    assists an adversary in targeting unmitigated surface.
 
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 48]
+
+Internet-Draft                    CRIT                        March 2026
+
+
 11.4.  Template Wildcard Enumeration
 
    Wildcard templates reveal the structural scope of a consumer's cloud
    footprint.  A consumer MUST NOT expose unresolved wildcard templates
    in contexts where asset enumeration is harmful.
-
-
-
-Langton                 Expires 22 September 2026              [Page 38]
-
-Internet-Draft                    CRIT                        March 2026
-
 
 11.5.  Provider Fix Version Trust
 
@@ -2172,19 +2738,17 @@ Internet-Draft                    CRIT                        March 2026
    Spec Default Dictionary:
       The normative dictionary defined in Section 12.5 of this document.
       It covers the five providers and all service and resource type
-      combinations defined in the provider template reference sections.
-      Producers and consumers MUST support the Spec Default Dictionary
-      as a baseline.
 
 
 
-
-
-
-Langton                 Expires 22 September 2026              [Page 39]
+Langton                 Expires 22 September 2026              [Page 49]
 
 Internet-Draft                    CRIT                        March 2026
 
+
+      combinations defined in the provider template reference sections.
+      Producers and consumers MUST support the Spec Default Dictionary
+      as a baseline.
 
    Extended Dictionary:
       A superset of the Spec Default Dictionary produced by a Vulnetix
@@ -2229,18 +2793,20 @@ Internet-Draft                    CRIT                        March 2026
       resource types, each type has its own dictionary entry with a
       distinct (provider, service, resource_type) natural key.
 
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 50]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    template:
       The CRIT template string for this entry, expressed using the slot
       syntax defined in Section 3.  After variable resolution, the
       string MUST be a valid provider identifier of the declared
       template_format.
-
-
-
-Langton                 Expires 22 September 2026              [Page 40]
-
-Internet-Draft                    CRIT                        March 2026
-
 
    template_format:
       One of: aws_arn, azure_resource_id, gcp_resource_name,
@@ -2280,23 +2846,26 @@ Internet-Draft                    CRIT                        March 2026
       inventory queries from wildcard templates, to avoid submitting
       region-qualified identifiers for global-only resource types.
 
-12.4.  Dictionary Versioning
-
-   The Spec Default Dictionary is versioned alongside the CRIT
-   specification.  The dictionary version is the same as the
-   crit_version semver string carried in CRIT records.  Additions of new
-   entries within a minor version are backwards compatible.  Removal or
-   semantic modification of existing entries requires a major version
-   increment.
 
 
 
 
 
-Langton                 Expires 22 September 2026              [Page 41]
+
+
+Langton                 Expires 22 September 2026              [Page 51]
 
 Internet-Draft                    CRIT                        March 2026
 
+
+12.4.  Dictionary Versioning
+
+   The Spec Default Dictionary is versioned alongside the CRIT
+   specification.  The dictionary version is the same as the semver
+   string carried in the vectorString prefix of CRIT records.  Additions
+   of new entries within a minor version are backwards compatible.
+   Removal or semantic modification of existing entries requires a major
+   version increment.
 
    Producers SHOULD include a dictionary_version field in their extended
    dictionaries to allow consumers to detect stale dictionary coverage.
@@ -2337,6 +2906,14 @@ Internet-Draft                    CRIT                        March 2026
    |                     |                    |               |node, virtual-  |                                                                    |
    |                     |                    |               |router, virtual-|                                                                    |
    |                     |                    |               |service         |                                                                    |
+
+
+
+Langton                 Expires 22 September 2026              [Page 52]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |appconfig            |appconfig           |regional       |application     |arn:aws:appconfig:{region}:{account}:application/{resource-id}      |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
@@ -2346,14 +2923,6 @@ Internet-Draft                    CRIT                        March 2026
    |                     |                    |               |builder, stack  |                                                                    |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |appsync              |appsync             |regional       |graphqlapi      |arn:aws:appsync:{region}:{account}:graphqlapi/{resource-id}         |
-
-
-
-Langton                 Expires 22 September 2026              [Page 42]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |athena               |athena              |regional       |workgroup       |arn:aws:athena:{region}:{account}:workgroup/{resource-id}           |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
@@ -2393,6 +2962,14 @@ Internet-Draft                    CRIT                        March 2026
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |codecommit           |codecommit          |regional       |repository      |arn:aws:codecommit:{region}:{account}:repository/{resource-id}      |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
+
+
+
+Langton                 Expires 22 September 2026              [Page 53]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |codedeploy           |codedeploy          |regional       |application,    |arn:aws:codedeploy:{region}:{account}:{resource-type}/{resource-id} |
    |                     |                    |               |deployment-group|                                                                    |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
@@ -2402,14 +2979,6 @@ Internet-Draft                    CRIT                        March 2026
    |                     |                    |               |                |connections:{region}:{account}:connection/{resource-id}             |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |cognito              |cognito-idp         |regional       |userpool        |arn:aws:cognito-idp:{region}:{account}:userpool/{resource-id}       |
-
-
-
-Langton                 Expires 22 September 2026              [Page 43]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |comprehend           |comprehend          |regional       |document-       |arn:aws:comprehend:{region}:{account}:{resource-type}/{resource-id} |
    |                     |                    |               |classifier,     |                                                                    |
@@ -2449,6 +3018,14 @@ Internet-Draft                    CRIT                        March 2026
    |                     |                    |               |internet-       |                                                                    |
    |                     |                    |               |gateway, key-   |                                                                    |
    |                     |                    |               |pair, launch-   |                                                                    |
+
+
+
+Langton                 Expires 22 September 2026              [Page 54]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |                     |                    |               |template, nat-  |                                                                    |
    |                     |                    |               |gateway,        |                                                                    |
    |                     |                    |               |network-acl,    |                                                                    |
@@ -2458,14 +3035,6 @@ Internet-Draft                    CRIT                        March 2026
    |                     |                    |               |prefix-list,    |                                                                    |
    |                     |                    |               |route-table,    |                                                                    |
    |                     |                    |               |security-group, |                                                                    |
-
-
-
-Langton                 Expires 22 September 2026              [Page 44]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    |                     |                    |               |snapshot,       |                                                                    |
    |                     |                    |               |subnet, transit-|                                                                    |
    |                     |                    |               |gateway,        |                                                                    |
@@ -2505,6 +3074,14 @@ Internet-Draft                    CRIT                        March 2026
    |                     |                    |               |                |type}/{resource-id}                                                 |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |emr_serverless       |emr-serverless      |regional       |application     |arn:aws:emr-serverless:{region}:{account}:application/{resource-id} |
+
+
+
+Langton                 Expires 22 September 2026              [Page 55]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |eventbridge          |events              |regional       |event-bus, rule |arn:aws:events:{region}:{account}:{resource-type}/{resource-id}     |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
@@ -2514,14 +3091,6 @@ Internet-Draft                    CRIT                        March 2026
    |                     |                    |               |system, volume  |                                                                    |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |gamelift             |gamelift            |regional       |build, fleet    |arn:aws:gamelift:{region}:{account}:{resource-type}/{resource-id}   |
-
-
-
-Langton                 Expires 22 September 2026              [Page 45]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |global_accelerator   |globalaccelerator   |global-only    |accelerator     |arn:aws:globalaccelerator:{region=us-east-                          |
    |                     |                    |               |                |1}:{account}:accelerator/{resource-id}                              |
@@ -2561,6 +3130,14 @@ Internet-Draft                    CRIT                        March 2026
    |kinesis_video        |kinesisvideo        |regional       |stream          |arn:aws:kinesisvideo:{region}:{account}:stream/{resource-id}        |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |kms                  |kms                 |regional       |alias, key      |arn:aws:kms:{region}:{account}:{resource-type}/{resource-id}        |
+
+
+
+Langton                 Expires 22 September 2026              [Page 56]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |lambda               |lambda              |regional       |function, layer |arn:aws:lambda:{region}:{account}:{resource-type}/{resource-id}     |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
@@ -2570,14 +3147,6 @@ Internet-Draft                    CRIT                        March 2026
    |                     |                    |               |service,        |                                                                    |
    |                     |                    |               |database,       |                                                                    |
    |                     |                    |               |instance, load- |                                                                    |
-
-
-
-Langton                 Expires 22 September 2026              [Page 46]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    |                     |                    |               |balancer        |                                                                    |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |location             |geo                 |regional       |geofence-       |arn:aws:geo:{region}:{account}:{resource-type}/{resource-id}        |
@@ -2617,6 +3186,14 @@ Internet-Draft                    CRIT                        March 2026
    |                     |                    |               |                |1}:{account}:account/{resource-id}                                  |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |personalize          |personalize         |regional       |campaign,       |arn:aws:personalize:{region}:{account}:{resource-type}/{resource-id}|
+
+
+
+Langton                 Expires 22 September 2026              [Page 57]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |                     |                    |               |dataset-group   |                                                                    |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |pinpoint             |mobiletargeting     |regional       |app             |arn:aws:mobiletargeting:{region}:{account}:app/{resource-id}        |
@@ -2626,14 +3203,6 @@ Internet-Draft                    CRIT                        March 2026
    |prometheus           |aps                 |regional       |workspace       |arn:aws:aps:{region}:{account}:workspace/{resource-id}              |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |qldb                 |qldb                |regional       |ledger          |arn:aws:qldb:{region}:{account}:ledger/{resource-id}                |
-
-
-
-Langton                 Expires 22 September 2026              [Page 47]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |quicksight           |quicksight          |regional       |dashboard,      |arn:aws:quicksight:{region}:{account}:{resource-type}/{resource-id} |
    |                     |                    |               |dataset,        |                                                                    |
@@ -2673,6 +3242,14 @@ Internet-Draft                    CRIT                        March 2026
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |secrets_manager      |secretsmanager      |regional       |secret          |arn:aws:secretsmanager:{region}:{account}:secret/{resource-id}      |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
+
+
+
+Langton                 Expires 22 September 2026              [Page 58]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |security_hub         |securityhub         |regional       |hub             |arn:aws:securityhub:{region}:{account}:hub/{resource-id}            |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |ses                  |ses                 |regional       |configuration-  |arn:aws:ses:{region}:{account}:{resource-type}/{resource-id}        |
@@ -2682,14 +3259,6 @@ Internet-Draft                    CRIT                        March 2026
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
    |signer               |signer              |regional       |signing-profile |arn:aws:signer:{region}:{account}:signing-profile/{resource-id}     |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
-
-
-
-Langton                 Expires 22 September 2026              [Page 48]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    |sns                  |sns                 |regional       |platform-       |arn:aws:sns:{region}:{account}:{resource-type}/{resource-id}        |
    |                     |                    |               |application,    |                                                                    |
    |                     |                    |               |subscription,   |                                                                    |
@@ -2730,21 +3299,20 @@ Internet-Draft                    CRIT                        March 2026
    |                     |                    |               |rule            |                                                                    |
    +---------------------+--------------------+---------------+----------------+--------------------------------------------------------------------+
 
-                                  Table 19
+
+
+Langton                 Expires 22 September 2026              [Page 59]
+
+Internet-Draft                    CRIT                        March 2026
+
+
+                                  Table 26
 
 12.5.2.  Azure Entries
 
    Azure resources are identified by Azure Resource IDs
    [Azure-ResourceID].  The template_format for all Azure entries is
    azure_resource_id.
-
-
-
-
-Langton                 Expires 22 September 2026              [Page 49]
-
-Internet-Draft                    CRIT                        March 2026
-
 
    +======================+=================================+=======================+===============+===========================================================================================================+
    |service               |namespace                        |azure_type             |region_behavior|Template                                                                                                   |
@@ -2786,6 +3354,14 @@ Internet-Draft                    CRIT                        March 2026
    |cognitive_services    |Microsoft.CognitiveServices      |accounts               |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CognitiveServices/      |
    |                      |                                 |                       |               |accounts/{name}                                                                                            |
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
+
+
+
+Langton                 Expires 22 September 2026              [Page 60]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |communication_services|Microsoft.Communication          |communicationServices  |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Communication/          |
    |                      |                                 |                       |               |communicationServices/{name}                                                                               |
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
@@ -2794,14 +3370,6 @@ Internet-Draft                    CRIT                        March 2026
    |container_apps        |Microsoft.App                    |managedEnvironments    |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.App/                    |
    |                      |                                 |                       |               |managedEnvironments/{name}                                                                                 |
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
-
-
-
-Langton                 Expires 22 September 2026              [Page 50]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    |container_instances   |Microsoft.ContainerInstance      |containerGroups        |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ContainerInstance/      |
    |                      |                                 |                       |               |containerGroups/{name}                                                                                     |
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
@@ -2842,6 +3410,14 @@ Internet-Draft                    CRIT                        March 2026
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
    |event_hubs            |Microsoft.EventHub               |namespaces             |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.EventHub/               |
    |                      |                                 |                       |               |namespaces/{name}                                                                                          |
+
+
+
+Langton                 Expires 22 September 2026              [Page 61]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
    |express_route         |Microsoft.Network                |expressRouteCircuits   |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/                |
    |                      |                                 |                       |               |expressRouteCircuits/{name}                                                                                |
@@ -2850,14 +3426,6 @@ Internet-Draft                    CRIT                        March 2026
    |                      |                                 |                       |               |azureFirewalls/{name}                                                                                      |
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
    |firewall              |Microsoft.Network                |firewallPolicies       |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/                |
-
-
-
-Langton                 Expires 22 September 2026              [Page 51]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    |                      |                                 |                       |               |firewallPolicies/{name}                                                                                    |
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
    |front_door            |Microsoft.Network                |frontDoors             |global-only    |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/                |
@@ -2898,6 +3466,14 @@ Internet-Draft                    CRIT                        March 2026
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
    |monitor               |Microsoft.Monitor                |accounts               |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Monitor/accounts/{name} |
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
+
+
+
+Langton                 Expires 22 September 2026              [Page 62]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |monitor               |Microsoft.Insights               |actionGroups           |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Insights/               |
    |                      |                                 |                       |               |actionGroups/{name}                                                                                        |
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
@@ -2906,14 +3482,6 @@ Internet-Draft                    CRIT                        March 2026
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
    |mysql                 |Microsoft.DBforMySQL             |flexibleServers        |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DBforMySQL/             |
    |                      |                                 |                       |               |flexibleServers/{name}                                                                                     |
-
-
-
-Langton                 Expires 22 September 2026              [Page 52]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
    |nat_gateway           |Microsoft.Network                |natGateways            |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/                |
    |                      |                                 |                       |               |natGateways/{name}                                                                                         |
@@ -2954,6 +3522,14 @@ Internet-Draft                    CRIT                        March 2026
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
    |service_fabric        |Microsoft.ServiceFabric          |clusters               |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ServiceFabric/          |
    |                      |                                 |                       |               |clusters/{name}                                                                                            |
+
+
+
+Langton                 Expires 22 September 2026              [Page 63]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
    |signalr               |Microsoft.SignalRService         |SignalR                |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.SignalRService/         |
    |                      |                                 |                       |               |SignalR/{name}                                                                                             |
@@ -2962,14 +3538,6 @@ Internet-Draft                    CRIT                        March 2026
    |                      |                                 |                       |               |Spring/{name}                                                                                              |
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
    |sql_database          |Microsoft.Sql                    |servers/databases      |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Sql/servers/            |
-
-
-
-Langton                 Expires 22 September 2026              [Page 53]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    |                      |                                 |                       |               |databases/{name}                                                                                           |
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
    |sql_managed_instance  |Microsoft.Sql                    |managedInstances       |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Sql/                    |
@@ -3010,6 +3578,14 @@ Internet-Draft                    CRIT                        March 2026
    |                      |                                 |                       |               |networkInterfaces/{name}                                                                                   |
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
    |virtual_network       |Microsoft.Network                |routeTables            |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/                |
+
+
+
+Langton                 Expires 22 September 2026              [Page 64]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |                      |                                 |                       |               |routeTables/{name}                                                                                         |
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
    |virtual_network       |Microsoft.Network                |virtualNetworks        |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/                |
@@ -3018,19 +3594,11 @@ Internet-Draft                    CRIT                        March 2026
    |vpn_gateway           |Microsoft.Network                |virtualNetworkGateways |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/                |
    |                      |                                 |                       |               |virtualNetworkGateways/{name}                                                                              |
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
-
-
-
-Langton                 Expires 22 September 2026              [Page 54]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    |vpn_gateway           |Microsoft.Network                |vpnGateways            |regional       |/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/                |
    |                      |                                 |                       |               |vpnGateways/{name}                                                                                         |
    +----------------------+---------------------------------+-----------------------+---------------+-----------------------------------------------------------------------------------------------------------+
 
-                                  Table 20
+                                  Table 27
 
 12.5.3.  GCP Entries
 
@@ -3066,6 +3634,14 @@ Internet-Draft                    CRIT                        March 2026
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
    |cloud_armor            |securityPolicy     |compute.googleapis.com         |global-only    |//compute.googleapis.com/projects/{project}/global/securityPolicies/{policy}     |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
+
+
+
+Langton                 Expires 22 September 2026              [Page 65]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |cloud_build            |build              |cloudbuild.googleapis.com      |regional       |//cloudbuild.googleapis.com/                                                     |
    |                       |                   |                               |               |projects/{project}/locations/{location}/builds/{build}                           |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
@@ -3074,14 +3650,6 @@ Internet-Draft                    CRIT                        March 2026
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
    |cloud_deploy           |pipeline           |clouddeploy.googleapis.com     |regional       |//clouddeploy.googleapis.com/                                                    |
    |                       |                   |                               |               |projects/{project}/locations/{location}/deliveryPipelines/{pipeline}             |
-
-
-
-Langton                 Expires 22 September 2026              [Page 55]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
    |cloud_deploy           |target             |clouddeploy.googleapis.com     |regional       |//clouddeploy.googleapis.com/                                                    |
    |                       |                   |                               |               |projects/{project}/locations/{location}/targets/{target}                         |
@@ -3122,6 +3690,14 @@ Internet-Draft                    CRIT                        March 2026
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
    |cloud_sql              |instance           |sqladmin.googleapis.com        |regional       |//sqladmin.googleapis.com/projects/{project}/instances/{instance}                |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
+
+
+
+Langton                 Expires 22 September 2026              [Page 66]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |cloud_storage          |bucket             |storage.googleapis.com         |regional       |//storage.googleapis.com/projects/{project}/buckets/{bucket}                     |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
    |cloud_tasks            |queue              |cloudtasks.googleapis.com      |regional       |//cloudtasks.googleapis.com/                                                     |
@@ -3130,14 +3706,6 @@ Internet-Draft                    CRIT                        March 2026
    |composer               |environment        |composer.googleapis.com        |regional       |//composer.googleapis.com/                                                       |
    |                       |                   |                               |               |projects/{project}/locations/{location}/environments/{environment}               |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
-
-
-
-Langton                 Expires 22 September 2026              [Page 56]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    |compute                |address            |compute.googleapis.com         |regional       |//compute.googleapis.com/projects/{project}/regions/{region}/addresses/{address} |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
    |compute                |backendService     |compute.googleapis.com         |global-only    |//compute.googleapis.com/projects/{project}/global/                              |
@@ -3178,6 +3746,14 @@ Internet-Draft                    CRIT                        March 2026
    |compute                |urlMap             |compute.googleapis.com         |global-only    |//compute.googleapis.com/projects/{project}/global/urlMaps/{urlMap}              |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
    |compute                |vpnGateway         |compute.googleapis.com         |regional       |//compute.googleapis.com/                                                        |
+
+
+
+Langton                 Expires 22 September 2026              [Page 67]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |                       |                   |                               |               |projects/{project}/regions/{region}/vpnGateways/{gateway}                        |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
    |compute                |vpnTunnel          |compute.googleapis.com         |regional       |//compute.googleapis.com/projects/{project}/regions/{region}/vpnTunnels/{tunnel} |
@@ -3186,14 +3762,6 @@ Internet-Draft                    CRIT                        March 2026
    |                       |                   |                               |               |projects/{project}/locations/{location}/entryGroups/{entryGroup}                 |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
    |dataflow               |job                |dataflow.googleapis.com        |regional       |//dataflow.googleapis.com/projects/{project}/locations/{location}/jobs/{job}     |
-
-
-
-Langton                 Expires 22 September 2026              [Page 57]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
    |dataproc               |cluster            |dataproc.googleapis.com        |regional       |//dataproc.googleapis.com/projects/{project}/regions/{region}/clusters/{cluster} |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
@@ -3234,6 +3802,14 @@ Internet-Draft                    CRIT                        March 2026
    |                       |                   |                               |               |projects/{project}/locations/{location}/namespaces/{namespace}                   |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
    |spanner                |database           |spanner.googleapis.com         |regional       |//spanner.googleapis.com/                                                        |
+
+
+
+Langton                 Expires 22 September 2026              [Page 68]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |                       |                   |                               |               |projects/{project}/instances/{instance}/databases/{database}                     |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
    |spanner                |instance           |spanner.googleapis.com         |regional       |//spanner.googleapis.com/projects/{project}/instances/{instance}                 |
@@ -3242,14 +3818,6 @@ Internet-Draft                    CRIT                        March 2026
    |                       |                   |                               |               |projects/{project}/locations/{location}/datasets/{dataset}                       |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
    |vertex_ai              |endpoint           |aiplatform.googleapis.com      |regional       |//aiplatform.googleapis.com/                                                     |
-
-
-
-Langton                 Expires 22 September 2026              [Page 58]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    |                       |                   |                               |               |projects/{project}/locations/{location}/endpoints/{endpoint}                     |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
    |vertex_ai              |model              |aiplatform.googleapis.com      |regional       |//aiplatform.googleapis.com/                                                     |
@@ -3262,7 +3830,7 @@ Internet-Draft                    CRIT                        March 2026
    |                       |                   |                               |               |projects/{project}/locations/{location}/workflows/{workflow}                     |
    +-----------------------+-------------------+-------------------------------+---------------+---------------------------------------------------------------------------------+
 
-                                  Table 21
+                                  Table 28
 
 12.5.4.  Cloudflare Entries
 
@@ -3290,6 +3858,14 @@ Internet-Draft                    CRIT                        March 2026
    +---------------+------------------------+---------------------------------------------------------------------+
    |argo           |argo_tunnel             |com.cloudflare.api.account.{account_id}.argo_tunnel.{id}             |
    +---------------+------------------------+---------------------------------------------------------------------+
+
+
+
+Langton                 Expires 22 September 2026              [Page 69]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |d1             |d1_database             |com.cloudflare.api.account.{account_id}.d1_database.{id}             |
    +---------------+------------------------+---------------------------------------------------------------------+
    |dns            |dns_record              |com.cloudflare.api.account.{account_id}.dns_record.{id}              |
@@ -3298,14 +3874,6 @@ Internet-Draft                    CRIT                        March 2026
    +---------------+------------------------+---------------------------------------------------------------------+
    |durable_objects|durable_object_namespace|com.cloudflare.api.account.{account_id}.durable_object_namespace.{id}|
    +---------------+------------------------+---------------------------------------------------------------------+
-
-
-
-Langton                 Expires 22 September 2026              [Page 59]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    |email_routing  |email_routing_rule      |com.cloudflare.api.account.{account_id}.email_routing_rule.{id}      |
    +---------------+------------------------+---------------------------------------------------------------------+
    |hyperdrive     |hyperdrive_config       |com.cloudflare.api.account.{account_id}.hyperdrive_config.{id}       |
@@ -3346,6 +3914,14 @@ Internet-Draft                    CRIT                        March 2026
    +---------------+------------------------+---------------------------------------------------------------------+
    |tunnel         |tunnel                  |com.cloudflare.api.account.{account_id}.tunnel.{id}                  |
    +---------------+------------------------+---------------------------------------------------------------------+
+
+
+
+Langton                 Expires 22 September 2026              [Page 70]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |turnstile      |turnstile_widget        |com.cloudflare.api.account.{account_id}.turnstile_widget.{id}        |
    +---------------+------------------------+---------------------------------------------------------------------+
    |vectorize      |vectorize_index         |com.cloudflare.api.account.{account_id}.vectorize_index.{id}         |
@@ -3354,14 +3930,6 @@ Internet-Draft                    CRIT                        March 2026
    +---------------+------------------------+---------------------------------------------------------------------+
    |waf            |waf_ruleset             |com.cloudflare.api.account.{account_id}.waf_ruleset.{id}             |
    +---------------+------------------------+---------------------------------------------------------------------+
-
-
-
-Langton                 Expires 22 September 2026              [Page 60]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    |waiting_room   |waiting_room            |com.cloudflare.api.account.{account_id}.waiting_room.{id}            |
    +---------------+------------------------+---------------------------------------------------------------------+
    |workers        |worker                  |com.cloudflare.api.account.{account_id}.worker.{id}                  |
@@ -3379,7 +3947,7 @@ Internet-Draft                    CRIT                        March 2026
    |zero_trust     |gateway_rule            |com.cloudflare.api.account.{account_id}.gateway_rule.{id}            |
    +---------------+------------------------+---------------------------------------------------------------------+
 
-                                  Table 22
+                                  Table 29
 
 12.5.5.  Oracle Cloud Entries
 
@@ -3402,6 +3970,14 @@ Internet-Draft                    CRIT                        March 2026
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
    |bastion               |bastionsession            |regional       |ocid1.bastionsession.{realm=oc1}.{region}..{unique-id}         |
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
+
+
+
+Langton                 Expires 22 September 2026              [Page 71]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    |block_storage         |bootvolume                |regional       |ocid1.bootvolume.{realm=oc1}.{region}..{unique-id}             |
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
    |block_storage         |bootvolumebackup          |regional       |ocid1.bootvolumebackup.{realm=oc1}.{region}..{unique-id}       |
@@ -3410,14 +3986,6 @@ Internet-Draft                    CRIT                        March 2026
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
    |block_storage         |volumebackup              |regional       |ocid1.volumebackup.{realm=oc1}.{region}..{unique-id}           |
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
-
-
-
-Langton                 Expires 22 September 2026              [Page 61]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    |block_storage         |volumegroup               |regional       |ocid1.volumegroup.{realm=oc1}.{region}..{unique-id}            |
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
    |cloud_guard           |cloudguardtarget          |regional       |ocid1.cloudguardtarget.{realm=oc1}.{region}..{unique-id}       |
@@ -3458,6 +4026,14 @@ Internet-Draft                    CRIT                        March 2026
    |dns                   |dns-zone                  |regional       |ocid1.dns-zone.{realm=oc1}.{region}..{unique-id}               |
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
    |events                |eventrule                 |regional       |ocid1.eventrule.{realm=oc1}.{region}..{unique-id}              |
+
+
+
+Langton                 Expires 22 September 2026              [Page 72]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
    |file_storage          |exportset                 |regional       |ocid1.exportset.{realm=oc1}.{region}..{unique-id}              |
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
@@ -3466,14 +4042,6 @@ Internet-Draft                    CRIT                        March 2026
    |file_storage          |mounttarget               |regional       |ocid1.mounttarget.{realm=oc1}.{region}..{unique-id}            |
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
    |functions             |fnapp                     |regional       |ocid1.fnapp.{realm=oc1}.{region}..{unique-id}                  |
-
-
-
-Langton                 Expires 22 September 2026              [Page 62]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
    |functions             |fnfunc                    |regional       |ocid1.fnfunc.{realm=oc1}.{region}..{unique-id}                 |
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
@@ -3514,6 +4082,14 @@ Internet-Draft                    CRIT                        March 2026
    |networking            |routetable                |regional       |ocid1.routetable.{realm=oc1}.{region}..{unique-id}             |
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
    |networking            |securitylist              |regional       |ocid1.securitylist.{realm=oc1}.{region}..{unique-id}           |
+
+
+
+Langton                 Expires 22 September 2026              [Page 73]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
    |networking            |servicegateway            |regional       |ocid1.servicegateway.{realm=oc1}.{region}..{unique-id}         |
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
@@ -3522,14 +4098,6 @@ Internet-Draft                    CRIT                        March 2026
    |nosql                 |nosqltable                |regional       |ocid1.nosqltable.{realm=oc1}.{region}..{unique-id}             |
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
    |notifications         |onstopic                  |regional       |ocid1.onstopic.{realm=oc1}.{region}..{unique-id}               |
-
-
-
-Langton                 Expires 22 September 2026              [Page 63]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
    |object_storage        |bucket                    |regional       |ocid1.bucket.{realm=oc1}.{region}..{unique-id}                 |
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
@@ -3552,7 +4120,7 @@ Internet-Draft                    CRIT                        March 2026
    |waf                   |waaspolicy                |regional       |ocid1.waaspolicy.{realm=oc1}.{region}..{unique-id}             |
    +----------------------+--------------------------+---------------+---------------------------------------------------------------+
 
-                                  Table 23
+                                  Table 30
 
 13.  References
 
@@ -3571,20 +4139,16 @@ Internet-Draft                    CRIT                        March 2026
               time -- Representations for information interchange",
               ISO 8601, 2019.
 
-   [AWS-ARN]  Amazon Web Services, "Amazon Resource Names (ARNs)", 2024,
-              <https://docs.aws.amazon.com/IAM/latest/UserGuide/
-              reference-arns.html>.
 
 
-
-
-
-
-
-Langton                 Expires 22 September 2026              [Page 64]
+Langton                 Expires 22 September 2026              [Page 74]
 
 Internet-Draft                    CRIT                        March 2026
 
+
+   [AWS-ARN]  Amazon Web Services, "Amazon Resource Names (ARNs)", 2024,
+              <https://docs.aws.amazon.com/IAM/latest/UserGuide/
+              reference-arns.html>.
 
    [Azure-ResourceID]
               Microsoft, "Azure Resource Manager REST API Reference",
@@ -3625,11 +4189,6 @@ Internet-Draft                    CRIT                        March 2026
               "Exploit Prediction Scoring System (EPSS)", 2024,
               <https://www.first.org/epss/>.
 
-   [CVSS31]   Forum of Incident Response and Security Teams (FIRST),
-              "Common Vulnerability Scoring System v3.1 Specification
-              Document", 2019,
-              <https://www.first.org/cvss/v3.1/specification-document>.
-
    [PURL]     package-url, "Package URL (PURL) Specification", 2024,
               <https://github.com/package-url/purl-spec>.
 
@@ -3637,7 +4196,8 @@ Internet-Draft                    CRIT                        March 2026
 
 
 
-Langton                 Expires 22 September 2026              [Page 65]
+
+Langton                 Expires 22 September 2026              [Page 75]
 
 Internet-Draft                    CRIT                        March 2026
 
@@ -3659,8 +4219,7 @@ Appendix A.  Complete CRIT Record Example -- AWS RDS MySQL (Informative)
    opt-in auto-upgrade and the deployed-before-fix problem.
 
    {
-     "crit_version": "0.2.0",
-     "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+     "vectorString": "CRITv0.2.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance",
      "vuln_id": "CVE-2024-20967",
      "provider": "aws",
      "service": "rds",
@@ -3690,15 +4249,15 @@ Appendix A.  Complete CRIT Record Example -- AWS RDS MySQL (Informative)
        "engine": "mysql",
        "version": "8.0.36",
        "auto_upgrade": false,
+       "note": "auto_minor_version_upgrade must be enabled
 
 
 
-Langton                 Expires 22 September 2026              [Page 66]
+Langton                 Expires 22 September 2026              [Page 76]
 
 Internet-Draft                    CRIT                        March 2026
 
 
-       "note": "auto_minor_version_upgrade must be enabled
          for automatic application."
      },
      "remediation_actions": [
@@ -3734,30 +4293,26 @@ Internet-Draft                    CRIT                        March 2026
      ],
      "provider_advisory": {
        "advisory_id": "ALAS2-2024-2489",
-       "advisory_url": "https://alas.aws.amazon.com/AL2/ALAS-2024.html",
-       "provider_severity": "high",
-       "provider_cvss_score": 7.2,
-       "provider_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U"
+       "advisory_url": "https://alas.aws.amazon.com/AL2/ALAS-2024.html"
      }
    }
 
                     Figure 12: AWS RDS MySQL CRIT Record
 
-
-
-
-
-
-
-Langton                 Expires 22 September 2026              [Page 67]
-
-Internet-Draft                    CRIT                        March 2026
-
-
 Appendix B.  Open Issues (Informative)
 
    The following issues require design decisions prior to a stable v1.0
    release:
+
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 77]
+
+Internet-Draft                    CRIT                        March 2026
+
 
    1.  *vulnerability_introduced_date sourcing:* What is the
        authoritative source?  NVD, provider advisory, Git commit
@@ -3805,4 +4360,9 @@ Author's Address
 
 
 
-Langton                 Expires 22 September 2026              [Page 68]
+
+
+
+
+
+Langton                 Expires 22 September 2026              [Page 78]

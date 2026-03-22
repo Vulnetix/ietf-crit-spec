@@ -1,15 +1,15 @@
 # CRIT Spec Conformance Report
 
-**Date:** 2026-03-22 09:47:24 UTC  
+**Date:** 2026-03-22 14:12:40 UTC  
 **Verdict:** WARN  
-**Total Checks:** 52224 | **Passed:** 52211 | **Failed:** 0 | **Warnings:** 13  
+**Total Checks:** 52620 | **Passed:** 52607 | **Failed:** 0 | **Warnings:** 13  
 
 ## Summary
 
 | Suite | Rules | Samples | Checks | Passed | Failed | Warnings |
 |-------|------:|--------:|-------:|-------:|-------:|---------:|
 | Template Rules | 20 | 2565 | 51300 | 51300 | 0 | 0 |
-| Sample Record Rules | 28 | 33 | 924 | 911 | 0 | 13 |
+| Sample Record Rules | 40 | 33 | 1320 | 1307 | 0 | 13 |
 
 ## Template Rules
 
@@ -48,7 +48,7 @@ pie title "Template Rules"
 
 ```mermaid
 pie title "Sample Record Rules"
-    "Pass" : 911
+    "Pass" : 1307
     "Fail" : 0
     "Warn" : 13
 ```
@@ -93,8 +93,20 @@ pie title "Sample Record Rules"
 | PASS | MUST | 4.6.4 | `pending-reason-enum` | 33 | 0 | 0 | pending_reason MUST be a valid enum value when present |
 | PASS | MUST | 4.6.4 | `pending-reason-empty-query` | 33 | 0 | 0 | query MUST be empty string when pending_reason is set |
 | PASS | MUST | 4.6.4 | `no-empty-query-without-pending` | 33 | 0 | 0 | functional detection with empty query requires pending_reason |
-| PASS | MUST | 4.7 | `cvss-score-range` | 33 | 0 | 0 | provider_cvss_score MUST be in [0.0, 10.0] when present |
-| PASS | MUST | 4.7 | `cvss-vector-format` | 33 | 0 | 0 | provider_cvss_vector MUST conform to CVSS v3.1 or v4.0 format |
+| PASS | MUST | 4.1.2 | `vector-string-parseable` | 33 | 0 | 0 | vectorString MUST be a parseable CRIT vector with valid known metrics |
+| PASS | MUST | 4.1.2 | `vector-provider-matches` | 33 | 0 | 0 | CP metric MUST match record provider field |
+| PASS | MUST | 4.1.2 | `vector-vex-matches` | 33 | 0 | 0 | VS metric MUST match record vex_status field |
+| PASS | MUST | 4.1.2 | `vector-propagation-matches` | 33 | 0 | 0 | FP metric MUST match record fix_propagation field |
+| PASS | MUST | 4.1.2 | `vector-responsibility-matches` | 33 | 0 | 0 | SR metric MUST match record shared_responsibility field |
+| PASS | MUST | 4.1.2 | `vector-lifecycle-matches` | 33 | 0 | 0 | RL metric MUST match record resource_lifecycle field |
+| PASS | MUST | 4.1.2 | `vector-existing-vuln-matches` | 33 | 0 | 0 | EV metric MUST match record existing_deployments_remain_vulnerable field |
+| PASS | MUST | 4.1.2 | `vector-qualifiers-match` | 33 | 0 | 0 | vector qualifiers MUST match record vuln_id, service, resource_type |
+| PASS | MUST | 4.1.2 | `vector-string-canonical` | 33 | 0 | 0 | vectorString MUST match canonical vector computed from record fields |
+| PASS | MUST | 4.1.2 | `vector-published-matches` | 33 | 0 | 0 | PP epoch MUST match temporal.vuln_published_date converted to UTC epoch |
+| PASS | MUST | 4.1.2 | `vector-service-avail-matches` | 33 | 0 | 0 | SA epoch MUST match temporal.service_available_date converted to UTC epoch |
+| PASS | MUST | 4.1.2 | `vector-metrics-order` | 33 | 0 | 0 | registered metrics MUST appear in canonical order CP VS FP SR RL EV PP SA |
+| PASS | MUST | 4.1.2 | `vector-unknown-tolerated` | 33 | 0 | 0 | consumer MUST NOT reject vectors with unknown metric keys |
+| PASS | MUST | 4.1.2 | `vector-missing-registered-rejected` | 33 | 0 | 0 | consumer MUST reject vectors missing a registered metric |
 
 ### Failures & Warnings
 

@@ -1,6 +1,6 @@
 // crit-test is the unified CRIT spec conformance test tool.
 // It generates interpolated template samples from dictionaries + wordlists,
-// runs 20 template-level rules and 28 record-level rules against hand-authored
+// runs 20 template-level rules and 40 record-level rules against hand-authored
 // samples, and produces a single consolidated Markdown report.
 //
 // Usage:
@@ -25,6 +25,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	critspec "github.com/Vulnetix/ietf-crit-spec"
 )
 
 // ---------------------------------------------------------------------------
@@ -92,8 +94,7 @@ type SamplesOutput struct {
 // ---------------------------------------------------------------------------
 
 type CRITRecord struct {
-	CritVersion                         string              `json:"crit_version"`
-	ID                                  string              `json:"id"`
+	VectorString                        string              `json:"vectorString"`
 	VulnID                              string              `json:"vuln_id"`
 	Provider                            string              `json:"provider"`
 	Service                             string              `json:"service"`
@@ -158,11 +159,8 @@ type Detection struct {
 }
 
 type ProviderAdvisory struct {
-	AdvisoryID         *string  `json:"advisory_id,omitempty"`
-	AdvisoryURL        *string  `json:"advisory_url,omitempty"`
-	ProviderSeverity   *string  `json:"provider_severity,omitempty"`
-	ProviderCVSSScore  *float64 `json:"provider_cvss_score,omitempty"`
-	ProviderCVSSVector *string  `json:"provider_cvss_vector,omitempty"`
+	AdvisoryID  *string `json:"advisory_id,omitempty"`
+	AdvisoryURL *string `json:"advisory_url,omitempty"`
 }
 
 // ---------------------------------------------------------------------------
@@ -201,8 +199,6 @@ var (
 	serviceKeyRe   = regexp.MustCompile(`^[a-z][a-z0-9_]*$`)
 	resourceTypeRe = regexp.MustCompile(`^[a-zA-Z][a-zA-Z0-9_/\-]*$`)
 	dateRe         = regexp.MustCompile(`^\d{4}-\d{2}-\d{2}$`)
-	cvss31Re       = regexp.MustCompile(`^CVSS:3\.[01]/AV:[NALP]/AC:[LH]/PR:[NLH]/UI:[NR]/S:[UC]/C:[NLH]/I:[NLH]/A:[NLH]$`)
-	cvss40Re       = regexp.MustCompile(`^CVSS:4\.0/`)
 )
 
 var providerFormatMap = map[string]string{
@@ -255,6 +251,14 @@ func parseSlots(template string) []slotInfo {
 		slots = append(slots, si)
 	}
 	return slots
+}
+
+func dateToEpoch(s string) int64 {
+	t, err := time.Parse("2006-01-02", s)
+	if err != nil {
+		return 0
+	}
+	return t.Unix()
 }
 
 func isValidDate(s string) bool {
@@ -895,23 +899,209 @@ func defineRecordRules() []RecordRule {
 			}
 			return true, ""
 		}},
-		{"4.7", "cvss-score-range", "MUST", "provider_cvss_score MUST be in [0.0, 10.0] when present", func(rec *CRITRecord) (bool, string) {
-			if rec.ProviderAdvisory == nil || rec.ProviderAdvisory.ProviderCVSSScore == nil {
-				return true, ""
+		{"4.1.2", "vector-string-parseable", "MUST", "vectorString MUST be a parseable CRIT vector with valid known metrics", func(rec *CRITRecord) (bool, string) {
+			if rec.VectorString == "" {
+				return false, "vectorString is empty"
 			}
-			s := *rec.ProviderAdvisory.ProviderCVSSScore
-			if s < 0.0 || s > 10.0 {
-				return false, fmt.Sprintf("score=%.1f outside [0.0, 10.0]", s)
+			_, _, err := critspec.ParseVector(rec.VectorString)
+			if err != nil {
+				return false, fmt.Sprintf("vectorString parse error: %v", err)
 			}
 			return true, ""
 		}},
-		{"4.7", "cvss-vector-format", "MUST", "provider_cvss_vector MUST conform to CVSS v3.1 or v4.0 format", func(rec *CRITRecord) (bool, string) {
-			if rec.ProviderAdvisory == nil || rec.ProviderAdvisory.ProviderCVSSVector == nil {
+		{"4.1.2", "vector-provider-matches", "MUST", "CP metric MUST match record provider field", func(rec *CRITRecord) (bool, string) {
+			if rec.VectorString == "" {
 				return true, ""
 			}
-			v := *rec.ProviderAdvisory.ProviderCVSSVector
-			if !cvss31Re.MatchString(v) && !cvss40Re.MatchString(v) {
-				return false, fmt.Sprintf("vector %q invalid format", v)
+			parsed, _, err := critspec.ParseVector(rec.VectorString)
+			if err != nil {
+				return true, "" // parse error reported by other rule
+			}
+			if parsed.Provider != rec.Provider {
+				return false, fmt.Sprintf("CP=%q but provider=%q", parsed.Provider, rec.Provider)
+			}
+			return true, ""
+		}},
+		{"4.1.2", "vector-vex-matches", "MUST", "VS metric MUST match record vex_status field", func(rec *CRITRecord) (bool, string) {
+			if rec.VectorString == "" {
+				return true, ""
+			}
+			parsed, _, err := critspec.ParseVector(rec.VectorString)
+			if err != nil {
+				return true, ""
+			}
+			if parsed.VEXStatus != rec.VexStatus {
+				return false, fmt.Sprintf("VS=%q but vex_status=%q", parsed.VEXStatus, rec.VexStatus)
+			}
+			return true, ""
+		}},
+		{"4.1.2", "vector-propagation-matches", "MUST", "FP metric MUST match record fix_propagation field", func(rec *CRITRecord) (bool, string) {
+			if rec.VectorString == "" {
+				return true, ""
+			}
+			parsed, _, err := critspec.ParseVector(rec.VectorString)
+			if err != nil {
+				return true, ""
+			}
+			if parsed.FixPropagation != rec.FixPropagation {
+				return false, fmt.Sprintf("FP=%q but fix_propagation=%q", parsed.FixPropagation, rec.FixPropagation)
+			}
+			return true, ""
+		}},
+		{"4.1.2", "vector-responsibility-matches", "MUST", "SR metric MUST match record shared_responsibility field", func(rec *CRITRecord) (bool, string) {
+			if rec.VectorString == "" {
+				return true, ""
+			}
+			parsed, _, err := critspec.ParseVector(rec.VectorString)
+			if err != nil {
+				return true, ""
+			}
+			if parsed.SharedResp != rec.SharedResponsibility {
+				return false, fmt.Sprintf("SR=%q but shared_responsibility=%q", parsed.SharedResp, rec.SharedResponsibility)
+			}
+			return true, ""
+		}},
+		{"4.1.2", "vector-lifecycle-matches", "MUST", "RL metric MUST match record resource_lifecycle field", func(rec *CRITRecord) (bool, string) {
+			if rec.VectorString == "" {
+				return true, ""
+			}
+			parsed, _, err := critspec.ParseVector(rec.VectorString)
+			if err != nil {
+				return true, ""
+			}
+			if parsed.Lifecycle != rec.ResourceLifecycle {
+				return false, fmt.Sprintf("RL=%q but resource_lifecycle=%q", parsed.Lifecycle, rec.ResourceLifecycle)
+			}
+			return true, ""
+		}},
+		{"4.1.2", "vector-existing-vuln-matches", "MUST", "EV metric MUST match record existing_deployments_remain_vulnerable field", func(rec *CRITRecord) (bool, string) {
+			if rec.VectorString == "" {
+				return true, ""
+			}
+			parsed, _, err := critspec.ParseVector(rec.VectorString)
+			if err != nil {
+				return true, ""
+			}
+			if parsed.ExistingVuln != rec.ExistingDeploymentsRemainVulnerable {
+				return false, fmt.Sprintf("EV=%v but existing_deployments_remain_vulnerable=%v", parsed.ExistingVuln, rec.ExistingDeploymentsRemainVulnerable)
+			}
+			return true, ""
+		}},
+		{"4.1.2", "vector-qualifiers-match", "MUST", "vector qualifiers MUST match record vuln_id, service, resource_type", func(rec *CRITRecord) (bool, string) {
+			if rec.VectorString == "" {
+				return true, ""
+			}
+			parsed, _, err := critspec.ParseVector(rec.VectorString)
+			if err != nil {
+				return true, ""
+			}
+			if parsed.VulnID != rec.VulnID {
+				return false, fmt.Sprintf("qualifier vuln_id=%q but vuln_id=%q", parsed.VulnID, rec.VulnID)
+			}
+			if parsed.Service != rec.Service {
+				return false, fmt.Sprintf("qualifier service=%q but service=%q", parsed.Service, rec.Service)
+			}
+			if parsed.ResourceType != rec.ResourceType {
+				return false, fmt.Sprintf("qualifier resource_type=%q but resource_type=%q", parsed.ResourceType, rec.ResourceType)
+			}
+			return true, ""
+		}},
+		{"4.1.2", "vector-string-canonical", "MUST", "vectorString MUST match canonical vector computed from record fields", func(rec *CRITRecord) (bool, string) {
+			if rec.VectorString == "" {
+				return false, "vectorString is empty"
+			}
+			pubEpoch := dateToEpoch(rec.Temporal.VulnPublishedDate)
+			var saEpoch int64
+			if rec.Temporal.ServiceAvailableDate != nil {
+				saEpoch = dateToEpoch(*rec.Temporal.ServiceAvailableDate)
+			}
+			expected, err := critspec.ComputeVector(critspec.CRITVector{
+				CRITVersion:    "0.2.0",
+				Provider:       rec.Provider,
+				VEXStatus:      rec.VexStatus,
+				FixPropagation: rec.FixPropagation,
+				SharedResp:     rec.SharedResponsibility,
+				Lifecycle:      rec.ResourceLifecycle,
+				ExistingVuln:   rec.ExistingDeploymentsRemainVulnerable,
+				VulnPublished:  pubEpoch,
+				ServiceAvail:   saEpoch,
+				VulnID:         rec.VulnID,
+				Service:        rec.Service,
+				ResourceType:   rec.ResourceType,
+			})
+			if err != nil {
+				return false, fmt.Sprintf("cannot compute expected vector: %v", err)
+			}
+			if rec.VectorString != expected {
+				return false, fmt.Sprintf("vectorString=%q expected=%q", rec.VectorString, expected)
+			}
+			return true, ""
+		}},
+		{"4.1.2", "vector-published-matches", "MUST", "PP epoch MUST match temporal.vuln_published_date converted to UTC epoch", func(rec *CRITRecord) (bool, string) {
+			if rec.VectorString == "" {
+				return true, ""
+			}
+			parsed, _, err := critspec.ParseVector(rec.VectorString)
+			if err != nil {
+				return true, ""
+			}
+			expected := dateToEpoch(rec.Temporal.VulnPublishedDate)
+			if parsed.VulnPublished != expected {
+				return false, fmt.Sprintf("PP=%d but vuln_published_date=%q (epoch %d)", parsed.VulnPublished, rec.Temporal.VulnPublishedDate, expected)
+			}
+			return true, ""
+		}},
+		{"4.1.2", "vector-service-avail-matches", "MUST", "SA epoch MUST match temporal.service_available_date converted to UTC epoch", func(rec *CRITRecord) (bool, string) {
+			if rec.VectorString == "" || rec.Temporal.ServiceAvailableDate == nil {
+				return true, ""
+			}
+			parsed, _, err := critspec.ParseVector(rec.VectorString)
+			if err != nil {
+				return true, ""
+			}
+			expected := dateToEpoch(*rec.Temporal.ServiceAvailableDate)
+			if parsed.ServiceAvail != expected {
+				return false, fmt.Sprintf("SA=%d but service_available_date=%q (epoch %d)", parsed.ServiceAvail, *rec.Temporal.ServiceAvailableDate, expected)
+			}
+			return true, ""
+		}},
+		{"4.1.2", "vector-metrics-order", "MUST", "registered metrics MUST appear in canonical order CP VS FP SR RL EV PP SA", func(rec *CRITRecord) (bool, string) {
+			if rec.VectorString == "" {
+				return true, ""
+			}
+			// ParseVector already validates ordering and returns an error if
+			// registered metrics are out of order. A successful parse confirms
+			// ordering is correct.
+			_, _, err := critspec.ParseVector(rec.VectorString)
+			if err != nil {
+				return false, fmt.Sprintf("vector parse failed (may indicate ordering issue): %v", err)
+			}
+			return true, ""
+		}},
+		{"4.1.2", "vector-unknown-tolerated", "MUST", "consumer MUST NOT reject vectors with unknown metric keys", func(rec *CRITRecord) (bool, string) {
+			// Test with a synthetic vector that appends an unknown metric.
+			synth := rec.VectorString
+			if synth == "" {
+				return true, ""
+			}
+			// Insert an unknown metric before the # delimiter.
+			parts := strings.SplitN(synth, "#", 2)
+			if len(parts) != 2 {
+				return true, ""
+			}
+			synthWithUnknown := parts[0] + "/ZQ:test#" + parts[1]
+			_, _, err := critspec.ParseVector(synthWithUnknown)
+			if err != nil {
+				return false, fmt.Sprintf("parser rejected unknown metric ZQ: %v", err)
+			}
+			return true, ""
+		}},
+		{"4.1.2", "vector-missing-registered-rejected", "MUST", "consumer MUST reject vectors missing a registered metric", func(rec *CRITRecord) (bool, string) {
+			// Test with a synthetic vector that omits the CP metric.
+			synth := "CRITv0.2.0/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE-2024-0001:svc:rt"
+			_, _, err := critspec.ParseVector(synth)
+			if err == nil {
+				return false, "parser accepted vector missing CP metric"
 			}
 			return true, ""
 		}},

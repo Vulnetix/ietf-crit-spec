@@ -1,6 +1,5 @@
 {
-  "crit_version": "0.2.0",
-  "id": "e7f8a9b0-c1d2-3456-0123-567890123456",
+  "vectorString": "CRITv0.2.0/CP:GC/VS:FX/FP:CC/SR:SH/RL:EP/EV:T/PP:1721606400/SA:1500940800#TRA-2024-20:cloud_functions:function",
   "vuln_id": "TRA-2024-20",
   "provider": "gcp",
   "service": "cloud_functions",
@@ -15,7 +14,8 @@
     "vulnerability_introduced_date_estimated": true,
     "vuln_published_date": "2024-07-22",
     "provider_acknowledged_date": "2024-06-05",
-    "provider_fix_date": "2024-06-15"
+    "provider_fix_date": "2024-06-15",
+    "service_available_date": "2017-07-25"
   },
   "fix_propagation": "config_change",
   "existing_deployments_remain_vulnerable": true,
