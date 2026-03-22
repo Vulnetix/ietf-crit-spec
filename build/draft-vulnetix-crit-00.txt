@@ -2482,7 +2482,7 @@ Internet-Draft                    CRIT                        March 2026
 
    Vulnetix publishes CRIT data as an Authorized Data Publisher (ADP) in
    CVEListv5 records.  The Vulnetix ADP container is identified by
-   providerMetadata.shortName = "Vulnetix" or by Vulnetix's orgId in the
+   providerMetadata.shortName = "VVD" or by Vulnetix's orgId in the
    containers.adp[] array.
 
 9.2.1.  Phase 1 -- x_crit Extension (Current)
@@ -2560,8 +2560,8 @@ Internet-Draft                    CRIT                        March 2026
 
 9.3.  OSV Schema Integration
 
-   Vulnetix publishes CRIT data in OSV schema format for consumption by
-   OSV.dev and compatible tooling.
+   Publishers may produce CRIT data in OSV schema format for consumption
+   by OSV.dev and compatible tooling.
 
 9.3.1.  Naming Conventions
 
@@ -4347,10 +4347,10 @@ Acknowledgements
 
 Author's Address
 
-   Christopher Daniel Langton
+   CD Langton
    Vulnetix
    Australia
-   Email: [chris@vulnetix.com]
+   Email: chris@vulnetix.com
    URI:   https://www.vulnetix.com
 
 

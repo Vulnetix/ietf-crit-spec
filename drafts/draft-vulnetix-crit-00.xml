@@ -20,13 +20,13 @@
 
     <seriesInfo name="Internet-Draft" value="draft-vulnetix-crit-00"/>
 
-    <author fullname="Christopher Daniel Langton" initials="CD" surname="Langton">
+    <author fullname="CD Langton" initials="CD" surname="Langton">
       <organization>Vulnetix</organization>
       <address>
         <postal>
           <country>AU</country>
         </postal>
-        <email>[chris@vulnetix.com]</email>
+        <email>chris@vulnetix.com</email>
         <uri>https://www.vulnetix.com</uri>
       </address>
     </author>
@@ -1752,7 +1752,7 @@ if resource.deployed_date < provider_fix_date
         <t>
           Vulnetix publishes CRIT data as an Authorized Data Publisher (ADP) in
           CVEListv5 records. The Vulnetix ADP container is identified by
-          <tt>providerMetadata.shortName = "Vulnetix"</tt> or by Vulnetix's
+          <tt>providerMetadata.shortName = "VVD"</tt> or by Vulnetix's
           <tt>orgId</tt> in the <tt>containers.adp[]</tt> array.
         </t>
 
@@ -1829,7 +1829,7 @@ if resource.deployed_date < provider_fix_date
       <section anchor="ui-osv">
         <name>OSV Schema Integration</name>
         <t>
-          Vulnetix publishes CRIT data in OSV schema format for consumption by OSV.dev
+          Publishers may produce CRIT data in OSV schema format for consumption by OSV.dev
           and compatible tooling.
         </t>
 
