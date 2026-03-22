@@ -9,7 +9,7 @@ Expires: 22 September 2026
 
 
                Cloud Resource Identifier Templates (CRIT)
-                         draft-vulnetix-crit-01
+                         draft-vulnetix-crit-00
 
 Abstract
 
