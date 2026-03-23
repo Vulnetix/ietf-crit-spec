@@ -1348,13 +1348,27 @@ li > p:last-of-type:only-child {
                 <p id="section-toc.1-1.1.2.4.1"><a href="#section-1.4" class="auto internal xref">1.4</a>.  <a href="#name-crit-approach" class="internal xref">CRIT Approach</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.5">
-                <p id="section-toc.1-1.1.2.5.1"><a href="#section-1.5" class="auto internal xref">1.5</a>.  <a href="#name-conventions-and-terminology" class="internal xref">Conventions and Terminology</a></p>
+                <p id="section-toc.1-1.1.2.5.1"><a href="#section-1.5" class="auto internal xref">1.5</a>.  <a href="#name-what-crit-is-and-what-it-is" class="internal xref">What CRIT Is and What It Is Not</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.5.2.1">
-                    <p id="section-toc.1-1.1.2.5.2.1.1"><a href="#section-1.5.1" class="auto internal xref">1.5.1</a>.  <a href="#name-requirements-language" class="internal xref">Requirements Language</a></p>
+                    <p id="section-toc.1-1.1.2.5.2.1.1"><a href="#section-1.5.1" class="auto internal xref">1.5.1</a>.  <a href="#name-crit-is" class="internal xref">CRIT Is</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.5.2.2">
-                    <p id="section-toc.1-1.1.2.5.2.2.1"><a href="#section-1.5.2" class="auto internal xref">1.5.2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+                    <p id="section-toc.1-1.1.2.5.2.2.1"><a href="#section-1.5.2" class="auto internal xref">1.5.2</a>.  <a href="#name-crit-is-not" class="internal xref">CRIT Is Not</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.5.2.3">
+                    <p id="section-toc.1-1.1.2.5.2.3.1"><a href="#section-1.5.3" class="auto internal xref">1.5.3</a>.  <a href="#name-why-not-purl" class="internal xref">Why Not PURL?</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.6">
+                <p id="section-toc.1-1.1.2.6.1"><a href="#section-1.6" class="auto internal xref">1.6</a>.  <a href="#name-conventions-and-terminology" class="internal xref">Conventions and Terminology</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.6.2.1">
+                    <p id="section-toc.1-1.1.2.6.2.1.1"><a href="#section-1.6.1" class="auto internal xref">1.6.1</a>.  <a href="#name-requirements-language" class="internal xref">Requirements Language</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.6.2.2">
+                    <p id="section-toc.1-1.1.2.6.2.2.1"><a href="#section-1.6.2" class="auto internal xref">1.6.2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
 </li>
                 </ul>
 </li>
@@ -1813,17 +1827,148 @@ li > p:last-of-type:only-child {
           exposure window computation that those schemes do not address.<a href="#section-1.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="conventions">
+<div id="crit-is-and-is-not">
 <section id="section-1.5">
+        <h3 id="name-what-crit-is-and-what-it-is">
+<a href="#section-1.5" class="section-number selfRef">1.5. </a><a href="#name-what-crit-is-and-what-it-is" class="section-name selfRef">What CRIT Is and What It Is Not</a>
+        </h3>
+<p id="section-1.5-1">
+          If the problem could be described in one word, that word is
+          <strong>affected</strong>. For packages, "affected" is a version
+          comparison. For cloud, "affected" is a function of four factors
+          evaluated simultaneously: when the resource was deployed relative to
+          the fix, the fix propagation type, whether the consumer has acted, and
+          whether a previously applied remediation has been reverted by
+          configuration drift. No static identifier carries these factors. CRIT
+          encodes all four.<a href="#section-1.5-1" class="pilcrow">¶</a></p>
+<div id="crit-is">
+<section id="section-1.5.1">
+          <h4 id="name-crit-is">
+<a href="#section-1.5.1" class="section-number selfRef">1.5.1. </a><a href="#name-crit-is" class="section-name selfRef">CRIT Is</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-1.5.1-1.1">
+              <strong>A template engine for cloud-native resources.</strong>
+            Discovery requires interpolation of consumer-specific variables
+            (account, region, resource ID) at resolution time. No static
+            identifier can express this.<a href="#section-1.5.1-1.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-1.5.1-1.2">
+              <strong>A solution to the "affected" problem.</strong> It
+            encodes deployment timing, fix propagation type, consumer action
+            state, and configuration drift status — everything required to
+            determine whether a specific deployed resource is impacted.<a href="#section-1.5.1-1.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-1.5.1-1.3">
+              <strong>A parameterisation layer over provider-native identifier
+            schemas.</strong> CRITs do not invent identifier formats. AWS ARNs,
+            Azure Resource IDs, GCP Resource Names, Cloudflare Locators, and
+            Oracle OCIDs are adopted as-is. CRIT parameterises them with
+            variable slots.<a href="#section-1.5.1-1.3" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-1.5.1-1.4">
+              <strong>An extension to existing vulnerability data
+            formats.</strong> CRIT integrates with CVEListv5 ADP containers and
+            OSV schema using their existing extension mechanisms. It does not
+            require changes to those specifications.<a href="#section-1.5.1-1.4" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-1.5.1-1.5">
+              <strong>A machine-readable encoding of fix propagation,
+            remediation actions, detection queries, and exposure window
+            computation</strong> — the metadata that turns a vulnerability
+            advisory into an actionable remediation workflow for cloud
+            resources.<a href="#section-1.5.1-1.5" class="pilcrow">¶</a>
+</li>
+          </ul>
+</section>
+</div>
+<div id="crit-is-not">
+<section id="section-1.5.2">
+          <h4 id="name-crit-is-not">
+<a href="#section-1.5.2" class="section-number selfRef">1.5.2. </a><a href="#name-crit-is-not" class="section-name selfRef">CRIT Is Not</a>
+          </h4>
+<ul class="normal">
+<li class="normal" id="section-1.5.2-1.1">
+              <strong>Not an identifier.</strong> Cloud resources already have
+            identifiers. CRITs reference them; they do not define new ones. The
+            CRIT vectorString is a natural composite key (replacing the UUID),
+            not a resource identifier.<a href="#section-1.5.2-1.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-1.5.2-1.2">
+              <strong>Not a replacement for CPE, PURL, CycloneDX, or
+            SPDX.</strong> Those standards solve identification, inventory, and
+            risk prioritisation for build-from-source artifacts. CRIT
+            complements them by addressing cloud resource scope where they do
+            not apply.<a href="#section-1.5.2-1.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-1.5.2-1.3">
+              <strong>Not a single string that can encode the full
+            record.</strong> The CRIT vectorString is a lossy compact encoding
+            of 12 enumerable fields from a 30+ field record. Descriptive
+            values, detection queries, remediation action descriptions,
+            provider-native templates, and consumer-specific variables cannot be
+            represented in any static string. Any attempt to reduce CRIT to a
+            single-string identifier discards the metadata that solves the
+            problem.<a href="#section-1.5.2-1.3" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-1.5.2-1.4">
+              <strong>Not a risk scoring or prioritisation
+            system.</strong> CRIT does not assign severity, CVSS scores, or
+            risk rankings. Risk-based prioritisation signals (EPSS, CVSS, SSVC)
+            remain complementary inputs to consumer tooling.<a href="#section-1.5.2-1.4" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-1.5.2-1.5">
+              <strong>Not a replacement for cloud provider security
+            advisories.</strong> CRIT references provider advisories; it does
+            not replace them. Provider advisory URLs and identifiers are carried
+            as metadata within the record.<a href="#section-1.5.2-1.5" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-1.5.2-1.6">
+              <strong>Not a software inventory or bill-of-materials
+            format.</strong> CRIT records describe how vulnerabilities affect
+            cloud resources. They are not an inventory of deployed resources or
+            a software composition.<a href="#section-1.5.2-1.6" class="pilcrow">¶</a>
+</li>
+          </ul>
+</section>
+</div>
+<div id="why-not-purl">
+<section id="section-1.5.3">
+          <h4 id="name-why-not-purl">
+<a href="#section-1.5.3" class="section-number selfRef">1.5.3. </a><a href="#name-why-not-purl" class="section-name selfRef">Why Not PURL?</a>
+          </h4>
+<p id="section-1.5.3-1">
+            <span><a href="#PURL" class="internal xref">PURL</a> [<a href="#PURL" class="cite xref">PURL</a>]</span> succeeds because package identity
+            is static: <code>pkg:npm/@angular/core@12.3.1</code> is the same string
+            regardless of where the package is installed. Cloud resource identity
+            is not static. An RDS instance's ARN contains an account ID, region,
+            and resource ID that do not exist until the resource is deployed.
+            Even if a PURL were constructed at that granularity, it would carry
+            none of the information required to determine affected status: the
+            deployment date relative to the fix, the propagation mechanism,
+            whether the consumer has acted, or whether a configuration change
+            has been reverted.<a href="#section-1.5.3-1" class="pilcrow">¶</a></p>
+<p id="section-1.5.3-2">
+            The <code>pkg:cloud/</code> convention observed in the OSV ecosystem
+            (see <a href="#ui-osv-conventions" class="auto internal xref">Section 9.3.1</a>) is not a registered PURL
+            type. Regardless of the type scheme, a static string cannot express
+            the interpolation that discovery requires or the temporal and
+            propagation logic that affected-status determination demands.<a href="#section-1.5.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="conventions">
+<section id="section-1.6">
         <h3 id="name-conventions-and-terminology">
-<a href="#section-1.5" class="section-number selfRef">1.5. </a><a href="#name-conventions-and-terminology" class="section-name selfRef">Conventions and Terminology</a>
+<a href="#section-1.6" class="section-number selfRef">1.6. </a><a href="#name-conventions-and-terminology" class="section-name selfRef">Conventions and Terminology</a>
         </h3>
 <div id="requirements-language">
-<section id="section-1.5.1">
+<section id="section-1.6.1">
           <h4 id="name-requirements-language">
-<a href="#section-1.5.1" class="section-number selfRef">1.5.1. </a><a href="#name-requirements-language" class="section-name selfRef">Requirements Language</a>
+<a href="#section-1.6.1" class="section-number selfRef">1.6.1. </a><a href="#name-requirements-language" class="section-name selfRef">Requirements Language</a>
           </h4>
-<p id="section-1.5.1-1">
+<p id="section-1.6.1-1">
             The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>",
             "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>",
             "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>",
@@ -1832,201 +1977,201 @@ li > p:last-of-type:only-child {
             "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
             described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span>
             <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they appear in all
-            capitals, as shown here.<a href="#section-1.5.1-1" class="pilcrow">¶</a></p>
+            capitals, as shown here.<a href="#section-1.6.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="terminology">
-<section id="section-1.5.2">
+<section id="section-1.6.2">
           <h4 id="name-terminology">
-<a href="#section-1.5.2" class="section-number selfRef">1.5.2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+<a href="#section-1.6.2" class="section-number selfRef">1.6.2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
           </h4>
-<p id="section-1.5.2-1">
-            The following terms are used throughout this document.<a href="#section-1.5.2-1" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlNewline" id="section-1.5.2-2">
-            <dt id="section-1.5.2-2.1">CRIT Record:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.2">A JSON object conforming to this specification that describes
+<p id="section-1.6.2-1">
+            The following terms are used throughout this document.<a href="#section-1.6.2-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-1.6.2-2">
+            <dt id="section-1.6.2-2.1">CRIT Record:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.2">A JSON object conforming to this specification that describes
             the scope, remediation, and detection characteristics of a single
-            vulnerability as it applies to a single cloud resource type.<a href="#section-1.5.2-2.2" class="pilcrow">¶</a>
+            vulnerability as it applies to a single cloud resource type.<a href="#section-1.6.2-2.2" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.3">CRIT Template:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.4">A parameterised string in which variable slots represent
+<dt id="section-1.6.2-2.3">CRIT Template:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.4">A parameterised string in which variable slots represent
             consumer-specific or context-dependent values. After all slots are
             resolved, the result is a valid provider-native resource
-            identifier.<a href="#section-1.5.2-2.4" class="pilcrow">¶</a>
+            identifier.<a href="#section-1.6.2-2.4" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.5">CRIT Dictionary:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.6">A machine-readable catalogue enumerating valid (provider,
+<dt id="section-1.6.2-2.5">CRIT Dictionary:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.6">A machine-readable catalogue enumerating valid (provider,
             service, resource_type) tuples with their corresponding templates
-            and metadata. See <a href="#dictionary" class="auto internal xref">Section 12</a>.<a href="#section-1.5.2-2.6" class="pilcrow">¶</a>
+            and metadata. See <a href="#dictionary" class="auto internal xref">Section 12</a>.<a href="#section-1.6.2-2.6" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.7">CRIT Vector String:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.8">A compact, deterministic, human-readable encoding of a CRIT
+<dt id="section-1.6.2-2.7">CRIT Vector String:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.8">A compact, deterministic, human-readable encoding of a CRIT
             record's classification and identity fields, modelled on CVSS
-            vector strings. See <a href="#crit-vector-string" class="auto internal xref">Section 4.1.2</a>.<a href="#section-1.5.2-2.8" class="pilcrow">¶</a>
+            vector strings. See <a href="#crit-vector-string" class="auto internal xref">Section 4.1.2</a>.<a href="#section-1.6.2-2.8" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.9">Natural Key:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.10">The tuple (vuln_id, provider, service, resource_type) that
-            uniquely identifies a CRIT record within a conformant corpus.<a href="#section-1.5.2-2.10" class="pilcrow">¶</a>
+<dt id="section-1.6.2-2.9">Natural Key:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.10">The tuple (vuln_id, provider, service, resource_type) that
+            uniquely identifies a CRIT record within a conformant corpus.<a href="#section-1.6.2-2.10" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.11">Producer:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.12">An entity that creates and emits CRIT records.<a href="#section-1.5.2-2.12" class="pilcrow">¶</a>
+<dt id="section-1.6.2-2.11">Producer:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.12">An entity that creates and emits CRIT records.<a href="#section-1.6.2-2.12" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.13">Consumer:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.14">An entity that processes CRIT records to evaluate cloud
+<dt id="section-1.6.2-2.13">Consumer:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.14">An entity that processes CRIT records to evaluate cloud
             resource exposure, deploy detections, or drive remediation
-            workflows.<a href="#section-1.5.2-2.14" class="pilcrow">¶</a>
+            workflows.<a href="#section-1.6.2-2.14" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.15">Conformant Corpus:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.16">A collection of CRIT records in which no two records share the
-            same natural key.<a href="#section-1.5.2-2.16" class="pilcrow">¶</a>
+<dt id="section-1.6.2-2.15">Conformant Corpus:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.16">A collection of CRIT records in which no two records share the
+            same natural key.<a href="#section-1.6.2-2.16" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.17">Provider:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.18">A cloud service vendor. This specification defines five
-            providers: aws, azure, gcp, cloudflare, and oracle.<a href="#section-1.5.2-2.18" class="pilcrow">¶</a>
+<dt id="section-1.6.2-2.17">Provider:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.18">A cloud service vendor. This specification defines five
+            providers: aws, azure, gcp, cloudflare, and oracle.<a href="#section-1.6.2-2.18" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.19">Service:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.20">A distinct offering within a provider's portfolio, identified
+<dt id="section-1.6.2-2.19">Service:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.20">A distinct offering within a provider's portfolio, identified
             by a lowercase underscore-delimited key (e.g., <code>ec2</code>,
-            <code>kubernetes_engine</code>, <code>waf</code>).<a href="#section-1.5.2-2.20" class="pilcrow">¶</a>
+            <code>kubernetes_engine</code>, <code>waf</code>).<a href="#section-1.6.2-2.20" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.21">Resource Type:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.22">A specific kind of resource within a service, identified by a
+<dt id="section-1.6.2-2.21">Resource Type:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.22">A specific kind of resource within a service, identified by a
             key matching the provider's API conventions (e.g., <code>instance</code>,
-            <code>cluster</code>, <code>waf_ruleset</code>).<a href="#section-1.5.2-2.22" class="pilcrow">¶</a>
+            <code>cluster</code>, <code>waf_ruleset</code>).<a href="#section-1.6.2-2.22" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.23">Template Format:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.24">The provider-native identifier schema used by a template:
+<dt id="section-1.6.2-2.23">Template Format:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.24">The provider-native identifier schema used by a template:
             <code>aws_arn</code>, <code>azure_resource_id</code>,
             <code>gcp_resource_name</code>, <code>cloudflare_locator</code>, or
-            <code>oracle_ocid</code>.<a href="#section-1.5.2-2.24" class="pilcrow">¶</a>
+            <code>oracle_ocid</code>.<a href="#section-1.6.2-2.24" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.25">Variable Slot:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.26">A delimited placeholder within a CRIT template, enclosed in
-            braces, that represents a value to be supplied or fixed.<a href="#section-1.5.2-2.26" class="pilcrow">¶</a>
+<dt id="section-1.6.2-2.25">Variable Slot:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.26">A delimited placeholder within a CRIT template, enclosed in
+            braces, that represents a value to be supplied or fixed.<a href="#section-1.6.2-2.26" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.27">Named Variable:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.28">A slot whose value the consumer must supply at resolution time.
-            Syntax: <code>{field-name}</code>.<a href="#section-1.5.2-2.28" class="pilcrow">¶</a>
+<dt id="section-1.6.2-2.27">Named Variable:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.28">A slot whose value the consumer must supply at resolution time.
+            Syntax: <code>{field-name}</code>.<a href="#section-1.6.2-2.28" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.29">Wildcard:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.30">A slot representing any value, used for inventory enumeration.
-            Syntax: <code>{field-name=*}</code>.<a href="#section-1.5.2-2.30" class="pilcrow">¶</a>
+<dt id="section-1.6.2-2.29">Wildcard:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.30">A slot representing any value, used for inventory enumeration.
+            Syntax: <code>{field-name=*}</code>.<a href="#section-1.6.2-2.30" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.31">Hardcoded:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.32">A slot with a fixed value determined by the provider schema.
-            Syntax: <code>{field-name=value}</code>.<a href="#section-1.5.2-2.32" class="pilcrow">¶</a>
+<dt id="section-1.6.2-2.31">Hardcoded:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.32">A slot with a fixed value determined by the provider schema.
+            Syntax: <code>{field-name=value}</code>.<a href="#section-1.6.2-2.32" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.33">Empty:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.34">A slot for a field that is structurally present but
+<dt id="section-1.6.2-2.33">Empty:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.34">A slot for a field that is structurally present but
             semantically inapplicable to the resource type. Syntax:
-            <code>{field-name=}</code>.<a href="#section-1.5.2-2.34" class="pilcrow">¶</a>
+            <code>{field-name=}</code>.<a href="#section-1.6.2-2.34" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.35">Slot Resolution:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.36">The process of substituting concrete values into variable
-            slots to produce a live provider identifier.<a href="#section-1.5.2-2.36" class="pilcrow">¶</a>
+<dt id="section-1.6.2-2.35">Slot Resolution:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.36">The process of substituting concrete values into variable
+            slots to produce a live provider identifier.<a href="#section-1.6.2-2.36" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.37">Resource Lifecycle:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.38">A classification of a resource type's operational behaviour
+<dt id="section-1.6.2-2.37">Resource Lifecycle:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.38">A classification of a resource type's operational behaviour
             with respect to data durability and replacement. See
-            <a href="#schema-lifecycle" class="auto internal xref">Section 4.4.1</a>.<a href="#section-1.5.2-2.38" class="pilcrow">¶</a>
+            <a href="#schema-lifecycle" class="auto internal xref">Section 4.4.1</a>.<a href="#section-1.6.2-2.38" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.39">Shared Responsibility:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.40">The remediation responsibility model describing whether the
+<dt id="section-1.6.2-2.39">Shared Responsibility:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.40">The remediation responsibility model describing whether the
             provider, the consumer, or both must act to remediate a
-            vulnerability. See <a href="#schema-shared-resp" class="auto internal xref">Section 4.4.2</a>.<a href="#section-1.5.2-2.40" class="pilcrow">¶</a>
+            vulnerability. See <a href="#schema-shared-resp" class="auto internal xref">Section 4.4.2</a>.<a href="#section-1.6.2-2.40" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.41">VEX Status:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.42">The Vulnerability Exploitability eXchange status of a record:
+<dt id="section-1.6.2-2.41">VEX Status:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.42">The Vulnerability Exploitability eXchange status of a record:
             affected, fixed, not_affected, or under_investigation. Aligns with
             the OpenVEX (<span>[<a href="#OpenVEX" class="cite xref">OpenVEX</a>]</span>) and CSAF VEX
             (<span>[<a href="#CSAF-VEX" class="cite xref">CSAF-VEX</a>]</span>) vocabularies. See
-            <a href="#schema-vex" class="auto internal xref">Section 4.8</a>.<a href="#section-1.5.2-2.42" class="pilcrow">¶</a>
+            <a href="#schema-vex" class="auto internal xref">Section 4.8</a>.<a href="#section-1.6.2-2.42" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.43">Fix Propagation:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.44">The mechanism by which a provider-released fix reaches
+<dt id="section-1.6.2-2.43">Fix Propagation:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.44">The mechanism by which a provider-released fix reaches
             existing deployed resources. See
-            <a href="#schema-propagation" class="auto internal xref">Section 4.4.3</a>.<a href="#section-1.5.2-2.44" class="pilcrow">¶</a>
+            <a href="#schema-propagation" class="auto internal xref">Section 4.4.3</a>.<a href="#section-1.6.2-2.44" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.45">Exposure Window:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.46">The time interval [W_start, W_end] during which a specific
+<dt id="section-1.6.2-2.45">Exposure Window:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.46">The time interval [W_start, W_end] during which a specific
             resource instance is vulnerable. See
-            <a href="#exposure-window" class="auto internal xref">Section 7</a>.<a href="#section-1.5.2-2.46" class="pilcrow">¶</a>
+            <a href="#exposure-window" class="auto internal xref">Section 7</a>.<a href="#section-1.6.2-2.46" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.47">Existing Deployments Remain Vulnerable:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.48">A boolean indicating whether resources deployed before the
+<dt id="section-1.6.2-2.47">Existing Deployments Remain Vulnerable:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.48">A boolean indicating whether resources deployed before the
             provider fix date remain in the exposure window absent explicit
-            consumer action.<a href="#section-1.5.2-2.48" class="pilcrow">¶</a>
+            consumer action.<a href="#section-1.6.2-2.48" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.49">Remediation Action:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.50">An ordered step a consumer takes to remediate or mitigate a
+<dt id="section-1.6.2-2.49">Remediation Action:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.50">An ordered step a consumer takes to remediate or mitigate a
             vulnerability on a specific resource type. See
-            <a href="#schema-remediation-actions" class="auto internal xref">Section 4.4.4</a>.<a href="#section-1.5.2-2.50" class="pilcrow">¶</a>
+            <a href="#schema-remediation-actions" class="auto internal xref">Section 4.4.4</a>.<a href="#section-1.6.2-2.50" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.51">Compensating Control:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.52">A remediation action that reduces exploitability but does not
-            fully remediate the vulnerability.<a href="#section-1.5.2-2.52" class="pilcrow">¶</a>
+<dt id="section-1.6.2-2.51">Compensating Control:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.52">A remediation action that reduces exploitability but does not
+            fully remediate the vulnerability.<a href="#section-1.6.2-2.52" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.53">Detection Entry:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.54">A log query, metric filter, or alerting rule for identifying
+<dt id="section-1.6.2-2.53">Detection Entry:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.54">A log query, metric filter, or alerting rule for identifying
             vulnerable configurations, active exploitation, or configuration
-            drift. See <a href="#schema-detections" class="auto internal xref">Section 4.6</a>.<a href="#section-1.5.2-2.54" class="pilcrow">¶</a>
+            drift. See <a href="#schema-detections" class="auto internal xref">Section 4.6</a>.<a href="#section-1.6.2-2.54" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.55">Detection Phase:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.56">The lifecycle stage of a detection: pre_fix, exploitation,
+<dt id="section-1.6.2-2.55">Detection Phase:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.56">The lifecycle stage of a detection: pre_fix, exploitation,
             post_fix, or misconfiguration. See
-            <a href="#detection-phase" class="auto internal xref">Section 4.6.3</a>.<a href="#section-1.5.2-2.56" class="pilcrow">¶</a>
+            <a href="#detection-phase" class="auto internal xref">Section 4.6.3</a>.<a href="#section-1.6.2-2.56" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.57">Pending Reason:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.58">An enumerated value indicating why a detection entry is a
+<dt id="section-1.6.2-2.57">Pending Reason:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.58">An enumerated value indicating why a detection entry is a
             placeholder without a functional query. See
-            <a href="#detection-pending" class="auto internal xref">Section 4.6.4</a>.<a href="#section-1.5.2-2.58" class="pilcrow">¶</a>
+            <a href="#detection-pending" class="auto internal xref">Section 4.6.4</a>.<a href="#section-1.6.2-2.58" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.59">Vulnerability Identifier:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.60">A string uniquely identifying the vulnerability a CRIT record
-            relates to (e.g., CVE-2024-6387).<a href="#section-1.5.2-2.60" class="pilcrow">¶</a>
+<dt id="section-1.6.2-2.59">Vulnerability Identifier:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.60">A string uniquely identifying the vulnerability a CRIT record
+            relates to (e.g., CVE-2024-6387).<a href="#section-1.6.2-2.60" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.61">Provider Fix Date:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.62">The date a provider made a fix generally available.<a href="#section-1.5.2-2.62" class="pilcrow">¶</a>
+<dt id="section-1.6.2-2.61">Provider Fix Date:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.62">The date a provider made a fix generally available.<a href="#section-1.6.2-2.62" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.63">Vulnerability Published Date:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.64">The date the vulnerability was publicly disclosed.<a href="#section-1.5.2-2.64" class="pilcrow">¶</a>
+<dt id="section-1.6.2-2.63">Vulnerability Published Date:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.64">The date the vulnerability was publicly disclosed.<a href="#section-1.6.2-2.64" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
-<dt id="section-1.5.2-2.65">Service Available Date:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.5.2-2.66">The date a provider's service became generally available,
+<dt id="section-1.6.2-2.65">Service Available Date:</dt>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.66">The date a provider's service became generally available,
             bounding the earliest possible deployment of affected
-            resources.<a href="#section-1.5.2-2.66" class="pilcrow">¶</a>
+            resources.<a href="#section-1.6.2-2.66" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
 </dl>
