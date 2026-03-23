@@ -5,7 +5,7 @@ Cloud Resource Identifier Templates (CRIT)
 A machine-readable format for identifying cloud resources affected by known
 vulnerabilities.
 
-| **Specification:** ``draft-vulnetix-crit-00`` (Independent Submission, Informational)
+| **Specification:** ``draft-vulnetix-crit-00`` https://datatracker.ietf.org/doc/draft-vulnetix-crit/
 | **Read:** ``build/draft-vulnetix-crit-00.html`` -- **Edit:** ``drafts/draft-vulnetix-crit-00.xml``
 | **Author:** Christopher Daniel Langton, Vulnetix
 | **Status:** Active development
