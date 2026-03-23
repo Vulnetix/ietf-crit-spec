@@ -29,6 +29,97 @@ each independently specifying the provider-specific fix details, propagation
 mechanism, and detection strategy applicable to that resource type.
 
 
+What CRIT Is --- and What It Is Not
+====================================
+
+If the problem could be described in one word, that word is **affected**.
+
+For packages, "affected" is a version comparison: if the installed version
+falls within the affected range, the package is vulnerable. Cloud resources
+have no equivalent comparison. "Affected" is a function of four factors that
+must be evaluated simultaneously: when the resource was deployed relative to
+the fix, the fix propagation type, whether the consumer has acted, and whether
+a previously applied remediation has been reverted by configuration drift.
+No static identifier carries these factors. CRIT encodes all four.
+
+
+CRIT Is
+-------
+
+- **A template engine for cloud-native resources.** Discovery requires
+  interpolation of consumer-specific variables (account, region, resource ID)
+  at resolution time. No static identifier can express this.
+
+- **A solution to the "affected" problem.** It encodes deployment timing, fix
+  propagation type, consumer action state, and configuration drift status ---
+  everything required to determine whether a specific deployed resource is
+  impacted.
+
+- **A parameterisation layer over provider-native identifier schemas.** CRITs
+  do not invent identifier formats. AWS ARNs, Azure Resource IDs, GCP Resource
+  Names, Cloudflare Locators, and Oracle OCIDs are adopted as-is. CRIT
+  parameterises them with variable slots.
+
+- **An extension to existing vulnerability data formats.** CRIT integrates
+  with CVEListv5 ADP containers and OSV schema using their existing extension
+  mechanisms. It does not require changes to those specifications.
+
+- **A machine-readable encoding of fix propagation, remediation actions,
+  detection queries, and exposure window computation** --- the metadata that
+  turns a vulnerability advisory into an actionable remediation workflow for
+  cloud resources.
+
+
+CRIT Is Not
+-----------
+
+- **Not an identifier.** Cloud resources already have identifiers. CRITs
+  reference them; they do not define new ones. The CRIT vectorString is a
+  natural composite key (replacing the UUID), not a resource identifier.
+
+- **Not a replacement for CPE, PURL, CycloneDX, or SPDX.** Those standards
+  solve identification, inventory, and risk prioritisation for build-from-source
+  artifacts. CRIT complements them by addressing cloud resource scope where
+  they do not apply.
+
+- **Not a single string that can encode the full record.** The CRIT
+  vectorString is a lossy compact encoding of 12 enumerable fields from a 30+
+  field record. Descriptive values, detection queries, remediation action
+  descriptions, provider-native templates, and consumer-specific variables
+  cannot be represented in any static string. Any attempt to reduce CRIT to a
+  single-string identifier discards the metadata that solves the problem.
+
+- **Not a risk scoring or prioritisation system.** CRIT does not assign
+  severity, CVSS scores, or risk rankings. Risk-based prioritisation signals
+  (EPSS, CVSS, SSVC) remain complementary inputs to consumer tooling.
+
+- **Not a replacement for cloud provider security advisories.** CRIT
+  references provider advisories; it does not replace them. Provider advisory
+  URLs and identifiers are carried as metadata within the record.
+
+- **Not a software inventory or bill-of-materials format.** CRIT records
+  describe how vulnerabilities affect cloud resources. They are not an
+  inventory of deployed resources or a software composition.
+
+
+Why Not PURL?
+-------------
+
+PURL succeeds because package identity is static:
+``pkg:npm/@angular/core@12.3.1`` is the same string regardless of where the
+package is installed. Cloud resource identity is not static. An RDS instance's
+ARN contains an account ID, region, and resource ID that do not exist until the
+resource is deployed. Even if a PURL were constructed at that granularity, it
+would carry none of the information required to determine affected status: the
+deployment date relative to the fix, the propagation mechanism, whether the
+consumer has acted, or whether a configuration change has been reverted.
+
+The ``pkg:cloud/`` convention observed in OSV is not a registered PURL type.
+Regardless of the type scheme, a static string cannot express the interpolation
+that discovery requires or the temporal and propagation logic that
+affected-status determination demands.
+
+
 Install
 =======
 
