@@ -509,8 +509,8 @@ func defineTemplateRules() []TemplateRule {
 		{"3.4", "slot-state-precedence", "Producer MUST select slot state according to precedence", func(s *Sample) (bool, string) {
 			if s.Provider == "aws" && s.RegionBehavior == "global-only" {
 				for _, si := range parseSlots(s.Template) {
-					if si.fieldName == "region" && si.state != "hardcoded" {
-						return false, fmt.Sprintf("AWS global-only region is %s, expected hardcoded", si.state)
+					if si.fieldName == "region" && si.state != "hardcoded" && si.state != "empty" {
+						return false, fmt.Sprintf("AWS global-only region is %s, expected hardcoded or empty", si.state)
 					}
 				}
 			}
@@ -538,13 +538,18 @@ func defineTemplateRules() []TemplateRule {
 			}
 			return true, ""
 		}},
-		{"6.1", "aws-global-region-hardcoded", "AWS global-only services: region MUST be hardcoded to us-east-1", func(s *Sample) (bool, string) {
+		{"6.1", "aws-global-region-hardcoded", "AWS global-only services: region MUST be hardcoded to us-east-1 or empty", func(s *Sample) (bool, string) {
 			if s.Provider != "aws" || s.RegionBehavior != "global-only" {
 				return true, ""
 			}
 			for _, si := range parseSlots(s.Template) {
-				if si.fieldName == "region" && (si.state != "hardcoded" || si.value != "us-east-1") {
-					return false, fmt.Sprintf("region=%s(%s), expected hardcoded=us-east-1", si.state, si.value)
+				if si.fieldName == "region" {
+					if si.state != "hardcoded" && si.state != "empty" {
+						return false, fmt.Sprintf("region=%s(%s), expected hardcoded=us-east-1 or empty", si.state, si.value)
+					}
+					if si.state == "hardcoded" && si.value != "us-east-1" {
+						return false, fmt.Sprintf("region hardcoded to %s, expected us-east-1", si.value)
+					}
 				}
 			}
 			return true, ""
@@ -712,7 +717,7 @@ func defineRecordRules() []RecordRule {
 			}
 			return true, ""
 		}},
-		{"6.1", "aws-global-region-hardcoded", "MUST", "AWS global-only: region MUST be hardcoded to us-east-1", func(rec *CRITRecord) (bool, string) {
+		{"6.1", "aws-global-region-hardcoded", "MUST", "AWS global-only: region MUST be hardcoded to us-east-1 or empty", func(rec *CRITRecord) (bool, string) {
 			if rec.Provider != "aws" {
 				return true, ""
 			}
@@ -720,8 +725,13 @@ func defineRecordRules() []RecordRule {
 				return true, ""
 			}
 			for _, si := range parseSlots(rec.Template) {
-				if si.fieldName == "region" && (si.state != "hardcoded" || si.value != "us-east-1") {
-					return false, fmt.Sprintf("region=%s(%s), expected hardcoded=us-east-1", si.state, si.value)
+				if si.fieldName == "region" {
+					if si.state != "hardcoded" && si.state != "empty" {
+						return false, fmt.Sprintf("region=%s(%s), expected hardcoded=us-east-1 or empty", si.state, si.value)
+					}
+					if si.state == "hardcoded" && si.value != "us-east-1" {
+						return false, fmt.Sprintf("region hardcoded to %s, expected us-east-1", si.value)
+					}
 				}
 			}
 			return true, ""

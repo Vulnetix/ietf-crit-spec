@@ -1,21 +1,21 @@
 # CRIT Spec Conformance Report
 
-**Date:** 2026-03-22 14:35:29 UTC  
+**Date:** 2026-03-24 07:00:47 UTC  
 **Verdict:** WARN  
-**Total Checks:** 52620 | **Passed:** 52607 | **Failed:** 0 | **Warnings:** 13  
+**Total Checks:** 52820 | **Passed:** 52807 | **Failed:** 0 | **Warnings:** 13  
 
 ## Summary
 
 | Suite | Rules | Samples | Checks | Passed | Failed | Warnings |
 |-------|------:|--------:|-------:|-------:|-------:|---------:|
-| Template Rules | 20 | 2565 | 51300 | 51300 | 0 | 0 |
+| Template Rules | 20 | 2575 | 51500 | 51500 | 0 | 0 |
 | Sample Record Rules | 40 | 33 | 1320 | 1307 | 0 | 13 |
 
 ## Template Rules
 
 ```mermaid
 pie title "Template Rules"
-    "Pass" : 51300
+    "Pass" : 51500
     "Fail" : 0
 ```
 
@@ -23,26 +23,26 @@ pie title "Template Rules"
 
 | Status | Sec | Rule | Pass | Fail | Requirement |
 |:------:|:---:|------|-----:|-----:|-------------|
-| PASS | 3.2 | `slot-delimiter-not-in-literal` | 2565 | 0 | Characters { and } MUST NOT appear outside slot expressions |
-| PASS | 3.3.1 | `named-var-no-default` | 2565 | 0 | Named variable MUST NOT be treated as implying any default value |
-| PASS | 3.3.1 | `named-var-requires-substitution` | 2565 | 0 | Named variable MUST substitute concrete value before using template as live identifier |
-| PASS | 3.3.2 | `wildcard-not-live-identifier` | 2565 | 0 | Wildcard MUST NOT be used as live identifier against provider API |
-| PASS | 3.3.4 | `hardcoded-value-as-is` | 2565 | 0 | Consumer MUST use hardcoded value as-is; MUST NOT substitute alternative value |
-| PASS | 3.4 | `slot-state-precedence` | 2565 | 0 | Producer MUST select slot state according to precedence |
-| PASS | 3.4 | `wildcard-not-fallback` | 2565 | 0 | Producer MUST NOT use wildcard as fallback when correct state is unknown |
-| PASS | 3.2 | `template-produces-valid-id` | 2565 | 0 | Conformant CRIT template MUST produce valid identifier after variable resolution |
-| PASS | 6.1 | `aws-global-region-hardcoded` | 2565 | 0 | AWS global-only services: region MUST be hardcoded to us-east-1 |
-| PASS | 6.1 | `aws-regional-region-variable` | 2565 | 0 | AWS regional services: region MUST be named variable or wildcard, MUST NOT be empty |
-| PASS | 6.4 | `cloudflare-no-region-slot` | 2565 | 0 | Producer MUST NOT add region slot to Cloudflare templates |
-| PASS | 7.1 | `resolution-produces-valid-id` | 2565 | 0 | After variable resolution, result MUST be valid provider identifier |
-| PASS | 7.2 | `reserved-field-names-used` | 2565 | 0 | Producer MUST use reserved field names where applicable |
-| PASS | 5 | `template-field-valid-after-resolution` | 2565 | 0 | After all named variables substituted, result MUST be valid provider identifier for declared template_format |
-| PASS | 12.2 | `dictionary-entry-required-fields` | 2565 | 0 | All fields except notes are REQUIRED in dictionary entry |
-| PASS | 12.1.1 | `dictionary-tuple-resolves` | 2565 | 0 | (provider, service, resource_type) tuple MUST resolve to entry in conformant dictionary |
-| PASS | 9.1 | `service-key-lowercase-underscore` | 2565 | 0 | service field MUST match pattern ^[a-z][a-z0-9_]*$ |
-| PASS | 9.1 | `resource-type-valid-pattern` | 2565 | 0 | resource_type MUST match pattern ^[a-zA-Z][a-zA-Z0-9_/-]*$ |
-| PASS | 9.1 | `template-format-matches-provider` | 2565 | 0 | template_format MUST match provider |
-| PASS | 3.2 | `slot-syntax-abnf-valid` | 2565 | 0 | All slots MUST conform to ABNF grammar: field-name = 1*(ALPHA / DIGIT / "-" / "_") |
+| PASS | 3.2 | `slot-delimiter-not-in-literal` | 2575 | 0 | Characters { and } MUST NOT appear outside slot expressions |
+| PASS | 3.3.1 | `named-var-no-default` | 2575 | 0 | Named variable MUST NOT be treated as implying any default value |
+| PASS | 3.3.1 | `named-var-requires-substitution` | 2575 | 0 | Named variable MUST substitute concrete value before using template as live identifier |
+| PASS | 3.3.2 | `wildcard-not-live-identifier` | 2575 | 0 | Wildcard MUST NOT be used as live identifier against provider API |
+| PASS | 3.3.4 | `hardcoded-value-as-is` | 2575 | 0 | Consumer MUST use hardcoded value as-is; MUST NOT substitute alternative value |
+| PASS | 3.4 | `slot-state-precedence` | 2575 | 0 | Producer MUST select slot state according to precedence |
+| PASS | 3.4 | `wildcard-not-fallback` | 2575 | 0 | Producer MUST NOT use wildcard as fallback when correct state is unknown |
+| PASS | 3.2 | `template-produces-valid-id` | 2575 | 0 | Conformant CRIT template MUST produce valid identifier after variable resolution |
+| PASS | 6.1 | `aws-global-region-hardcoded` | 2575 | 0 | AWS global-only services: region MUST be hardcoded to us-east-1 or empty |
+| PASS | 6.1 | `aws-regional-region-variable` | 2575 | 0 | AWS regional services: region MUST be named variable or wildcard, MUST NOT be empty |
+| PASS | 6.4 | `cloudflare-no-region-slot` | 2575 | 0 | Producer MUST NOT add region slot to Cloudflare templates |
+| PASS | 7.1 | `resolution-produces-valid-id` | 2575 | 0 | After variable resolution, result MUST be valid provider identifier |
+| PASS | 7.2 | `reserved-field-names-used` | 2575 | 0 | Producer MUST use reserved field names where applicable |
+| PASS | 5 | `template-field-valid-after-resolution` | 2575 | 0 | After all named variables substituted, result MUST be valid provider identifier for declared template_format |
+| PASS | 12.2 | `dictionary-entry-required-fields` | 2575 | 0 | All fields except notes are REQUIRED in dictionary entry |
+| PASS | 12.1.1 | `dictionary-tuple-resolves` | 2575 | 0 | (provider, service, resource_type) tuple MUST resolve to entry in conformant dictionary |
+| PASS | 9.1 | `service-key-lowercase-underscore` | 2575 | 0 | service field MUST match pattern ^[a-z][a-z0-9_]*$ |
+| PASS | 9.1 | `resource-type-valid-pattern` | 2575 | 0 | resource_type MUST match pattern ^[a-zA-Z][a-zA-Z0-9_/-]*$ |
+| PASS | 9.1 | `template-format-matches-provider` | 2575 | 0 | template_format MUST match provider |
+| PASS | 3.2 | `slot-syntax-abnf-valid` | 2575 | 0 | All slots MUST conform to ABNF grammar: field-name = 1*(ALPHA / DIGIT / "-" / "_") |
 
 ## Sample Record Rules
 
@@ -74,7 +74,7 @@ pie title "Sample Record Rules"
 | PASS | MUST | 9.1 | `template-format-matches-provider` | 33 | 0 | 0 | template_format MUST match provider |
 | PASS | MUST | 3.2 | `slot-syntax-abnf-valid` | 33 | 0 | 0 | All slots MUST conform to ABNF grammar |
 | PASS | MUST | 3.2 | `slot-delimiter-not-in-literal` | 33 | 0 | 0 | { and } MUST NOT appear outside slot expressions |
-| PASS | MUST | 6.1 | `aws-global-region-hardcoded` | 33 | 0 | 0 | AWS global-only: region MUST be hardcoded to us-east-1 |
+| PASS | MUST | 6.1 | `aws-global-region-hardcoded` | 33 | 0 | 0 | AWS global-only: region MUST be hardcoded to us-east-1 or empty |
 | PASS | MUST | 6.1 | `aws-regional-region-variable` | 33 | 0 | 0 | AWS regional: region MUST be named-variable, MUST NOT be empty |
 | PASS | MUST | 6.4 | `cloudflare-no-region-slot` | 33 | 0 | 0 | Cloudflare templates MUST NOT have region slot |
 | PASS | MUST | 12.1.1 | `dictionary-tuple-resolves` | 33 | 0 | 0 | (provider, service, resource_type) MUST resolve in dictionary |
