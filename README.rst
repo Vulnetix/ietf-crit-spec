@@ -526,6 +526,26 @@ Run the full test suite to verify everything passes:
    just test
 
 
+Dictionary Governance
+---------------------
+
+The Spec Default Dictionary shipped with this repository is a minimum baseline.
+It covers the most commonly encountered resource types across five cloud
+providers but is not exhaustive. The dictionary will grow over time.
+
+- **Spec Default Dictionary** entries are maintained alongside the specification
+  XML source. Changes require a PR and must pass the conformance suite.
+- **Extended Dictionaries** are independently maintained by implementers and may
+  add entries for services or providers not yet in the Spec Default Dictionary.
+- A conformant consumer must validate CRIT records against a dictionary before
+  accepting them. Dictionary availability is a prerequisite for conformant
+  consumption.
+- Cloud providers are encouraged to contribute entries for their services.
+  Community contributions are accepted via pull request.
+- No IANA registry is proposed for dictionary entries. The dictionary is a
+  template catalogue scoped by provider, not a shared identifier namespace.
+
+
 Writing Samples and Rules
 =========================
 
