@@ -1,5 +1,5 @@
-# Default draft source file
-draft := "drafts/draft-vulnetix-crit-01.xml"
+# Draft revision (override with: just rev=01 <recipe>)
+rev := "02"
 outdir := "build"
 schema := "schemas/crit-dictionary-v0.2.0.schema.json"
 
@@ -9,34 +9,37 @@ default:
 
 # Validate the XML by running preptool (catches errors without producing final output)
 check:
-    xml2rfc --preptool --out /dev/null {{draft}}
+    xml2rfc --preptool --out /dev/null drafts/draft-vulnetix-crit-{{rev}}.xml
 
 # Generate plain text output
 text:
     mkdir -p {{outdir}}
-    xml2rfc --text -o {{outdir}}/draft-vulnetix-crit-01.txt {{draft}}
+    xml2rfc --text -o {{outdir}}/draft-vulnetix-crit-{{rev}}.txt drafts/draft-vulnetix-crit-{{rev}}.xml
 
 # Generate HTML output
 html:
     mkdir -p {{outdir}}
-    xml2rfc --html -o {{outdir}}/draft-vulnetix-crit-01.html {{draft}}
+    xml2rfc --html -o {{outdir}}/draft-vulnetix-crit-{{rev}}.html drafts/draft-vulnetix-crit-{{rev}}.xml
 
 # Generate both text and HTML
-build: text html
+build:
+    mkdir -p {{outdir}}
+    xml2rfc --text -o {{outdir}}/draft-vulnetix-crit-{{rev}}.txt drafts/draft-vulnetix-crit-{{rev}}.xml
+    xml2rfc --html -o {{outdir}}/draft-vulnetix-crit-{{rev}}.html drafts/draft-vulnetix-crit-{{rev}}.xml
 
 # Run preptool to validate and prep the XML
 prep:
     mkdir -p {{outdir}}
-    xml2rfc --preptool -o {{outdir}}/draft-vulnetix-crit-01.prepped.xml {{draft}}
+    xml2rfc --preptool -o {{outdir}}/draft-vulnetix-crit-{{rev}}.prepped.xml drafts/draft-vulnetix-crit-{{rev}}.xml
 
 # Expand all references and output full XML
 expand:
     mkdir -p {{outdir}}
-    xml2rfc --expand -o {{outdir}}/draft-vulnetix-crit-01.exp.xml {{draft}}
+    xml2rfc --expand -o {{outdir}}/draft-vulnetix-crit-{{rev}}.exp.xml drafts/draft-vulnetix-crit-{{rev}}.xml
 
 # Update references to use bib.ietf.org
 update-refs:
-    xml2rfc --use-bib {{draft}}
+    xml2rfc --use-bib drafts/draft-vulnetix-crit-{{rev}}.xml
 
 # Validate dictionary JSON files against the CRIT dictionary schema
 validate-dictionaries:
