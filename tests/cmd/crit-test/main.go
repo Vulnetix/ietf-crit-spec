@@ -217,6 +217,9 @@ var knownSlotFiles = map[string]map[string]bool{
 	"gcp":        {"project": true, "location": true, "zone": true, "region": true, "resource-id": true},
 	"cloudflare": {"account_id": true, "id": true},
 	"oracle":     {"region": true, "unique-id": true},
+	"salesforce": {"instance": true, "api-version": true, "org-id": true},
+	"sap":        {"region": true, "host": true, "api-server": true},
+	"servicenow": {"instance": true, "sys-id": true},
 }
 
 var dictLookup map[DictKey]DictEntry
@@ -399,7 +402,7 @@ func loadSampleRecords(samplesDir string) ([]CRITRecord, error) {
 
 func generateSamples(dicts []*Dictionary, testsDir string) ([]Sample, error) {
 	providerWordlists := make(map[string]map[string][]string)
-	for _, p := range []string{"aws", "azure", "gcp", "cloudflare", "oracle"} {
+	for _, p := range []string{"aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow"} {
 		wl, err := loadWordlists(p, testsDir)
 		if err != nil {
 			return nil, fmt.Errorf("loading wordlists for %s: %w", p, err)
@@ -1227,39 +1230,184 @@ func printSuiteConsole(sr *SuiteResult, ruleNames []string, ruleSections map[str
 // Markdown report
 // ---------------------------------------------------------------------------
 
-func writeConsolidatedReport(path string, tplSuite, recSuite *SuiteResult, tplRules []TemplateRule, recRules []RecordRule, now time.Time) error {
+var providerDisplayNames = map[string]string{
+	"aws": "AWS", "azure": "Azure", "gcp": "GCP", "cloudflare": "Cloudflare",
+	"oracle": "Oracle", "salesforce": "Salesforce", "sap": "SAP", "servicenow": "ServiceNow",
+}
+
+var allProviderOrder = []string{"aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow"}
+
+var providerGroupings = []struct {
+	name      string
+	providers []string
+}{
+	{"Cloud Hyperscalers", []string{"aws", "azure", "gcp"}},
+	{"Network & CDN", []string{"cloudflare"}},
+	{"Enterprise Software", []string{"oracle"}},
+	{"Enterprise SaaS", []string{"salesforce", "sap", "servicenow"}},
+}
+
+func mermaidProviderGrouping(b *strings.Builder, dictEntries, recordCounts map[string]int) {
+	b.WriteString("```mermaid\n")
+	b.WriteString("graph LR\n")
+	for _, cat := range providerGroupings {
+		hasAny := false
+		for _, p := range cat.providers {
+			if dictEntries[p]+recordCounts[p] > 0 {
+				hasAny = true
+				break
+			}
+		}
+		if !hasAny {
+			continue
+		}
+		fmt.Fprintf(b, "    subgraph \"%s\"\n", cat.name)
+		for _, p := range cat.providers {
+			if dictEntries[p]+recordCounts[p] == 0 {
+				continue
+			}
+			fmt.Fprintf(b, "        %s[\"<b>%s</b> %d entries · %d records\"]\n",
+				p, providerDisplayNames[p], dictEntries[p], recordCounts[p])
+		}
+		b.WriteString("    end\n")
+	}
+	b.WriteString("```\n\n")
+}
+
+func mermaidEntriesPie(b *strings.Builder, dictEntries map[string]int) {
+	b.WriteString("```mermaid\n")
+	b.WriteString("pie title \"Dictionary Entries by Provider\"\n")
+	for _, p := range allProviderOrder {
+		if dictEntries[p] == 0 {
+			continue
+		}
+		fmt.Fprintf(b, "    \"%s (%d)\" : %d\n", providerDisplayNames[p], dictEntries[p], dictEntries[p])
+	}
+	b.WriteString("```\n\n")
+}
+
+func mermaidOverallPie(b *strings.Builder, totalPass, totalFail, totalWarn, totalChecks int) {
+	b.WriteString("```mermaid\n")
+	fmt.Fprintf(b, "pie title \"Overall Results (%d checks)\"\n", totalChecks)
+	if totalPass > 0 {
+		fmt.Fprintf(b, "    \"✅ Passed (%d)\" : %d\n", totalPass, totalPass)
+	}
+	if totalFail > 0 {
+		fmt.Fprintf(b, "    \"❌ Failed (%d)\" : %d\n", totalFail, totalFail)
+	}
+	if totalWarn > 0 {
+		fmt.Fprintf(b, "    \"⚠️ Warnings (%d)\" : %d\n", totalWarn, totalWarn)
+	}
+	b.WriteString("```\n\n")
+}
+
+func mermaidProviderRecordPie(b *strings.Builder, provider string, nRecords int, recSuite *SuiteResult, recRules []RecordRule) {
+	totalChecks := nRecords * len(recRules)
+	provFail, provWarn := 0, 0
+	for _, f := range recSuite.Failures {
+		if f.Provider == provider {
+			if f.Level == "SHOULD" {
+				provWarn++
+			} else {
+				provFail++
+			}
+		}
+	}
+	if provFail == 0 && provWarn == 0 {
+		return
+	}
+	provPass := totalChecks - provFail - provWarn
+	b.WriteString("```mermaid\n")
+	fmt.Fprintf(b, "pie title \"%s — Record Rule Results (%d checks)\"\n", providerDisplayNames[provider], totalChecks)
+	if provPass > 0 {
+		fmt.Fprintf(b, "    \"✅ Passed (%d)\" : %d\n", provPass, provPass)
+	}
+	if provFail > 0 {
+		fmt.Fprintf(b, "    \"❌ Failed (%d)\" : %d\n", provFail, provFail)
+	}
+	if provWarn > 0 {
+		fmt.Fprintf(b, "    \"⚠️ Warnings (%d)\" : %d\n", provWarn, provWarn)
+	}
+	b.WriteString("```\n\n")
+}
+
+func writeConsolidatedReport(path string, tplSuite, recSuite *SuiteResult, tplRules []TemplateRule, recRules []RecordRule, dicts []*Dictionary, samples []Sample, records []CRITRecord, now time.Time) error {
 	var b strings.Builder
 	totalPass := tplSuite.TotalPass + recSuite.TotalPass
 	totalFail := tplSuite.TotalFail + recSuite.TotalFail
 	totalWarn := tplSuite.TotalWarn + recSuite.TotalWarn
 	totalChecks := totalPass + totalFail + totalWarn
 
+	verdictEmoji := "✅"
 	verdict := "PASS"
 	if totalFail > 0 {
 		verdict = "FAIL"
+		verdictEmoji = "❌"
 	} else if totalWarn > 0 {
 		verdict = "WARN"
+		verdictEmoji = "⚠️"
 	}
 
 	b.WriteString("# CRIT Spec Conformance Report\n\n")
+
+	// Context section
+	b.WriteString("## Context\n\n")
+	b.WriteString("This report validates CRIT dictionary entries and sample records against [draft-vulnetix-crit-00](../drafts/draft-vulnetix-crit-00.xml).\n\n")
 	fmt.Fprintf(&b, "**Date:** %s  \n", now.Format("2006-01-02 15:04:05 UTC"))
-	fmt.Fprintf(&b, "**Verdict:** %s  \n", verdict)
-	fmt.Fprintf(&b, "**Total Checks:** %d | **Passed:** %d | **Failed:** %d | **Warnings:** %d  \n\n", totalChecks, totalPass, totalFail, totalWarn)
+	fmt.Fprintf(&b, "**Verdict:** %s %s  \n", verdictEmoji, verdict)
+	fmt.Fprintf(&b, "**Total Checks:** %d | ✅ **Passed:** %d | ❌ **Failed:** %d | ⚠️ **Warnings:** %d  \n\n", totalChecks, totalPass, totalFail, totalWarn)
+
+	// Build per-provider counts for context table
+	dictEntries := make(map[string]int)
+	for _, d := range dicts {
+		dictEntries[d.Provider] += len(d.Entries)
+	}
+	sampleCounts := make(map[string]int)
+	for _, s := range samples {
+		sampleCounts[s.Provider]++
+	}
+	recordCounts := make(map[string]int)
+	for _, r := range records {
+		recordCounts[r.Provider]++
+	}
+
+	b.WriteString("| Provider | Dictionary Entries | Template Samples | Sample Records |\n")
+	b.WriteString("|----------|------------------:|----------------:|---------------:|\n")
+	totalEntries, totalSamples, totalRecords := 0, 0, 0
+	for _, p := range allProviderOrder {
+		if dictEntries[p]+sampleCounts[p]+recordCounts[p] == 0 {
+			continue
+		}
+		name := providerDisplayNames[p]
+		fmt.Fprintf(&b, "| %s | %d | %d | %d |\n", name, dictEntries[p], sampleCounts[p], recordCounts[p])
+		totalEntries += dictEntries[p]
+		totalSamples += sampleCounts[p]
+		totalRecords += recordCounts[p]
+	}
+	fmt.Fprintf(&b, "| **Total** | **%d** | **%d** | **%d** |\n\n", totalEntries, totalSamples, totalRecords)
+
+	mermaidProviderGrouping(&b, dictEntries, recordCounts)
+	mermaidEntriesPie(&b, dictEntries)
 
 	// Summary table
 	b.WriteString("## Summary\n\n")
-	b.WriteString("| Suite | Rules | Samples | Checks | Passed | Failed | Warnings |\n")
-	b.WriteString("|-------|------:|--------:|-------:|-------:|-------:|---------:|\n")
+	b.WriteString("| Suite | Rules | Samples | Checks | ✅ Passed | ❌ Failed | ⚠️ Warnings |\n")
+	b.WriteString("|-------|------:|--------:|-------:|----------:|----------:|------------:|\n")
 	fmt.Fprintf(&b, "| Template Rules | %d | %d | %d | %d | %d | %d |\n",
 		tplSuite.RuleCount, tplSuite.SampleCount, tplSuite.TotalPass+tplSuite.TotalFail, tplSuite.TotalPass, tplSuite.TotalFail, tplSuite.TotalWarn)
 	fmt.Fprintf(&b, "| Sample Record Rules | %d | %d | %d | %d | %d | %d |\n\n",
 		recSuite.RuleCount, recSuite.SampleCount, recSuite.TotalPass+recSuite.TotalFail+recSuite.TotalWarn, recSuite.TotalPass, recSuite.TotalFail, recSuite.TotalWarn)
 
-	// Template suite section
-	writeSuiteSection(&b, tplSuite, tplRules, nil)
+	mermaidOverallPie(&b, totalPass, totalFail, totalWarn, totalChecks)
 
-	// Record suite section
-	writeSuiteSection(&b, recSuite, nil, recRules)
+	// Per-provider sections
+	for _, p := range allProviderOrder {
+		if dictEntries[p]+recordCounts[p] == 0 {
+			continue
+		}
+		writeProviderSection(&b, p, tplSuite, recSuite, tplRules, recRules,
+			sampleCounts[p], recordCounts[p], dictEntries[p])
+	}
 
 	b.WriteString("---\n\n")
 	b.WriteString("*Generated by `crit-test` from [draft-vulnetix-crit-00](../drafts/draft-vulnetix-crit-00.xml)*\n")
@@ -1270,98 +1418,94 @@ func writeConsolidatedReport(path string, tplSuite, recSuite *SuiteResult, tplRu
 	return os.WriteFile(path, []byte(b.String()), 0644)
 }
 
-func writeSuiteSection(b *strings.Builder, sr *SuiteResult, tplRules []TemplateRule, recRules []RecordRule) {
-	fmt.Fprintf(b, "## %s\n\n", sr.Name)
-
-	// Pie chart
-	b.WriteString("```mermaid\n")
-	fmt.Fprintf(b, "pie title \"%s\"\n", sr.Name)
-	fmt.Fprintf(b, "    \"Pass\" : %d\n", sr.TotalPass)
-	fmt.Fprintf(b, "    \"Fail\" : %d\n", sr.TotalFail)
-	if sr.TotalWarn > 0 {
-		fmt.Fprintf(b, "    \"Warn\" : %d\n", sr.TotalWarn)
+func writeProviderSection(b *strings.Builder, provider string, tplSuite, recSuite *SuiteResult, tplRules []TemplateRule, recRules []RecordRule, nSamples, nRecords, nEntries int) {
+	name := providerDisplayNames[provider]
+	if name == "" {
+		name = provider
 	}
-	b.WriteString("```\n\n")
+	fmt.Fprintf(b, "## %s\n\n", name)
+	fmt.Fprintf(b, "> %d dictionary entries · %d template samples · %d sample records\n\n", nEntries, nSamples, nRecords)
 
-	// Provider breakdown
-	provSamples := make(map[string]int)
-	provFail := make(map[string]int)
-	provWarn := make(map[string]int)
-	for _, f := range sr.Failures {
-		if f.Level == "SHOULD" {
-			provWarn[f.Provider]++
-		} else {
-			provFail[f.Provider]++
-		}
-	}
-	// Count samples per provider from failures+passes — use rule count to derive
-	// We don't have direct sample-level provider info here, so compute from results
-	providers := []string{"aws", "azure", "gcp", "cloudflare", "oracle"}
-
-	hasProviders := false
-	for _, f := range sr.Failures {
-		if f.Provider != "" {
-			hasProviders = true
-			break
+	// Per-provider per-rule fail counts from template suite failures
+	tplProvFail := make(map[string]int)
+	for _, f := range tplSuite.Failures {
+		if f.Provider == provider {
+			tplProvFail[f.RuleName]++
 		}
 	}
 
-	if hasProviders {
-		// Count unique provider occurrences from samples
-		// For template suite: each sample has a provider, total checks = samples * rules
-		// We estimate from failures. A better approach: pass provider counts directly.
-		// For now, show the failure breakdown.
-		b.WriteString("### Failures by Provider\n\n")
-		b.WriteString("| Provider | Failed | Warnings |\n")
-		b.WriteString("|----------|-------:|---------:|\n")
-		for _, p := range providers {
-			if provFail[p]+provWarn[p] > 0 {
-				fmt.Fprintf(b, "| %s | %d | %d |\n", p, provFail[p], provWarn[p])
-			}
+	// Template Rules table
+	b.WriteString("### Template Rules\n\n")
+	b.WriteString("| Status | Sec | Rule | ✅ Pass | ❌ Fail | Requirement |\n")
+	b.WriteString("|:------:|:---:|------|-------:|-------:|-------------|\n")
+	for _, r := range tplRules {
+		fail := tplProvFail[r.Name]
+		pass := nSamples - fail
+		if pass < 0 {
+			pass = 0
 		}
-		if len(provFail)+len(provWarn) == 0 {
-			b.WriteString("| *(none)* | 0 | 0 |\n")
+		status := "✅"
+		if fail > 0 {
+			status = "❌"
 		}
-		b.WriteString("\n")
-		_ = provSamples
-	}
-
-	// Rule results table
-	b.WriteString("### Rule Results\n\n")
-	if recRules != nil {
-		b.WriteString("| Status | Level | Sec | Rule | Pass | Fail | Warn | Requirement |\n")
-		b.WriteString("|:------:|:-----:|:---:|------|-----:|-----:|-----:|-------------|\n")
-		for _, r := range recRules {
-			rr := sr.Results[r.Name]
-			status := "PASS"
-			if rr.Fail > 0 {
-				status = "FAIL"
-			} else if rr.Warn > 0 {
-				status = "WARN"
-			}
-			fmt.Fprintf(b, "| %s | %s | %s | `%s` | %d | %d | %d | %s |\n",
-				status, r.Level, r.Section, r.Name, rr.Pass, rr.Fail, rr.Warn, escapeMarkdown(r.Requirement))
-		}
-	} else if tplRules != nil {
-		b.WriteString("| Status | Sec | Rule | Pass | Fail | Requirement |\n")
-		b.WriteString("|:------:|:---:|------|-----:|-----:|-------------|\n")
-		for _, r := range tplRules {
-			rr := sr.Results[r.Name]
-			status := "PASS"
-			if rr.Fail > 0 {
-				status = "FAIL"
-			}
-			fmt.Fprintf(b, "| %s | %s | `%s` | %d | %d | %s |\n",
-				status, r.Section, r.Name, rr.Pass, rr.Fail, escapeMarkdown(r.Requirement))
-		}
+		fmt.Fprintf(b, "| %s | %s | `%s` | %d | %d | %s |\n",
+			status, r.Section, r.Name, pass, fail, escapeMarkdown(r.Requirement))
 	}
 	b.WriteString("\n")
 
-	// Failures
-	if len(sr.Failures) > 0 {
+	// Sample Record Rules table (only if provider has records)
+	if nRecords > 0 {
+		recProvFail := make(map[string]int)
+		recProvWarn := make(map[string]int)
+		for _, f := range recSuite.Failures {
+			if f.Provider == provider {
+				if f.Level == "SHOULD" {
+					recProvWarn[f.RuleName]++
+				} else {
+					recProvFail[f.RuleName]++
+				}
+			}
+		}
+		b.WriteString("### Sample Record Rules\n\n")
+		b.WriteString("| Status | Level | Sec | Rule | ✅ Pass | ❌ Fail | ⚠️ Warn | Requirement |\n")
+		b.WriteString("|:------:|:-----:|:---:|------|-------:|-------:|--------:|-------------|\n")
+		for _, r := range recRules {
+			fail := recProvFail[r.Name]
+			warn := recProvWarn[r.Name]
+			pass := nRecords - fail - warn
+			if pass < 0 {
+				pass = 0
+			}
+			status := "✅"
+			if fail > 0 {
+				status = "❌"
+			} else if warn > 0 {
+				status = "⚠️"
+			}
+			fmt.Fprintf(b, "| %s | %s | %s | `%s` | %d | %d | %d | %s |\n",
+				status, r.Level, r.Section, r.Name, pass, fail, warn, escapeMarkdown(r.Requirement))
+		}
+		b.WriteString("\n")
+		mermaidProviderRecordPie(b, provider, nRecords, recSuite, recRules)
+	}
+
+	// Collect failures & warnings for this provider from both suites
+	var provFailures []Failure
+	for _, f := range tplSuite.Failures {
+		if f.Provider == provider {
+			provFailures = append(provFailures, f)
+		}
+	}
+	for _, f := range recSuite.Failures {
+		if f.Provider == provider {
+			provFailures = append(provFailures, f)
+		}
+	}
+
+	if len(provFailures) > 0 {
 		b.WriteString("### Failures & Warnings\n\n")
 		failsByRule := make(map[string][]Failure)
-		for _, f := range sr.Failures {
+		for _, f := range provFailures {
 			failsByRule[f.RuleName] = append(failsByRule[f.RuleName], f)
 		}
 		names := make([]string, 0, len(failsByRule))
@@ -1369,26 +1513,26 @@ func writeSuiteSection(b *strings.Builder, sr *SuiteResult, tplRules []TemplateR
 			names = append(names, k)
 		}
 		sort.Strings(names)
-		for _, name := range names {
-			ff := failsByRule[name]
-			label := "failures"
+		for _, ruleName := range names {
+			ff := failsByRule[ruleName]
+			label := "❌ failures"
 			if ff[0].Level == "SHOULD" {
-				label = "warnings"
+				label = "⚠️ warnings"
 			}
-			fmt.Fprintf(b, "#### `%s` (%s) &mdash; %d %s\n\n", name, ff[0].Section, len(ff), label)
-			b.WriteString("| Provider | Service | Resource Type | Detail |\n")
-			b.WriteString("|----------|---------|---------------|--------|\n")
+			fmt.Fprintf(b, "#### `%s` (%s) &mdash; %d %s\n\n", ruleName, ff[0].Section, len(ff), label)
+			b.WriteString("| Service | Resource Type | Detail |\n")
+			b.WriteString("|---------|---------------|--------|\n")
 			cap := 20
 			for i, f := range ff {
 				if i >= cap {
-					fmt.Fprintf(b, "| ... | ... | ... | *%d more omitted* |\n", len(ff)-cap)
+					fmt.Fprintf(b, "| ... | ... | *%d more omitted* |\n", len(ff)-cap)
 					break
 				}
 				d := escapeMarkdown(f.Detail)
 				if len(d) > 70 {
 					d = d[:67] + "..."
 				}
-				fmt.Fprintf(b, "| %s | %s | %s | %s |\n", f.Provider, f.Service, f.ResourceType, d)
+				fmt.Fprintf(b, "| %s | %s | %s |\n", f.Service, f.ResourceType, d)
 			}
 			b.WriteString("\n")
 		}
@@ -1442,7 +1586,7 @@ func main() {
 		Schema: "../schemas/crit-samples-v0.1.0.schema.json", GeneratedAt: time.Now().UTC().Format(time.RFC3339),
 		Wordlists: make(map[string]map[string][]string), Samples: samples,
 	}
-	for _, p := range []string{"aws", "azure", "gcp", "cloudflare", "oracle"} {
+	for _, p := range []string{"aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow"} {
 		wl, _ := loadWordlists(p, testsDir)
 		samplesOut.Wordlists[p] = wl
 	}
@@ -1504,7 +1648,7 @@ func main() {
 	now := time.Now().UTC()
 	if *reportDir != "" {
 		reportFile := filepath.Join(*reportDir, now.Format("20060102")+"-crit-test-report.md")
-		if err := writeConsolidatedReport(reportFile, tplSuite, recSuite, tplRules, recRules, now); err != nil {
+		if err := writeConsolidatedReport(reportFile, tplSuite, recSuite, tplRules, recRules, dicts, samples, records, now); err != nil {
 			fmt.Fprintf(os.Stderr, "Error writing report: %v\n", err)
 			os.Exit(1)
 		}
