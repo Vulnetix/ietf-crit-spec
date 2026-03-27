@@ -37,6 +37,7 @@ func TestComputeVectorAllProviders(t *testing.T) {
 	}{
 		{"aws", "AW"}, {"azure", "MA"}, {"gcp", "GC"},
 		{"cloudflare", "CF"}, {"oracle", "OC"},
+		{"salesforce", "SF"}, {"sap", "SP"}, {"servicenow", "SN"},
 	}
 	for _, tc := range cases {
 		v := CRITVector{

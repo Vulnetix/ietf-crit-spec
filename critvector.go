@@ -55,6 +55,9 @@ var providerToCode = map[string]string{
 	"gcp":        "GC",
 	"cloudflare": "CF",
 	"oracle":     "OC",
+	"salesforce": "SF",
+	"sap":        "SP",
+	"servicenow": "SN",
 }
 
 var vexStatusToCode = map[string]string{
