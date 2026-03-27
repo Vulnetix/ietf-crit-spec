@@ -9,7 +9,7 @@ Expires: 28 September 2026
 
 
                Cloud Resource Identifier Templates (CRIT)
-                         draft-vulnetix-crit-01
+                         draft-vulnetix-crit-02
 
 Abstract
 
@@ -91,11 +91,11 @@ Table of Contents
      3.4.  The Four Slot States  . . . . . . . . . . . . . . . . . .  15
        3.4.1.  Named Variable  . . . . . . . . . . . . . . . . . . .  15
        3.4.2.  Wildcard  . . . . . . . . . . . . . . . . . . . . . .  15
-       3.4.3.  Empty . . . . . . . . . . . . . . . . . . . . . . . .  15
+       3.4.3.  Empty . . . . . . . . . . . . . . . . . . . . . . . .  16
        3.4.4.  Hardcoded . . . . . . . . . . . . . . . . . . . . . .  16
      3.5.  Slot State Selection Rules  . . . . . . . . . . . . . . .  16
-   4.  CRIT Record Schema  . . . . . . . . . . . . . . . . . . . . .  16
-     4.1.  Envelope and Identity . . . . . . . . . . . . . . . . . .  16
+   4.  CRIT Record Schema  . . . . . . . . . . . . . . . . . . . . .  17
+     4.1.  Envelope and Identity . . . . . . . . . . . . . . . . . .  17
        4.1.1.  Natural Key and Uniqueness  . . . . . . . . . . . . .  18
        4.1.2.  CRIT Vector String  . . . . . . . . . . . . . . . . .  19
      4.2.  Resource Template . . . . . . . . . . . . . . . . . . . .  25
@@ -511,8 +511,11 @@ Internet-Draft                    CRIT                        March 2026
       same natural key.
 
    Provider:
-      A cloud service vendor.  This specification defines five
-      providers: aws, azure, gcp, cloudflare, and oracle.
+      A cloud service vendor whose resources are covered by this
+      specification.  Supported values are: aws, azure, gcp, cloudflare,
+      oracle, salesforce, sap, and servicenow.  Each provider maintains
+      its own resource identification scheme; CRIT encodes those schemes
+      as templates without altering or extending them.
 
    Service:
       A distinct offering within a provider's portfolio, identified by a
@@ -549,9 +552,6 @@ Internet-Draft                    CRIT                        March 2026
       A slot for a field that is structurally present but semantically
       inapplicable to the resource type.  Syntax: {field-name=}.
 
-   Slot Resolution:
-      The process of substituting concrete values into variable slots to
-      produce a live provider identifier.
 
 
 
@@ -561,6 +561,10 @@ Langton                 Expires 28 September 2026              [Page 10]
 
 Internet-Draft                    CRIT                        March 2026
 
+
+   Slot Resolution:
+      The process of substituting concrete values into variable slots to
+      produce a live provider identifier.
 
    Resource Lifecycle:
       A classification of a resource type's operational behaviour with
@@ -607,16 +611,16 @@ Internet-Draft                    CRIT                        March 2026
       The lifecycle stage of a detection: pre_fix, exploitation,
       post_fix, or misconfiguration.  See Section 4.6.3.
 
-   Pending Reason:
-      An enumerated value indicating why a detection entry is a
-      placeholder without a functional query.  See Section 4.6.4.
-
 
 
 Langton                 Expires 28 September 2026              [Page 11]
 
 Internet-Draft                    CRIT                        March 2026
 
+
+   Pending Reason:
+      An enumerated value indicating why a detection entry is a
+      placeholder without a functional query.  See Section 4.6.4.
 
    Vulnerability Identifier:
       A string uniquely identifying the vulnerability a CRIT record
@@ -661,10 +665,6 @@ Internet-Draft                    CRIT                        March 2026
 
                                   Table 1
 
-   This specification does not alter, extend, or redefine any provider
-   identifier schema.  A conformant CRIT template MUST produce a string
-   that, after variable resolution, is a valid identifier according to
-   the applicable provider schema.
 
 
 
@@ -673,6 +673,11 @@ Langton                 Expires 28 September 2026              [Page 12]
 
 Internet-Draft                    CRIT                        March 2026
 
+
+   This specification does not alter, extend, or redefine any provider
+   identifier schema.  A conformant CRIT template MUST produce a string
+   that, after variable resolution, is a valid identifier according to
+   the applicable provider schema.
 
    A CRIT template MUST NOT use pkg:generic/ or any PURL type that
    implies a build-from-source artifact to represent a cloud
@@ -710,6 +715,21 @@ Internet-Draft                    CRIT                        March 2026
    delimiters is a slot descriptor with the following ABNF ([RFC5234])
    grammar:
 
+
+
+
+
+
+
+
+
+
+
+Langton                 Expires 28 September 2026              [Page 13]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    slot            = "{" slot-descriptor "}"
    slot-descriptor = named-var / wildcard / empty-marker / hardcoded
    named-var       = field-name
@@ -720,15 +740,6 @@ Internet-Draft                    CRIT                        March 2026
    literal-value   = 1*( ALPHA / DIGIT / "-" / "_" / "." / ":" )
 
                         Figure 1: Slot ABNF Grammar
-
-
-
-
-
-Langton                 Expires 28 September 2026              [Page 13]
-
-Internet-Draft                    CRIT                        March 2026
-
 
    The characters { and } are reserved as slot delimiters and MUST NOT
    appear in literal-value or as literal characters within a template
@@ -766,6 +777,15 @@ Internet-Draft                    CRIT                        March 2026
        distinction to prevent consumers from treating a structurally
        absent field as an unknown value requiring resolution.
 
+
+
+
+
+Langton                 Expires 28 September 2026              [Page 14]
+
+Internet-Draft                    CRIT                        March 2026
+
+
    4.  *Hardcoded* ({field=literal}): Provider-fixed value.  The value
        is determined by the provider schema, not by the consumer.  This
        state is required because some provider identifier schemas
@@ -778,14 +798,6 @@ Internet-Draft                    CRIT                        March 2026
    [RFC6570] operators (+, #, ., /, ;, ?, &) are not supported.  CRIT
    templates use simple string replacement only.  A fully-resolved CRIT
    template — one in which every named-variable slot has been
-
-
-
-Langton                 Expires 28 September 2026              [Page 14]
-
-Internet-Draft                    CRIT                        March 2026
-
-
    substituted with a concrete value, every empty slot resolved to the
    empty string, and every hardcoded slot resolved to its literal —
    produces a valid provider-native resource identifier.  The result is
@@ -819,6 +831,17 @@ Internet-Draft                    CRIT                        March 2026
    Examples: {region=*} matches all regions; {account=*} matches all
    accounts.
 
+
+
+
+
+
+
+Langton                 Expires 28 September 2026              [Page 15]
+
+Internet-Draft                    CRIT                        March 2026
+
+
 3.4.3.  Empty
 
    Syntax: {field-name=}
@@ -832,15 +855,6 @@ Internet-Draft                    CRIT                        March 2026
 
    Example: GCP global resources carry no zone; the zone slot is
    expressed as {zone=}.
-
-
-
-
-
-Langton                 Expires 28 September 2026              [Page 15]
-
-Internet-Draft                    CRIT                        March 2026
-
 
 3.4.4.  Hardcoded
 
@@ -876,6 +890,14 @@ Internet-Draft                    CRIT                        March 2026
    named variable; wildcard is a deliberate semantic choice meaning
    "enumerate all".
 
+
+
+
+Langton                 Expires 28 September 2026              [Page 16]
+
+Internet-Draft                    CRIT                        March 2026
+
+
 4.  CRIT Record Schema
 
    All field names are lowercase snake_case.  The schema is expressed in
@@ -886,17 +908,6 @@ Internet-Draft                    CRIT                        March 2026
    intraday precision is meaningful.
 
 4.1.  Envelope and Identity
-
-
-
-
-
-
-
-Langton                 Expires 28 September 2026              [Page 16]
-
-Internet-Draft                    CRIT                        March 2026
-
 
    {
      "vectorString": "<crit-vector>",
@@ -910,17 +921,6 @@ Internet-Draft                    CRIT                        March 2026
    }
 
                          Figure 2: Envelope Fields
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -973,7 +973,9 @@ Internet-Draft                    CRIT                        March 2026
     | provider              | REQUIRED | enum   | One of: aws,       |
     |                       |          |        | azure, gcp,        |
     |                       |          |        | cloudflare,        |
-    |                       |          |        | oracle.            |
+    |                       |          |        | oracle,            |
+    |                       |          |        | salesforce, sap,   |
+    |                       |          |        | servicenow.        |
     +-----------------------+----------+--------+--------------------+
     | service               | REQUIRED | string | Provider service   |
     |                       |          |        | key (e.g., lambda, |
@@ -1000,8 +1002,6 @@ Internet-Draft                    CRIT                        March 2026
    natural key of a CRIT record.  Within a conformant corpus, no two
    records MAY share the same natural key.  A producer MUST enforce this
    uniqueness constraint before emitting records.
-
-
 
 
 
@@ -1386,14 +1386,14 @@ Internet-Draft                    CRIT                        March 2026
 
 4.2.  Resource Template
 
-   +=================+==========+========+=============================+
-   | Field           | Required | Type   | Description                 |
-   +=================+==========+========+=============================+
-   | template        | REQUIRED | string | Parameterised identifier    |
-   |                 |          |        | string.  After all named    |
-   |                 |          |        | variables are               |
-   |                 |          |        | substituted, the result     |
-   |                 |          |        | MUST be a valid provider    |
+   +=================+==========+========+============================+
+   | Field           | Required | Type   | Description                |
+   +=================+==========+========+============================+
+   | template        | REQUIRED | string | Parameterised identifier   |
+   |                 |          |        | string.  After all named   |
+   |                 |          |        | variables are substituted, |
+   |                 |          |        | the result MUST be a valid |
+   |                 |          |        | provider identifier for    |
 
 
 
@@ -1402,17 +1402,21 @@ Langton                 Expires 28 September 2026              [Page 25]
 Internet-Draft                    CRIT                        March 2026
 
 
-   |                 |          |        | identifier for the          |
-   |                 |          |        | declared template_format.   |
-   +-----------------+----------+--------+-----------------------------+
-   | template_format | REQUIRED | enum   | One of: aws_arn,            |
-   |                 |          |        | azure_resource_id,          |
-   |                 |          |        | gcp_resource_name,          |
-   |                 |          |        | cloudflare_locator,         |
-   |                 |          |        | oracle_ocid.                |
-   +-----------------+----------+--------+-----------------------------+
+   |                 |          |        | the declared               |
+   |                 |          |        | template_format.           |
+   +-----------------+----------+--------+----------------------------+
+   | template_format | REQUIRED | enum   | One of: aws_arn,           |
+   |                 |          |        | azure_resource_id,         |
+   |                 |          |        | gcp_resource_name,         |
+   |                 |          |        | cloudflare_locator,        |
+   |                 |          |        | oracle_ocid,               |
+   |                 |          |        | salesforce_url,            |
+   |                 |          |        | sap_btp_url,               |
+   |                 |          |        | sap_odata_url, sap_sf_url, |
+   |                 |          |        | servicenow_table_url.      |
+   +-----------------+----------+--------+----------------------------+
 
-                                  Table 10
+                                 Table 10
 
 4.3.  Temporal Fields and Exposure Window
 
@@ -1445,10 +1449,6 @@ Internet-Draft                    CRIT                        March 2026
       vuln_published_date by months or years.  When present, MUST be
       used as W_start of the exposure window.
 
-   vulnerability_introduced_date_estimated (OPTIONAL):
-      When true, vulnerability_introduced_date is an estimate.
-      Consumers SHOULD surface this flag in exposure window reporting.
-
 
 
 
@@ -1457,6 +1457,10 @@ Langton                 Expires 28 September 2026              [Page 26]
 
 Internet-Draft                    CRIT                        March 2026
 
+
+   vulnerability_introduced_date_estimated (OPTIONAL):
+      When true, vulnerability_introduced_date is an estimate.
+      Consumers SHOULD surface this flag in exposure window reporting.
 
    vuln_published_date (REQUIRED):
       Date the vulnerability record was first published.  MUST match the
@@ -1486,10 +1490,6 @@ Internet-Draft                    CRIT                        March 2026
    of the resource type with respect to data durability and replacement.
    This is a property of the resource type, not of any specific consumer
    deployment.
-
-
-
-
 
 
 
