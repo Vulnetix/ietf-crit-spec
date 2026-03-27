@@ -1,5 +1,5 @@
 # Default draft source file
-draft := "drafts/draft-vulnetix-crit-00.xml"
+draft := "drafts/draft-vulnetix-crit-01.xml"
 outdir := "build"
 schema := "schemas/crit-dictionary-v0.2.0.schema.json"
 
@@ -14,12 +14,12 @@ check:
 # Generate plain text output
 text:
     mkdir -p {{outdir}}
-    xml2rfc --text -o {{outdir}}/draft-vulnetix-crit-00.txt {{draft}}
+    xml2rfc --text -o {{outdir}}/draft-vulnetix-crit-01.txt {{draft}}
 
 # Generate HTML output
 html:
     mkdir -p {{outdir}}
-    xml2rfc --html -o {{outdir}}/draft-vulnetix-crit-00.html {{draft}}
+    xml2rfc --html -o {{outdir}}/draft-vulnetix-crit-01.html {{draft}}
 
 # Generate both text and HTML
 build: text html
@@ -27,12 +27,12 @@ build: text html
 # Run preptool to validate and prep the XML
 prep:
     mkdir -p {{outdir}}
-    xml2rfc --preptool -o {{outdir}}/draft-vulnetix-crit-00.prepped.xml {{draft}}
+    xml2rfc --preptool -o {{outdir}}/draft-vulnetix-crit-01.prepped.xml {{draft}}
 
 # Expand all references and output full XML
 expand:
     mkdir -p {{outdir}}
-    xml2rfc --expand -o {{outdir}}/draft-vulnetix-crit-00.exp.xml {{draft}}
+    xml2rfc --expand -o {{outdir}}/draft-vulnetix-crit-01.exp.xml {{draft}}
 
 # Update references to use bib.ietf.org
 update-refs:

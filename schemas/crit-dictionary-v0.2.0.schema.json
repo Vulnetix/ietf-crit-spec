@@ -17,7 +17,7 @@
       "description": "Semantic version tracking the CRIT specification version."
     },
     "provider": {
-      "enum": ["aws", "azure", "gcp", "cloudflare", "oracle"],
+      "enum": ["aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow"],
       "description": "Canonical provider key."
     },
     "entries": {
@@ -47,6 +47,18 @@
     {
       "if": { "properties": { "provider": { "const": "oracle" } }, "required": ["provider"] },
       "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "oracle_ocid" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "salesforce" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "salesforce_url" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "sap" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "enum": ["sap_btp_url", "sap_odata_url", "sap_sf_url"] } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "servicenow" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "servicenow_table_url" } } } } } }
     }
   ],
   "$defs": {
@@ -71,12 +83,12 @@
           "description": "CRIT template string using slot syntax."
         },
         "template_format": {
-          "enum": ["aws_arn", "azure_resource_id", "gcp_resource_name", "cloudflare_locator", "oracle_ocid"],
+          "enum": ["aws_arn", "azure_resource_id", "gcp_resource_name", "cloudflare_locator", "oracle_ocid", "salesforce_url", "sap_btp_url", "sap_odata_url", "sap_sf_url", "servicenow_table_url"],
           "description": "Format of the resolved template."
         },
         "region_behavior": {
           "enum": ["regional", "global-only"],
-          "description": "Whether the resource is regional or globally scoped."
+          "description": "Whether the resource is regional or globally scoped. Use global-only for providers with no regional deployment concept."
         },
         "notes": {
           "type": "string",
