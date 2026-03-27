@@ -1240,7 +1240,7 @@ li > p:last-of-type:only-child {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Langton</td>
-<td class="center">Expires 22 September 2026</td>
+<td class="center">Expires 28 September 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1253,12 +1253,12 @@ li > p:last-of-type:only-child {
 <dd class="internet-draft">draft-vulnetix-crit-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-03-21" class="published">21 March 2026</time>
+<time datetime="2026-03-27" class="published">27 March 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-09-22">22 September 2026</time></dd>
+<dd class="expires"><time datetime="2026-09-28">28 September 2026</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1306,7 +1306,7 @@ li > p:last-of-type:only-child {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 22 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 28 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2052,8 +2052,13 @@ li > p:last-of-type:only-child {
 </dd>
             <dd class="break"></dd>
 <dt id="section-1.6.2-2.17">Provider:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.6.2-2.18">A cloud service vendor. This specification defines five
-            providers: aws, azure, gcp, cloudflare, and oracle.<a href="#section-1.6.2-2.18" class="pilcrow">¶</a>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.18">A cloud service vendor whose resources are covered by this
+            specification.  Supported values are: <code>aws</code>,
+            <code>azure</code>, <code>gcp</code>, <code>cloudflare</code>,
+            <code>oracle</code>, <code>salesforce</code>, <code>sap</code>, and
+            <code>servicenow</code>.  Each provider maintains its own resource
+            identification scheme; CRIT encodes those schemes as templates
+            without altering or extending them.<a href="#section-1.6.2-2.18" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
 <dt id="section-1.6.2-2.19">Service:</dt>
@@ -2586,7 +2591,7 @@ literal-value   = 1*( ALPHA / DIGIT / "-" / "_" / "." / ":" )
               <td class="text-left" rowspan="1" colspan="1">provider</td>
               <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
               <td class="text-left" rowspan="1" colspan="1">enum</td>
-              <td class="text-left" rowspan="1" colspan="1">One of: <code>aws</code>, <code>azure</code>, <code>gcp</code>, <code>cloudflare</code>, <code>oracle</code>.</td>
+              <td class="text-left" rowspan="1" colspan="1">One of: <code>aws</code>, <code>azure</code>, <code>gcp</code>, <code>cloudflare</code>, <code>oracle</code>, <code>salesforce</code>, <code>sap</code>, <code>servicenow</code>.</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">service</td>
@@ -3127,7 +3132,7 @@ CRITv0.2.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-20
               <td class="text-left" rowspan="1" colspan="1">template_format</td>
               <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
               <td class="text-left" rowspan="1" colspan="1">enum</td>
-              <td class="text-left" rowspan="1" colspan="1">One of: <code>aws_arn</code>, <code>azure_resource_id</code>, <code>gcp_resource_name</code>, <code>cloudflare_locator</code>, <code>oracle_ocid</code>.</td>
+              <td class="text-left" rowspan="1" colspan="1">One of: <code>aws_arn</code>, <code>azure_resource_id</code>, <code>gcp_resource_name</code>, <code>cloudflare_locator</code>, <code>oracle_ocid</code>, <code>salesforce_url</code>, <code>sap_btp_url</code>, <code>sap_odata_url</code>, <code>sap_sf_url</code>, <code>servicenow_table_url</code>.</td>
             </tr>
           </tbody>
         </table>

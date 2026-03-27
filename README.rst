@@ -125,7 +125,7 @@ Install
 =======
 
 ``crit-validate`` checks CVE records containing CRIT extensions against the
-specification rules. The binary embeds the Spec Default Dictionary (513 entries)
+specification rules. The binary embeds the Spec Default Dictionary (682 entries)
 and the dictionary JSON Schema at build time -- no external files required.
 
 .. code-block:: bash
@@ -214,8 +214,9 @@ that underpins modern software security.
 
 Cloud infrastructure has no equivalent. Until CRIT.
 
-There are 513 distinct resource types across AWS, Azure, GCP, Cloudflare, and
-Oracle in the CRIT dictionaries today. Not one of them can be expressed in CPE
+There are 682 distinct resource types across AWS, Azure, GCP, Cloudflare,
+Oracle, Salesforce, SAP, and ServiceNow in the CRIT dictionaries today. Not one
+of them can be expressed in CPE
 or PURL in a way that a CSPM tool can use for automated vulnerability matching.
 The result: Cloud Security Posture Management tools handle misconfigurations
 and vendor insecure defaults. They check if your S3 bucket is public or your
@@ -303,19 +304,22 @@ Hardcoded slots carry fixed values determined by the provider schema:
 Dictionaries
 ------------
 
-CRIT ships default dictionaries -- JSON files cataloguing every known resource
-type for each provider. The repository contains five dictionaries covering 512
-resource types:
+CRIT ships default dictionaries -- JSON files cataloguing representative
+resource types for each provider. The repository contains eight dictionaries
+covering 682 resource types:
 
-==========================  ===============
-Dictionary                  Resource Types
-==========================  ===============
-``dictionaries/aws.json``           238
-``dictionaries/azure.json``          88
-``dictionaries/gcp.json``            77
-``dictionaries/cloudflare.json``     43
-``dictionaries/oracle.json``         67
-==========================  ===============
+================================  ===============
+Dictionary                        Resource Types
+================================  ===============
+``dictionaries/aws.json``                    240
+``dictionaries/azure.json``                   88
+``dictionaries/gcp.json``                     77
+``dictionaries/cloudflare.json``              43
+``dictionaries/oracle.json``                  67
+``dictionaries/salesforce.json``              47
+``dictionaries/sap.json``                     55
+``dictionaries/servicenow.json``              65
+================================  ===============
 
 Each dictionary entry maps a ``(service, resource_type)`` tuple to a template
 and metadata:
@@ -531,8 +535,8 @@ Dictionary Governance
 ---------------------
 
 The Spec Default Dictionary shipped with this repository is a minimum baseline.
-It covers the most commonly encountered resource types across five cloud
-providers but is not exhaustive. The dictionary will grow over time.
+It covers representative resource types across eight providers but is not
+exhaustive. The dictionary will grow over time.
 
 - **Spec Default Dictionary** entries are maintained alongside the specification
   XML source. Changes require a PR and must pass the conformance suite.

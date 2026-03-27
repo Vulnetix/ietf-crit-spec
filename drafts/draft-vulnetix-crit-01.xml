@@ -31,7 +31,7 @@
       </address>
     </author>
 
-    <date year="2026" month="March" day="21"/>
+    <date year="2026" month="March" day="27"/>
 
     <area>Security</area>
     <workgroup>Independent Submission</workgroup>
@@ -373,8 +373,13 @@
             same natural key.</dd>
 
             <dt>Provider:</dt>
-            <dd>A cloud service vendor. This specification defines five
-            providers: aws, azure, gcp, cloudflare, and oracle.</dd>
+            <dd>A cloud service vendor whose resources are covered by this
+            specification.  Supported values are: <tt>aws</tt>,
+            <tt>azure</tt>, <tt>gcp</tt>, <tt>cloudflare</tt>,
+            <tt>oracle</tt>, <tt>salesforce</tt>, <tt>sap</tt>, and
+            <tt>servicenow</tt>.  Each provider maintains its own resource
+            identification scheme; CRIT encodes those schemes as templates
+            without altering or extending them.</dd>
 
             <dt>Service:</dt>
             <dd>A distinct offering within a provider's portfolio, identified
@@ -779,7 +784,7 @@ literal-value   = 1*( ALPHA / DIGIT / "-" / "_" / "." / ":" )
           <tbody>
             <tr><td>vectorString</td><td>REQUIRED</td><td>string</td><td>Canonical CRIT vector string computed from record fields. See <xref target="crit-vector-string"/>.</td></tr>
             <tr><td>vuln_id</td><td>REQUIRED</td><td>string</td><td>The vulnerability this record relates to. <bcp14>MUST</bcp14> match exactly one vulnerability per record.</td></tr>
-            <tr><td>provider</td><td>REQUIRED</td><td>enum</td><td>One of: <tt>aws</tt>, <tt>azure</tt>, <tt>gcp</tt>, <tt>cloudflare</tt>, <tt>oracle</tt>.</td></tr>
+            <tr><td>provider</td><td>REQUIRED</td><td>enum</td><td>One of: <tt>aws</tt>, <tt>azure</tt>, <tt>gcp</tt>, <tt>cloudflare</tt>, <tt>oracle</tt>, <tt>salesforce</tt>, <tt>sap</tt>, <tt>servicenow</tt>.</td></tr>
             <tr><td>service</td><td>REQUIRED</td><td>string</td><td>Provider service key (e.g., <tt>lambda</tt>, <tt>aks</tt>, <tt>cloud_sql</tt>).</td></tr>
             <tr><td>resource_type</td><td>REQUIRED</td><td>string</td><td>Specific resource type within the service (e.g., <tt>function</tt>, <tt>cluster</tt>, <tt>instance</tt>).</td></tr>
             <tr><td>resource_lifecycle</td><td>REQUIRED</td><td>enum</td><td>See <xref target="schema-lifecycle"/>.</td></tr>
@@ -1059,7 +1064,7 @@ CRITv0.2.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-20
           </thead>
           <tbody>
             <tr><td>template</td><td>REQUIRED</td><td>string</td><td>Parameterised identifier string. After all named variables are substituted, the result <bcp14>MUST</bcp14> be a valid provider identifier for the declared <tt>template_format</tt>.</td></tr>
-            <tr><td>template_format</td><td>REQUIRED</td><td>enum</td><td>One of: <tt>aws_arn</tt>, <tt>azure_resource_id</tt>, <tt>gcp_resource_name</tt>, <tt>cloudflare_locator</tt>, <tt>oracle_ocid</tt>.</td></tr>
+            <tr><td>template_format</td><td>REQUIRED</td><td>enum</td><td>One of: <tt>aws_arn</tt>, <tt>azure_resource_id</tt>, <tt>gcp_resource_name</tt>, <tt>cloudflare_locator</tt>, <tt>oracle_ocid</tt>, <tt>salesforce_url</tt>, <tt>sap_btp_url</tt>, <tt>sap_odata_url</tt>, <tt>sap_sf_url</tt>, <tt>servicenow_table_url</tt>.</td></tr>
           </tbody>
         </table>
       </section>
