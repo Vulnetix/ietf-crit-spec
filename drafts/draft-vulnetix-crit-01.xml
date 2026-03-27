@@ -9,7 +9,7 @@
 <rfc
   xmlns:xi="http://www.w3.org/2001/XInclude"
   category="info"
-  docName="draft-vulnetix-crit-00"
+  docName="draft-vulnetix-crit-01"
   ipr="trust200902"
   submissionType="independent"
   xml:lang="en"
@@ -18,7 +18,7 @@
   <front>
     <title abbrev="CRIT">Cloud Resource Identifier Templates (CRIT)</title>
 
-    <seriesInfo name="Internet-Draft" value="draft-vulnetix-crit-00"/>
+    <seriesInfo name="Internet-Draft" value="draft-vulnetix-crit-01"/>
 
     <author fullname="CD Langton" initials="CD" surname="Langton">
       <organization>Vulnetix</organization>
@@ -200,6 +200,115 @@
           providing the cloud resource scope, fix propagation semantics, and
           exposure window computation that those schemes do not address.
         </t>
+      </section>
+
+      <section anchor="crit-is-and-is-not">
+        <name>What CRIT Is and What It Is Not</name>
+        <t>
+          If the problem could be described in one word, that word is
+          <strong>affected</strong>. For packages, "affected" is a version
+          comparison. For cloud, "affected" is a function of four factors
+          evaluated simultaneously: when the resource was deployed relative to
+          the fix, the fix propagation type, whether the consumer has acted, and
+          whether a previously applied remediation has been reverted by
+          configuration drift. No static identifier carries these factors. CRIT
+          encodes all four.
+        </t>
+
+        <section anchor="crit-is">
+          <name>CRIT Is</name>
+          <ul>
+            <li><strong>A template engine for cloud-native resources.</strong>
+            Discovery requires interpolation of consumer-specific variables
+            (account, region, resource ID) at resolution time. No static
+            identifier can express this.</li>
+
+            <li><strong>A solution to the "affected" problem.</strong> It
+            encodes deployment timing, fix propagation type, consumer action
+            state, and configuration drift status — everything required to
+            determine whether a specific deployed resource is impacted.</li>
+
+            <li><strong>A parameterisation layer over provider-native identifier
+            schemas.</strong> CRITs do not invent identifier formats. AWS ARNs,
+            Azure Resource IDs, GCP Resource Names, Cloudflare Locators, and
+            Oracle OCIDs are adopted as-is. CRIT parameterises them with
+            variable slots.</li>
+
+            <li><strong>An extension to existing vulnerability data
+            formats.</strong> CRIT integrates with CVEListv5 ADP containers and
+            OSV schema using their existing extension mechanisms. It does not
+            require changes to those specifications.</li>
+
+            <li><strong>A machine-readable encoding of fix propagation,
+            remediation actions, detection queries, and exposure window
+            computation</strong> — the metadata that turns a vulnerability
+            advisory into an actionable remediation workflow for cloud
+            resources.</li>
+          </ul>
+        </section>
+
+        <section anchor="crit-is-not">
+          <name>CRIT Is Not</name>
+          <ul>
+            <li><strong>Not an identifier.</strong> Cloud resources already have
+            identifiers. CRITs reference them; they do not define new ones. The
+            CRIT vectorString is a natural composite key (replacing the UUID),
+            not a resource identifier.</li>
+
+            <li><strong>Not a replacement for CPE, PURL, CycloneDX, or
+            SPDX.</strong> Those standards solve identification, inventory, and
+            risk prioritisation for build-from-source artifacts. CRIT
+            complements them by addressing cloud resource scope where they do
+            not apply.</li>
+
+            <li><strong>Not a single string that can encode the full
+            record.</strong> The CRIT vectorString is a lossy compact encoding
+            of 12 enumerable fields from a 30+ field record. Descriptive
+            values, detection queries, remediation action descriptions,
+            provider-native templates, and consumer-specific variables cannot be
+            represented in any static string. Any attempt to reduce CRIT to a
+            single-string identifier discards the metadata that solves the
+            problem.</li>
+
+            <li><strong>Not a risk scoring or prioritisation
+            system.</strong> CRIT does not assign severity, CVSS scores, or
+            risk rankings. Risk-based prioritisation signals (EPSS, CVSS, SSVC)
+            remain complementary inputs to consumer tooling.</li>
+
+            <li><strong>Not a replacement for cloud provider security
+            advisories.</strong> CRIT references provider advisories; it does
+            not replace them. Provider advisory URLs and identifiers are carried
+            as metadata within the record.</li>
+
+            <li><strong>Not a software inventory or bill-of-materials
+            format.</strong> CRIT records describe how vulnerabilities affect
+            cloud resources. They are not an inventory of deployed resources or
+            a software composition.</li>
+          </ul>
+        </section>
+
+        <section anchor="why-not-purl">
+          <name>Why Not PURL?</name>
+          <t>
+            <xref target="PURL">PURL</xref> succeeds because package identity
+            is static: <tt>pkg:npm/@angular/core@12.3.1</tt> is the same string
+            regardless of where the package is installed. Cloud resource identity
+            is not static. An RDS instance's ARN contains an account ID, region,
+            and resource ID that do not exist until the resource is deployed.
+            Even if a PURL were constructed at that granularity, it would carry
+            none of the information required to determine affected status: the
+            deployment date relative to the fix, the propagation mechanism,
+            whether the consumer has acted, or whether a configuration change
+            has been reverted.
+          </t>
+          <t>
+            The <tt>pkg:cloud/</tt> convention observed in the OSV ecosystem
+            (see <xref target="ui-osv-conventions"/>) is not a registered PURL
+            type. Regardless of the type scheme, a static string cannot express
+            the interpolation that discovery requires or the temporal and
+            propagation logic that affected-status determination demands.
+          </t>
+        </section>
       </section>
 
       <section anchor="conventions">
@@ -469,6 +578,65 @@ literal-value   = 1*( ALPHA / DIGIT / "-" / "_" / "." / ":" )
           The characters <tt>{</tt> and <tt>}</tt> are reserved as slot delimiters and
           <bcp14>MUST NOT</bcp14> appear in <tt>literal-value</tt> or as literal
           characters within a template string outside of slot expressions.
+        </t>
+      </section>
+
+      <section anchor="vs-design">
+        <name>Design Relationship to RFC 6570</name>
+        <t>
+          CRIT slot syntax uses curly-brace delimiters that resemble
+          <xref target="RFC6570"/> URI Templates. This resemblance is
+          intentional but superficial. CRIT slots are <strong>not</strong>
+          URI Templates and implementations <bcp14>MUST NOT</bcp14> process
+          them with an RFC 6570 expansion engine.
+        </t>
+        <t>
+          The CRIT variable system defines exactly four slot states. The
+          number four is a design invariant: each additional state
+          multiplies the number of producer-consumer interactions that
+          require specification and testing. Because cloud provider
+          identifier schemas are not standardised, and the number of
+          providers is unbounded, the slot state vocabulary must remain
+          fixed to prevent combinatorial growth in conformance surface
+          area. The four states are the minimum set that satisfies all
+          operational requirements defined in this specification:
+        </t>
+        <ol>
+          <li><strong>Named variable</strong> (<tt>{field}</tt>):
+          Consumer-supplied value. This is the only state that
+          corresponds to <xref target="RFC6570"/> Level 1 simple string
+          expansion.</li>
+          <li><strong>Wildcard</strong> (<tt>{field=*}</tt>): Population
+          enumeration. No <xref target="RFC6570"/> equivalent exists.
+          The semantic is an inventory operation, not a URI
+          construction.</li>
+          <li><strong>Empty</strong> (<tt>{field=}</tt>): Structurally
+          present but inapplicable. The resolved value is the empty
+          string. <xref target="RFC6570"/> does not distinguish between
+          an undefined variable and a field that is normatively absent
+          from the provider schema; CRIT requires this distinction to
+          prevent consumers from treating a structurally absent field as
+          an unknown value requiring resolution.</li>
+          <li><strong>Hardcoded</strong> (<tt>{field=literal}</tt>):
+          Provider-fixed value. The value is determined by the provider
+          schema, not by the consumer. This state is required because
+          some provider identifier schemas contain positional fields
+          whose value is invariant for a given resource type (e.g., a
+          region field that is always <tt>us-east-1</tt> for a global
+          service). Without a distinct hardcoded state, a consumer
+          cannot distinguish a provider-fixed value from a
+          consumer-specific value that coincidentally matches.</li>
+        </ol>
+        <t>
+          <xref target="RFC6570"/> operators (<tt>+</tt>, <tt>#</tt>,
+          <tt>.</tt>, <tt>/</tt>, <tt>;</tt>, <tt>?</tt>,
+          <tt>&amp;</tt>) are not supported. CRIT templates use simple
+          string replacement only. A fully-resolved CRIT template — one
+          in which every named-variable slot has been substituted with a
+          concrete value, every empty slot resolved to the empty string,
+          and every hardcoded slot resolved to its literal — produces a
+          valid provider-native resource identifier. The result is a
+          plain string, not a URI Template expansion.
         </t>
       </section>
 
@@ -1390,23 +1558,32 @@ arn:aws:{service-prefix}:{region}:{account}:{resource-type}:{id}
         </t>
         <t>
           The <tt>{region}</tt> slot <bcp14>MUST</bcp14> be hardcoded to
-          <tt>us-east-1</tt> for globally-scoped services: <tt>iam</tt>,
+          <tt>us-east-1</tt> for globally-scoped services whose ARN schema
+          requires the region field to carry a fixed value: <tt>iam</tt>,
           <tt>cloudfront</tt>, <tt>route53</tt>, <tt>waf</tt>, <tt>wafv2</tt>,
           <tt>shield</tt>, <tt>organizations</tt>, <tt>sts</tt>,
-          <tt>globalaccelerator</tt>. For all other AWS services the region slot
-          <bcp14>MUST</bcp14> be a named variable or wildcard and <bcp14>MUST
-          NOT</bcp14> be empty.
+          <tt>globalaccelerator</tt>. For globally-scoped services whose ARN
+          schema structurally omits the region field (the field is positionally
+          present but the value is the empty string), the region slot
+          <bcp14>MUST</bcp14> be empty (<tt>{region=}</tt>). S3 buckets and
+          objects are the principal example: the ARN format is
+          <tt>arn:aws:s3:::{resource}</tt>. For all other AWS services the
+          region slot <bcp14>MUST</bcp14> be a named variable or wildcard and
+          <bcp14>MUST NOT</bcp14> be empty.
         </t>
         <t>
-          The <tt>{account}</tt> slot is always a named variable. The
-          <tt>{resource-type}</tt> slot is hardcoded or empty per the service schema.
-          The <tt>{resource-id}</tt> slot is a named variable or wildcard.
+          The <tt>{account}</tt> slot is a named variable, except for resource
+          types whose ARN schema structurally omits the account field (e.g., S3
+          buckets and objects), in which case it <bcp14>MUST</bcp14> be empty
+          (<tt>{account=}</tt>). The <tt>{resource-type}</tt> slot is hardcoded
+          or empty per the service schema. The <tt>{resource-id}</tt> slot is a
+          named variable or wildcard.
         </t>
         <figure>
           <name>AWS ARN Examples</name>
           <sourcecode type="text"><![CDATA[
 arn:aws:iam:{region=us-east-1}:{account}:role/{resource-id}
-arn:aws:s3:{region=*}:{account}:bucket/{resource-id}
+arn:aws:s3:{region=}:{account=}:{resource-id}
 arn:aws:ec2:{region}:{account}:instance/{resource-id}
 arn:aws:lambda:{region}:{account}:function:{resource-id}
 arn:aws:eks:{region}:{account}:cluster/{resource-id}
@@ -1480,6 +1657,24 @@ ocid1.{type}.{realm}...{unique-id}               (global)
           <tt>oc3</tt>) when fix timelines differ. <tt>{region}</tt> is a named
           variable for regional resources and empty (<tt>{region=}</tt>) for global
           resources.
+        </t>
+      </section>
+
+      <section anchor="pt-naming-conventions">
+        <name>Parameter Naming Conventions</name>
+        <t>
+          Slot field names vary between providers by design. AWS ARNs use a
+          consistent positional structure so slot names are uniform across
+          services (<tt>region</tt>, <tt>account</tt>, <tt>resource-id</tt>).
+          GCP, Azure, Oracle, and Cloudflare use service-specific path
+          components (<tt>project</tt>, <tt>location</tt>,
+          <tt>subscriptionId</tt>, <tt>resourceGroup</tt>, <tt>realm</tt>,
+          <tt>account_id</tt>) because their resource path structures are
+          service-specific. This asymmetry is intentional: CRIT adopts
+          provider-native naming conventions rather than imposing a normalised
+          abstraction. Consumers <bcp14>SHOULD</bcp14> expect different slot
+          vocabularies per provider and <bcp14>MUST NOT</bcp14> assume that
+          all providers use the same field names.
         </t>
       </section>
 
@@ -2181,6 +2376,52 @@ if resource.deployed_date < provider_fix_date
         </t>
       </section>
 
+      <section anchor="dictionary-governance">
+        <name>Dictionary Governance</name>
+        <t>
+          The Spec Default Dictionary is maintained alongside this
+          specification and represents the minimum baseline catalogue.
+          It is not an exhaustive enumeration of all cloud resource
+          types. Additions to the Spec Default Dictionary within a
+          minor version are backwards compatible; removal or semantic
+          modification of existing entries requires a major version
+          increment.
+        </t>
+        <t>
+          Extended Dictionaries are independently maintained by
+          implementers and are subject to the conformance requirements
+          of <xref target="dictionary-conformance"/>.
+        </t>
+        <t>
+          A conformant consumer <bcp14>MUST</bcp14> validate CRIT
+          records against a dictionary before accepting them. Validation
+          requires a known, trusted dictionary as the source of truth
+          for the <tt>(provider, service, resource_type)</tt> tuple
+          space. A consumer that does not maintain a dictionary cannot
+          distinguish a valid tuple from an arbitrary one; therefore,
+          dictionary availability is a prerequisite for conformant
+          consumption.
+        </t>
+        <t>
+          A conformant producer <bcp14>MAY</bcp14> emit CRIT records
+          without consulting a dictionary, but the resulting records are
+          non-conformant until validated by a consumer that holds a
+          dictionary containing matching entries. Producers
+          <bcp14>SHOULD</bcp14> validate records against a dictionary
+          before emission to avoid producing records that no conformant
+          consumer will accept.
+        </t>
+        <t>
+          Cloud providers are encouraged to contribute dictionary entries
+          for their services. Community contributions are accepted via
+          the specification repository. No IANA registry is proposed for
+          dictionary entries. The dictionary is a template catalogue
+          scoped by provider, not a shared identifier namespace;
+          provider-scoped entries do not compete for a global name and
+          therefore do not require a central allocation authority.
+        </t>
+      </section>
+
       <section anchor="dictionary-default">
         <name>Spec Default CRIT Dictionary</name>
         <t>
@@ -2202,8 +2443,11 @@ if resource.deployed_date < provider_fix_date
             AWS resources are identified by Amazon Resource Names (ARNs)
             <xref target="AWS-ARN"/>.  The <tt>template_format</tt> for all
             AWS entries is <tt>aws_arn</tt>.  For globally-scoped services the
-            region slot is hardcoded to <tt>us-east-1</tt>; for all others it
-            is a named variable.
+            region slot is hardcoded to <tt>us-east-1</tt> when the ARN schema
+            requires a fixed region value, or empty (<tt>{region=}</tt>) when
+            the ARN schema structurally omits the field (e.g., S3 buckets and
+            objects).  For all other services the region slot is a named
+            variable.
           </t>
           <table>
             <thead>
@@ -2310,7 +2554,8 @@ if resource.deployed_date < provider_fix_date
               <tr><td><tt>rekognition</tt></td><td><tt>rekognition</tt></td><td>regional</td><td><tt>collection, project</tt></td><td><tt>arn:aws:rekognition:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
               <tr><td><tt>route53</tt></td><td><tt>route53</tt></td><td>global-only</td><td><tt>healthcheck, hostedzone</tt></td><td><tt>arn:aws:route53:{region=us-east-1}:{account}:{resource-type}/{resource-id}</tt></td></tr>
               <tr><td><tt>route53resolver</tt></td><td><tt>route53resolver</tt></td><td>regional</td><td><tt>resolver-endpoint, resolver-rule</tt></td><td><tt>arn:aws:route53resolver:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>s3</tt></td><td><tt>s3</tt></td><td>regional</td><td><tt>access-point, bucket, object</tt></td><td><tt>arn:aws:s3:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
+              <tr><td><tt>s3</tt></td><td><tt>s3</tt></td><td>regional</td><td><tt>access-point</tt></td><td><tt>arn:aws:s3:{region}:{account}:accesspoint/{resource-id}</tt></td></tr>
+              <tr><td><tt>s3</tt></td><td><tt>s3</tt></td><td>global-only</td><td><tt>bucket, object</tt></td><td><tt>arn:aws:s3:{region=}:{account=}:{resource-id}</tt></td></tr>
               <tr><td><tt>sagemaker</tt></td><td><tt>sagemaker</tt></td><td>regional</td><td><tt>endpoint, model, notebook-instance, training-job</tt></td><td><tt>arn:aws:sagemaker:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
               <tr><td><tt>scheduler</tt></td><td><tt>scheduler</tt></td><td>regional</td><td><tt>schedule, schedule-group</tt></td><td><tt>arn:aws:scheduler:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
               <tr><td><tt>secrets_manager</tt></td><td><tt>secretsmanager</tt></td><td>regional</td><td><tt>secret</tt></td><td><tt>arn:aws:secretsmanager:{region}:{account}:secret/{resource-id}</tt></td></tr>
@@ -2321,6 +2566,7 @@ if resource.deployed_date < provider_fix_date
               <tr><td><tt>sns</tt></td><td><tt>sns</tt></td><td>regional</td><td><tt>platform-application, subscription, topic</tt></td><td><tt>arn:aws:sns:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
               <tr><td><tt>sqs</tt></td><td><tt>sqs</tt></td><td>regional</td><td><tt>queue</tt></td><td><tt>arn:aws:sqs:{region}:{account}:queue/{resource-id}</tt></td></tr>
               <tr><td><tt>ssm</tt></td><td><tt>ssm</tt></td><td>regional</td><td><tt>automation-execution, document, maintenance-window, managed-instance, parameter, patch-baseline</tt></td><td><tt>arn:aws:ssm:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
+              <tr><td><tt>sso</tt></td><td><tt>sso</tt></td><td>regional</td><td><tt>instance, permissionSet</tt></td><td><tt>arn:aws:sso:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
               <tr><td><tt>step_functions</tt></td><td><tt>states</tt></td><td>regional</td><td><tt>execution, stateMachine</tt></td><td><tt>arn:aws:states:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
               <tr><td><tt>synthetics</tt></td><td><tt>synthetics</tt></td><td>regional</td><td><tt>canary</tt></td><td><tt>arn:aws:synthetics:{region}:{account}:canary/{resource-id}</tt></td></tr>
               <tr><td><tt>timestream</tt></td><td><tt>timestream</tt></td><td>regional</td><td><tt>database, table</tt></td><td><tt>arn:aws:timestream:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
@@ -2832,6 +3078,19 @@ if resource.deployed_date < provider_fix_date
             </author>
             <date year="2024"/>
           </front>
+        </reference>
+
+        <reference anchor="RFC6570">
+          <front>
+            <title>URI Template</title>
+            <author initials="J." surname="Gregorio" fullname="J. Gregorio"/>
+            <author initials="R." surname="Fielding" fullname="R. Fielding"/>
+            <author initials="M." surname="Hadley" fullname="M. Hadley"/>
+            <author initials="M." surname="Nottingham" fullname="M. Nottingham"/>
+            <author initials="D." surname="Orchard" fullname="D. Orchard"/>
+            <date year="2012" month="March"/>
+          </front>
+          <seriesInfo name="RFC" value="6570"/>
         </reference>
 
         <reference anchor="PURL" target="https://github.com/package-url/purl-spec">

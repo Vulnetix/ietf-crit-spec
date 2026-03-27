@@ -1,0 +1,4 @@
+saphost.example.com
+erp.example.corp
+s4hana.acme.local
+abap.contoso.net

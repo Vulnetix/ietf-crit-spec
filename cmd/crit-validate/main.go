@@ -1,6 +1,6 @@
 // crit-validate validates CVEListv5 JSON files containing Vulnetix VVD ADP
 // containers with x_crit extensions against the CRIT specification
-// (draft-vulnetix-crit-00).
+// (draft-vulnetix-crit-01).
 //
 // The binary embeds the Spec Default Dictionary and the dictionary JSON Schema
 // at build time. Custom dictionaries provided via --dictionary are validated
