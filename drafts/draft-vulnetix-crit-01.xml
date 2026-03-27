@@ -512,6 +512,9 @@
           <tr><td>GCP</td><td>GCP Resource Name</td><td><xref target="GCP-ResourceName"/></td></tr>
           <tr><td>Cloudflare</td><td>Cloudflare API Locator</td><td><xref target="CF-API"/></td></tr>
           <tr><td>Oracle</td><td>Oracle Cloud ID (OCID)</td><td><xref target="OCI-OCID"/></td></tr>
+          <tr><td>Salesforce</td><td>REST API Resource URL</td><td><xref target="SF-REST-API"/></td></tr>
+          <tr><td>SAP BTP</td><td>BTP / OData / SuccessFactors URL</td><td><xref target="SAP-BTP"/></td></tr>
+          <tr><td>ServiceNow</td><td>Table API URL</td><td><xref target="SN-TABLE-API"/></td></tr>
         </tbody>
       </table>
       <t>
@@ -2230,12 +2233,12 @@ if resource.deployed_date < provider_fix_date
         <dl newline="true" spacing="normal">
           <dt>Spec Default Dictionary:</dt>
           <dd>
-            The normative dictionary defined in
-            <xref target="dictionary-default"/> of this document.  It covers
-            the five providers and all service and resource type combinations
-            defined in the provider template reference sections.  Producers and
-            consumers <bcp14>MUST</bcp14> support the Spec Default Dictionary
-            as a baseline.
+            The normative dictionary published alongside this specification
+            in the specification repository.  It covers the providers
+            described in <xref target="dictionary-providers"/> and
+            representative service and resource type combinations for each.
+            Producers and consumers <bcp14>MUST</bcp14> support the Spec
+            Default Dictionary as a baseline.
           </dd>
           <dt>Extended Dictionary:</dt>
           <dd>
@@ -2260,12 +2263,15 @@ if resource.deployed_date < provider_fix_date
           <name>Dictionary Entry Structure</name>
           <sourcecode type="json"><![CDATA[
 {
-  "provider":        "<enum: aws | azure | gcp | cloudflare | oracle>",
+  "provider":        "<enum: aws | azure | gcp | cloudflare | oracle
+                            | salesforce | sap | servicenow>",
   "service":         "<string: normalised service key>",
   "resource_type":   "<string: resource type within service>",
   "template":        "<CRIT template string>",
   "template_format": "<enum: aws_arn | azure_resource_id | gcp_resource_name
-                             | cloudflare_locator | oracle_ocid>",
+                             | cloudflare_locator | oracle_ocid
+                             | salesforce_url | sap_btp_url | sap_odata_url
+                             | sap_sf_url | servicenow_table_url>",
   "region_behavior": "<enum: regional | global-only>",
   "notes":           "<string: optional annotation>"
 }
@@ -2305,7 +2311,11 @@ if resource.deployed_date < provider_fix_date
           <dd>
             One of: <tt>aws_arn</tt>, <tt>azure_resource_id</tt>,
             <tt>gcp_resource_name</tt>, <tt>cloudflare_locator</tt>,
-            <tt>oracle_ocid</tt>.
+            <tt>oracle_ocid</tt>, <tt>salesforce_url</tt>,
+            <tt>sap_btp_url</tt>, <tt>sap_odata_url</tt>,
+            <tt>sap_sf_url</tt>, <tt>servicenow_table_url</tt>.
+            The applicable value for each provider is defined in
+            <xref target="dictionary-providers"/>.
           </dd>
           <dt><tt>region_behavior</tt>:</dt>
           <dd>
@@ -2422,532 +2432,241 @@ if resource.deployed_date < provider_fix_date
         </t>
       </section>
 
-      <section anchor="dictionary-default">
-        <name>Spec Default CRIT Dictionary</name>
+      <section anchor="dictionary-providers">
+        <name>Provider Identification Systems</name>
         <t>
-          The following tables constitute the Spec Default CRIT Dictionary for
-          version 0.2.0 of this specification.  The entries are derived from
-          the provider identifier schemas referenced in <xref target="scope"/>.
-          Where a provider service has multiple common registry keys (aliases),
-          the canonical key is listed; aliases resolve to the same template.
-          The <tt>template</tt> column uses the slot syntax of
-          <xref target="variable-system"/>.  Wildcard (<tt>{field=*}</tt>)
-          variants are omitted for brevity; consumers <bcp14>MAY</bcp14>
-          substitute <tt>{region=*}</tt> for inventory-wide queries on
-          regional services.
+          Each provider covered by this specification maintains a published,
+          authoritative identification scheme for its resources.  CRIT
+          dictionary entries do not define these schemes; they encode them as
+          CRIT templates so that producers can emit identifiers that conform
+          to the provider&#8217;s own published format.  Implementers adding
+          dictionary entries for services not listed here <bcp14>MUST</bcp14>
+          derive templates from the provider&#8217;s current documentation;
+          those entries <bcp14>MAY</bcp14> be contributed to the Spec Default
+          Dictionary via the specification repository.
         </t>
 
         <section anchor="dictionary-aws">
-          <name>AWS Entries</name>
+          <name>Amazon Web Services (aws)</name>
           <t>
             AWS resources are identified by Amazon Resource Names (ARNs)
-            <xref target="AWS-ARN"/>.  The <tt>template_format</tt> for all
-            AWS entries is <tt>aws_arn</tt>.  For globally-scoped services the
-            region slot is hardcoded to <tt>us-east-1</tt> when the ARN schema
-            requires a fixed region value, or empty (<tt>{region=}</tt>) when
-            the ARN schema structurally omits the field (e.g., S3 buckets and
-            objects).  For all other services the region slot is a named
-            variable.
+            <xref target="AWS-ARN"/>, a hierarchical URN-like format with
+            the structure
+            <tt>arn:partition:service:region:account-id:resource-type/resource-id</tt>.
+            The ARN format is defined and maintained by Amazon Web Services;
+            this specification does not alter or extend it.  The
+            <tt>template_format</tt> value for all AWS entries is
+            <tt>aws_arn</tt>.
           </t>
-          <table>
-            <thead>
-              <tr>
-                <th>service</th>
-                <th>ARN service prefix</th>
-                <th>region_behavior</th>
-                <th>resource_type (common values)</th>
-                <th>Template</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td><tt>acm</tt></td><td><tt>acm</tt></td><td>regional</td><td><tt>certificate</tt></td><td><tt>arn:aws:acm:{region}:{account}:certificate/{resource-id}</tt></td></tr>
-              <tr><td><tt>acm_pca</tt></td><td><tt>acm-pca</tt></td><td>regional</td><td><tt>certificate-authority</tt></td><td><tt>arn:aws:acm-pca:{region}:{account}:certificate-authority/{resource-id}</tt></td></tr>
-              <tr><td><tt>amplify</tt></td><td><tt>amplify</tt></td><td>regional</td><td><tt>app, branch</tt></td><td><tt>arn:aws:amplify:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>api_gateway</tt></td><td><tt>apigateway</tt></td><td>regional</td><td><tt>httpapi, restapi</tt></td><td><tt>arn:aws:apigateway:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>app_mesh</tt></td><td><tt>appmesh</tt></td><td>regional</td><td><tt>mesh, virtual-node, virtual-router, virtual-service</tt></td><td><tt>arn:aws:appmesh:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>appconfig</tt></td><td><tt>appconfig</tt></td><td>regional</td><td><tt>application</tt></td><td><tt>arn:aws:appconfig:{region}:{account}:application/{resource-id}</tt></td></tr>
-              <tr><td><tt>apprunner</tt></td><td><tt>apprunner</tt></td><td>regional</td><td><tt>service</tt></td><td><tt>arn:aws:apprunner:{region}:{account}:service/{resource-id}</tt></td></tr>
-              <tr><td><tt>appstream</tt></td><td><tt>appstream</tt></td><td>regional</td><td><tt>fleet, image-builder, stack</tt></td><td><tt>arn:aws:appstream:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>appsync</tt></td><td><tt>appsync</tt></td><td>regional</td><td><tt>graphqlapi</tt></td><td><tt>arn:aws:appsync:{region}:{account}:graphqlapi/{resource-id}</tt></td></tr>
-              <tr><td><tt>athena</tt></td><td><tt>athena</tt></td><td>regional</td><td><tt>workgroup</tt></td><td><tt>arn:aws:athena:{region}:{account}:workgroup/{resource-id}</tt></td></tr>
-              <tr><td><tt>autoscaling</tt></td><td><tt>autoscaling</tt></td><td>regional</td><td><tt>auto-scaling-group</tt></td><td><tt>arn:aws:autoscaling:{region}:{account}:auto-scaling-group/{resource-id}</tt></td></tr>
-              <tr><td><tt>backup</tt></td><td><tt>backup</tt></td><td>regional</td><td><tt>backup-plan, backup-vault</tt></td><td><tt>arn:aws:backup:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>batch</tt></td><td><tt>batch</tt></td><td>regional</td><td><tt>compute-environment, job-definition, job-queue</tt></td><td><tt>arn:aws:batch:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>bedrock</tt></td><td><tt>bedrock</tt></td><td>regional</td><td><tt>agent, custom-model, model</tt></td><td><tt>arn:aws:bedrock:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>cloud9</tt></td><td><tt>cloud9</tt></td><td>regional</td><td><tt>environment</tt></td><td><tt>arn:aws:cloud9:{region}:{account}:environment/{resource-id}</tt></td></tr>
-              <tr><td><tt>cloud_map</tt></td><td><tt>servicediscovery</tt></td><td>regional</td><td><tt>namespace, service</tt></td><td><tt>arn:aws:servicediscovery:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>cloudformation</tt></td><td><tt>cloudformation</tt></td><td>regional</td><td><tt>changeset, stack</tt></td><td><tt>arn:aws:cloudformation:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>cloudfront</tt></td><td><tt>cloudfront</tt></td><td>global-only</td><td><tt>distribution, function</tt></td><td><tt>arn:aws:cloudfront:{region=us-east-1}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>cloudtrail</tt></td><td><tt>cloudtrail</tt></td><td>regional</td><td><tt>trail</tt></td><td><tt>arn:aws:cloudtrail:{region}:{account}:trail/{resource-id}</tt></td></tr>
-              <tr><td><tt>cloudwatch</tt></td><td><tt>cloudwatch</tt></td><td>regional</td><td><tt>alarm, dashboard</tt></td><td><tt>arn:aws:cloudwatch:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>codeartifact</tt></td><td><tt>codeartifact</tt></td><td>regional</td><td><tt>domain, repository</tt></td><td><tt>arn:aws:codeartifact:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>codebuild</tt></td><td><tt>codebuild</tt></td><td>regional</td><td><tt>build, project</tt></td><td><tt>arn:aws:codebuild:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>codecommit</tt></td><td><tt>codecommit</tt></td><td>regional</td><td><tt>repository</tt></td><td><tt>arn:aws:codecommit:{region}:{account}:repository/{resource-id}</tt></td></tr>
-              <tr><td><tt>codedeploy</tt></td><td><tt>codedeploy</tt></td><td>regional</td><td><tt>application, deployment-group</tt></td><td><tt>arn:aws:codedeploy:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>codepipeline</tt></td><td><tt>codepipeline</tt></td><td>regional</td><td><tt>pipeline</tt></td><td><tt>arn:aws:codepipeline:{region}:{account}:pipeline/{resource-id}</tt></td></tr>
-              <tr><td><tt>codestar_connections</tt></td><td><tt>codestar-connections</tt></td><td>regional</td><td><tt>connection</tt></td><td><tt>arn:aws:codestar-connections:{region}:{account}:connection/{resource-id}</tt></td></tr>
-              <tr><td><tt>cognito</tt></td><td><tt>cognito-idp</tt></td><td>regional</td><td><tt>userpool</tt></td><td><tt>arn:aws:cognito-idp:{region}:{account}:userpool/{resource-id}</tt></td></tr>
-              <tr><td><tt>comprehend</tt></td><td><tt>comprehend</tt></td><td>regional</td><td><tt>document-classifier, entity-recognizer</tt></td><td><tt>arn:aws:comprehend:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>config</tt></td><td><tt>config</tt></td><td>regional</td><td><tt>config-rule, configuration-recorder</tt></td><td><tt>arn:aws:config:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>connect</tt></td><td><tt>connect</tt></td><td>regional</td><td><tt>contact-flow, instance</tt></td><td><tt>arn:aws:connect:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>datasync</tt></td><td><tt>datasync</tt></td><td>regional</td><td><tt>agent, task</tt></td><td><tt>arn:aws:datasync:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>detective</tt></td><td><tt>detective</tt></td><td>regional</td><td><tt>graph</tt></td><td><tt>arn:aws:detective:{region}:{account}:graph/{resource-id}</tt></td></tr>
-              <tr><td><tt>direct_connect</tt></td><td><tt>directconnect</tt></td><td>regional</td><td><tt>connection, virtual-interface</tt></td><td><tt>arn:aws:directconnect:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>directory_service</tt></td><td><tt>ds</tt></td><td>regional</td><td><tt>directory</tt></td><td><tt>arn:aws:ds:{region}:{account}:directory/{resource-id}</tt></td></tr>
-              <tr><td><tt>dms</tt></td><td><tt>dms</tt></td><td>regional</td><td><tt>endpoint, replication-instance, replication-task</tt></td><td><tt>arn:aws:dms:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>dynamodb</tt></td><td><tt>dynamodb</tt></td><td>regional</td><td><tt>backup, global-table, table</tt></td><td><tt>arn:aws:dynamodb:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>ec2</tt></td><td><tt>ec2</tt></td><td>regional</td><td><tt>capacity-reservation, dedicated-host, elastic-ip, image, instance, internet-gateway, key-pair, launch-template, nat-gateway, network-acl, network-interface, placement-group, prefix-list, route-table, security-group, snapshot, subnet, transit-gateway, transit-gateway-attachment, volume, vpc, vpc-endpoint, vpc-flow-log, vpc-peering-connection, vpn-connection, vpn-gateway</tt></td><td><tt>arn:aws:ec2:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>ecr</tt></td><td><tt>ecr</tt></td><td>regional</td><td><tt>repository</tt></td><td><tt>arn:aws:ecr:{region}:{account}:repository/{resource-id}</tt></td></tr>
-              <tr><td><tt>ecs</tt></td><td><tt>ecs</tt></td><td>regional</td><td><tt>cluster, service, task, task-definition</tt></td><td><tt>arn:aws:ecs:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>efs</tt></td><td><tt>elasticfilesystem</tt></td><td>regional</td><td><tt>access-point, file-system</tt></td><td><tt>arn:aws:elasticfilesystem:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>eks</tt></td><td><tt>eks</tt></td><td>regional</td><td><tt>cluster, nodegroup</tt></td><td><tt>arn:aws:eks:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>elasticache</tt></td><td><tt>elasticache</tt></td><td>regional</td><td><tt>cluster, replicationgroup</tt></td><td><tt>arn:aws:elasticache:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>elasticbeanstalk</tt></td><td><tt>elasticbeanstalk</tt></td><td>regional</td><td><tt>application, environment</tt></td><td><tt>arn:aws:elasticbeanstalk:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>elb</tt></td><td><tt>elasticloadbalancing</tt></td><td>regional</td><td><tt>listener, loadbalancer, targetgroup</tt></td><td><tt>arn:aws:elasticloadbalancing:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>emr</tt></td><td><tt>elasticmapreduce</tt></td><td>regional</td><td><tt>cluster, studio</tt></td><td><tt>arn:aws:elasticmapreduce:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>emr_serverless</tt></td><td><tt>emr-serverless</tt></td><td>regional</td><td><tt>application</tt></td><td><tt>arn:aws:emr-serverless:{region}:{account}:application/{resource-id}</tt></td></tr>
-              <tr><td><tt>eventbridge</tt></td><td><tt>events</tt></td><td>regional</td><td><tt>event-bus, rule</tt></td><td><tt>arn:aws:events:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>firehose</tt></td><td><tt>firehose</tt></td><td>regional</td><td><tt>deliverystream</tt></td><td><tt>arn:aws:firehose:{region}:{account}:deliverystream/{resource-id}</tt></td></tr>
-              <tr><td><tt>fsx</tt></td><td><tt>fsx</tt></td><td>regional</td><td><tt>backup, file-system, volume</tt></td><td><tt>arn:aws:fsx:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>gamelift</tt></td><td><tt>gamelift</tt></td><td>regional</td><td><tt>build, fleet</tt></td><td><tt>arn:aws:gamelift:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>global_accelerator</tt></td><td><tt>globalaccelerator</tt></td><td>global-only</td><td><tt>accelerator</tt></td><td><tt>arn:aws:globalaccelerator:{region=us-east-1}:{account}:accelerator/{resource-id}</tt></td></tr>
-              <tr><td><tt>glue</tt></td><td><tt>glue</tt></td><td>regional</td><td><tt>crawler, database, job, registry, table</tt></td><td><tt>arn:aws:glue:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>grafana</tt></td><td><tt>grafana</tt></td><td>regional</td><td><tt>workspace</tt></td><td><tt>arn:aws:grafana:{region}:{account}:workspace/{resource-id}</tt></td></tr>
-              <tr><td><tt>guardduty</tt></td><td><tt>guardduty</tt></td><td>regional</td><td><tt>detector</tt></td><td><tt>arn:aws:guardduty:{region}:{account}:detector/{resource-id}</tt></td></tr>
-              <tr><td><tt>iam</tt></td><td><tt>iam</tt></td><td>global-only</td><td><tt>group, instance-profile, policy, role, user</tt></td><td><tt>arn:aws:iam:{region=us-east-1}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>imagebuilder</tt></td><td><tt>imagebuilder</tt></td><td>regional</td><td><tt>component, image-pipeline, image-recipe</tt></td><td><tt>arn:aws:imagebuilder:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>inspector</tt></td><td><tt>inspector2</tt></td><td>regional</td><td><tt>finding</tt></td><td><tt>arn:aws:inspector2:{region}:{account}:finding/{resource-id}</tt></td></tr>
-              <tr><td><tt>iot_core</tt></td><td><tt>iot</tt></td><td>regional</td><td><tt>certificate, policy, thing</tt></td><td><tt>arn:aws:iot:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>ivs</tt></td><td><tt>ivs</tt></td><td>regional</td><td><tt>channel</tt></td><td><tt>arn:aws:ivs:{region}:{account}:channel/{resource-id}</tt></td></tr>
-              <tr><td><tt>kendra</tt></td><td><tt>kendra</tt></td><td>regional</td><td><tt>index</tt></td><td><tt>arn:aws:kendra:{region}:{account}:index/{resource-id}</tt></td></tr>
-              <tr><td><tt>keyspaces</tt></td><td><tt>cassandra</tt></td><td>regional</td><td><tt>keyspace, table</tt></td><td><tt>arn:aws:cassandra:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>kinesis</tt></td><td><tt>kinesis</tt></td><td>regional</td><td><tt>stream</tt></td><td><tt>arn:aws:kinesis:{region}:{account}:stream/{resource-id}</tt></td></tr>
-              <tr><td><tt>kinesis_analytics</tt></td><td><tt>kinesisanalyticsv2</tt></td><td>regional</td><td><tt>application</tt></td><td><tt>arn:aws:kinesisanalyticsv2:{region}:{account}:application/{resource-id}</tt></td></tr>
-              <tr><td><tt>kinesis_video</tt></td><td><tt>kinesisvideo</tt></td><td>regional</td><td><tt>stream</tt></td><td><tt>arn:aws:kinesisvideo:{region}:{account}:stream/{resource-id}</tt></td></tr>
-              <tr><td><tt>kms</tt></td><td><tt>kms</tt></td><td>regional</td><td><tt>alias, key</tt></td><td><tt>arn:aws:kms:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>lambda</tt></td><td><tt>lambda</tt></td><td>regional</td><td><tt>function, layer</tt></td><td><tt>arn:aws:lambda:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>lex</tt></td><td><tt>lex</tt></td><td>regional</td><td><tt>bot</tt></td><td><tt>arn:aws:lex:{region}:{account}:bot/{resource-id}</tt></td></tr>
-              <tr><td><tt>lightsail</tt></td><td><tt>lightsail</tt></td><td>regional</td><td><tt>container-service, database, instance, load-balancer</tt></td><td><tt>arn:aws:lightsail:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>location</tt></td><td><tt>geo</tt></td><td>regional</td><td><tt>geofence-collection, map, place-index, route-calculator, tracker</tt></td><td><tt>arn:aws:geo:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>logs</tt></td><td><tt>logs</tt></td><td>regional</td><td><tt>log-group</tt></td><td><tt>arn:aws:logs:{region}:{account}:log-group/{resource-id}</tt></td></tr>
-              <tr><td><tt>macie</tt></td><td><tt>macie2</tt></td><td>regional</td><td><tt>classification-job</tt></td><td><tt>arn:aws:macie2:{region}:{account}:classification-job/{resource-id}</tt></td></tr>
-              <tr><td><tt>mediaconvert</tt></td><td><tt>mediaconvert</tt></td><td>regional</td><td><tt>job-template, queue</tt></td><td><tt>arn:aws:mediaconvert:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>memorydb</tt></td><td><tt>memorydb</tt></td><td>regional</td><td><tt>cluster</tt></td><td><tt>arn:aws:memorydb:{region}:{account}:cluster/{resource-id}</tt></td></tr>
-              <tr><td><tt>mq</tt></td><td><tt>mq</tt></td><td>regional</td><td><tt>broker</tt></td><td><tt>arn:aws:mq:{region}:{account}:broker/{resource-id}</tt></td></tr>
-              <tr><td><tt>msk</tt></td><td><tt>kafka</tt></td><td>regional</td><td><tt>cluster</tt></td><td><tt>arn:aws:kafka:{region}:{account}:cluster/{resource-id}</tt></td></tr>
-              <tr><td><tt>mwaa</tt></td><td><tt>airflow</tt></td><td>regional</td><td><tt>environment</tt></td><td><tt>arn:aws:airflow:{region}:{account}:environment/{resource-id}</tt></td></tr>
-              <tr><td><tt>network_firewall</tt></td><td><tt>network-firewall</tt></td><td>regional</td><td><tt>firewall, firewall-policy</tt></td><td><tt>arn:aws:network-firewall:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>network_manager</tt></td><td><tt>networkmanager</tt></td><td>global-only</td><td><tt>global-network</tt></td><td><tt>arn:aws:networkmanager:{region=us-east-1}:{account}:global-network/{resource-id}</tt></td></tr>
-              <tr><td><tt>opensearch</tt></td><td><tt>es</tt></td><td>regional</td><td><tt>domain</tt></td><td><tt>arn:aws:es:{region}:{account}:domain/{resource-id}</tt></td></tr>
-              <tr><td><tt>opensearch_serverless</tt></td><td><tt>aoss</tt></td><td>regional</td><td><tt>collection</tt></td><td><tt>arn:aws:aoss:{region}:{account}:collection/{resource-id}</tt></td></tr>
-              <tr><td><tt>organizations</tt></td><td><tt>organizations</tt></td><td>global-only</td><td><tt>account</tt></td><td><tt>arn:aws:organizations:{region=us-east-1}:{account}:account/{resource-id}</tt></td></tr>
-              <tr><td><tt>personalize</tt></td><td><tt>personalize</tt></td><td>regional</td><td><tt>campaign, dataset-group</tt></td><td><tt>arn:aws:personalize:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>pinpoint</tt></td><td><tt>mobiletargeting</tt></td><td>regional</td><td><tt>app</tt></td><td><tt>arn:aws:mobiletargeting:{region}:{account}:app/{resource-id}</tt></td></tr>
-              <tr><td><tt>pipes</tt></td><td><tt>pipes</tt></td><td>regional</td><td><tt>pipe</tt></td><td><tt>arn:aws:pipes:{region}:{account}:pipe/{resource-id}</tt></td></tr>
-              <tr><td><tt>prometheus</tt></td><td><tt>aps</tt></td><td>regional</td><td><tt>workspace</tt></td><td><tt>arn:aws:aps:{region}:{account}:workspace/{resource-id}</tt></td></tr>
-              <tr><td><tt>qldb</tt></td><td><tt>qldb</tt></td><td>regional</td><td><tt>ledger</tt></td><td><tt>arn:aws:qldb:{region}:{account}:ledger/{resource-id}</tt></td></tr>
-              <tr><td><tt>quicksight</tt></td><td><tt>quicksight</tt></td><td>regional</td><td><tt>dashboard, dataset, datasource</tt></td><td><tt>arn:aws:quicksight:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>ram</tt></td><td><tt>ram</tt></td><td>regional</td><td><tt>resource-share</tt></td><td><tt>arn:aws:ram:{region}:{account}:resource-share/{resource-id}</tt></td></tr>
-              <tr><td><tt>rds</tt></td><td><tt>rds</tt></td><td>regional</td><td><tt>cluster, db, db-proxy, snapshot</tt></td><td><tt>arn:aws:rds:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>redshift</tt></td><td><tt>redshift</tt></td><td>regional</td><td><tt>cluster, snapshot</tt></td><td><tt>arn:aws:redshift:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>redshift_serverless</tt></td><td><tt>redshift-serverless</tt></td><td>regional</td><td><tt>namespace, workgroup</tt></td><td><tt>arn:aws:redshift-serverless:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>rekognition</tt></td><td><tt>rekognition</tt></td><td>regional</td><td><tt>collection, project</tt></td><td><tt>arn:aws:rekognition:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>route53</tt></td><td><tt>route53</tt></td><td>global-only</td><td><tt>healthcheck, hostedzone</tt></td><td><tt>arn:aws:route53:{region=us-east-1}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>route53resolver</tt></td><td><tt>route53resolver</tt></td><td>regional</td><td><tt>resolver-endpoint, resolver-rule</tt></td><td><tt>arn:aws:route53resolver:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>s3</tt></td><td><tt>s3</tt></td><td>regional</td><td><tt>access-point</tt></td><td><tt>arn:aws:s3:{region}:{account}:accesspoint/{resource-id}</tt></td></tr>
-              <tr><td><tt>s3</tt></td><td><tt>s3</tt></td><td>global-only</td><td><tt>bucket, object</tt></td><td><tt>arn:aws:s3:{region=}:{account=}:{resource-id}</tt></td></tr>
-              <tr><td><tt>sagemaker</tt></td><td><tt>sagemaker</tt></td><td>regional</td><td><tt>endpoint, model, notebook-instance, training-job</tt></td><td><tt>arn:aws:sagemaker:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>scheduler</tt></td><td><tt>scheduler</tt></td><td>regional</td><td><tt>schedule, schedule-group</tt></td><td><tt>arn:aws:scheduler:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>secrets_manager</tt></td><td><tt>secretsmanager</tt></td><td>regional</td><td><tt>secret</tt></td><td><tt>arn:aws:secretsmanager:{region}:{account}:secret/{resource-id}</tt></td></tr>
-              <tr><td><tt>security_hub</tt></td><td><tt>securityhub</tt></td><td>regional</td><td><tt>hub</tt></td><td><tt>arn:aws:securityhub:{region}:{account}:hub/{resource-id}</tt></td></tr>
-              <tr><td><tt>ses</tt></td><td><tt>ses</tt></td><td>regional</td><td><tt>configuration-set, identity</tt></td><td><tt>arn:aws:ses:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>shield</tt></td><td><tt>shield</tt></td><td>global-only</td><td><tt>protection</tt></td><td><tt>arn:aws:shield:{region=us-east-1}:{account}:protection/{resource-id}</tt></td></tr>
-              <tr><td><tt>signer</tt></td><td><tt>signer</tt></td><td>regional</td><td><tt>signing-profile</tt></td><td><tt>arn:aws:signer:{region}:{account}:signing-profile/{resource-id}</tt></td></tr>
-              <tr><td><tt>sns</tt></td><td><tt>sns</tt></td><td>regional</td><td><tt>platform-application, subscription, topic</tt></td><td><tt>arn:aws:sns:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>sqs</tt></td><td><tt>sqs</tt></td><td>regional</td><td><tt>queue</tt></td><td><tt>arn:aws:sqs:{region}:{account}:queue/{resource-id}</tt></td></tr>
-              <tr><td><tt>ssm</tt></td><td><tt>ssm</tt></td><td>regional</td><td><tt>automation-execution, document, maintenance-window, managed-instance, parameter, patch-baseline</tt></td><td><tt>arn:aws:ssm:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>sso</tt></td><td><tt>sso</tt></td><td>regional</td><td><tt>instance, permissionSet</tt></td><td><tt>arn:aws:sso:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>step_functions</tt></td><td><tt>states</tt></td><td>regional</td><td><tt>execution, stateMachine</tt></td><td><tt>arn:aws:states:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>synthetics</tt></td><td><tt>synthetics</tt></td><td>regional</td><td><tt>canary</tt></td><td><tt>arn:aws:synthetics:{region}:{account}:canary/{resource-id}</tt></td></tr>
-              <tr><td><tt>timestream</tt></td><td><tt>timestream</tt></td><td>regional</td><td><tt>database, table</tt></td><td><tt>arn:aws:timestream:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>transfer_family</tt></td><td><tt>transfer</tt></td><td>regional</td><td><tt>server</tt></td><td><tt>arn:aws:transfer:{region}:{account}:server/{resource-id}</tt></td></tr>
-              <tr><td><tt>vpc_lattice</tt></td><td><tt>vpc-lattice</tt></td><td>regional</td><td><tt>service, service-network, target-group</tt></td><td><tt>arn:aws:vpc-lattice:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>wafv2</tt></td><td><tt>wafv2</tt></td><td>regional</td><td><tt>ipset, rule-group, web-acl</tt></td><td><tt>arn:aws:wafv2:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>workspaces</tt></td><td><tt>workspaces</tt></td><td>regional</td><td><tt>bundle, directory, workspace</tt></td><td><tt>arn:aws:workspaces:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-              <tr><td><tt>xray</tt></td><td><tt>xray</tt></td><td>regional</td><td><tt>group, sampling-rule</tt></td><td><tt>arn:aws:xray:{region}:{account}:{resource-type}/{resource-id}</tt></td></tr>
-            </tbody>
-          </table>
+          <figure>
+            <name>AWS CRIT template examples</name>
+            <sourcecode type="text"><![CDATA[
+arn:aws:ec2:{region}:{account}:instance/{resource-id}
+arn:aws:iam:{region=us-east-1}:{account}:role/{resource-id}
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The ARN service prefix matches the AWS service namespace
+            documented in the IAM User Guide.  Globally-scoped services
+            either hardcode the region component (e.g., <tt>us-east-1</tt>)
+            or structurally omit it (e.g., S3 buckets), following the AWS
+            ARN specification for that service.
+          </t>
         </section>
 
         <section anchor="dictionary-azure">
-          <name>Azure Entries</name>
+          <name>Microsoft Azure (azure)</name>
           <t>
             Azure resources are identified by Azure Resource IDs
-            <xref target="Azure-ResourceID"/>.  The <tt>template_format</tt>
-            for all Azure entries is <tt>azure_resource_id</tt>.
+            <xref target="Azure-ResourceID"/>, hierarchical paths within
+            the Azure Resource Manager (ARM) namespace.  The path structure
+            follows the pattern
+            <tt>/subscriptions/{id}/resourceGroups/{rg}/providers/{Namespace}/{type}/{name}</tt>.
+            The ARM provider namespace and resource type hierarchy are defined
+            and maintained by Microsoft; this specification does not alter or
+            extend them.  The <tt>template_format</tt> value for all Azure
+            entries is <tt>azure_resource_id</tt>.
           </t>
-          <table>
-            <thead>
-              <tr>
-                <th>service</th>
-                <th>namespace</th>
-                <th>azure_type</th>
-                <th>region_behavior</th>
-                <th>Template</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td><tt>active_directory</tt></td><td><tt>Microsoft.AAD</tt></td><td><tt>domainServices</tt></td><td>global-only</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AAD/domainServices/{name}</tt></td></tr>
-              <tr><td><tt>analysis_services</tt></td><td><tt>Microsoft.AnalysisServices</tt></td><td><tt>servers</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AnalysisServices/servers/{name}</tt></td></tr>
-              <tr><td><tt>api_management</tt></td><td><tt>Microsoft.ApiManagement</tt></td><td><tt>service</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ApiManagement/service/{name}</tt></td></tr>
-              <tr><td><tt>app_configuration</tt></td><td><tt>Microsoft.AppConfiguration</tt></td><td><tt>configurationStores</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AppConfiguration/configurationStores/{name}</tt></td></tr>
-              <tr><td><tt>app_service</tt></td><td><tt>Microsoft.Web</tt></td><td><tt>sites</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Web/sites/{name}</tt></td></tr>
-              <tr><td><tt>application_gateway</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>applicationGateways</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/applicationGateways/{name}</tt></td></tr>
-              <tr><td><tt>application_insights</tt></td><td><tt>Microsoft.Insights</tt></td><td><tt>components</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Insights/components/{name}</tt></td></tr>
-              <tr><td><tt>automation</tt></td><td><tt>Microsoft.Automation</tt></td><td><tt>automationAccounts</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Automation/automationAccounts/{name}</tt></td></tr>
-              <tr><td><tt>bastion</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>bastionHosts</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/bastionHosts/{name}</tt></td></tr>
-              <tr><td><tt>batch</tt></td><td><tt>Microsoft.Batch</tt></td><td><tt>batchAccounts</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Batch/batchAccounts/{name}</tt></td></tr>
-              <tr><td><tt>bot_service</tt></td><td><tt>Microsoft.BotService</tt></td><td><tt>botServices</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.BotService/botServices/{name}</tt></td></tr>
-              <tr><td><tt>cdn</tt></td><td><tt>Microsoft.Cdn</tt></td><td><tt>profiles</tt></td><td>global-only</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Cdn/profiles/{name}</tt></td></tr>
-              <tr><td><tt>cognitive_services</tt></td><td><tt>Microsoft.CognitiveServices</tt></td><td><tt>accounts</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CognitiveServices/accounts/{name}</tt></td></tr>
-              <tr><td><tt>communication_services</tt></td><td><tt>Microsoft.Communication</tt></td><td><tt>communicationServices</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Communication/communicationServices/{name}</tt></td></tr>
-              <tr><td><tt>container_apps</tt></td><td><tt>Microsoft.App</tt></td><td><tt>containerApps</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.App/containerApps/{name}</tt></td></tr>
-              <tr><td><tt>container_apps</tt></td><td><tt>Microsoft.App</tt></td><td><tt>managedEnvironments</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.App/managedEnvironments/{name}</tt></td></tr>
-              <tr><td><tt>container_instances</tt></td><td><tt>Microsoft.ContainerInstance</tt></td><td><tt>containerGroups</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ContainerInstance/containerGroups/{name}</tt></td></tr>
-              <tr><td><tt>container_registry</tt></td><td><tt>Microsoft.ContainerRegistry</tt></td><td><tt>registries</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ContainerRegistry/registries/{name}</tt></td></tr>
-              <tr><td><tt>cosmos_db</tt></td><td><tt>Microsoft.DocumentDB</tt></td><td><tt>databaseAccounts</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DocumentDB/databaseAccounts/{name}</tt></td></tr>
-              <tr><td><tt>data_explorer</tt></td><td><tt>Microsoft.Kusto</tt></td><td><tt>clusters</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Kusto/clusters/{name}</tt></td></tr>
-              <tr><td><tt>data_factory</tt></td><td><tt>Microsoft.DataFactory</tt></td><td><tt>factories</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DataFactory/factories/{name}</tt></td></tr>
-              <tr><td><tt>data_lake_store</tt></td><td><tt>Microsoft.DataLakeStore</tt></td><td><tt>accounts</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DataLakeStore/accounts/{name}</tt></td></tr>
-              <tr><td><tt>databricks</tt></td><td><tt>Microsoft.Databricks</tt></td><td><tt>workspaces</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Databricks/workspaces/{name}</tt></td></tr>
-              <tr><td><tt>ddos_protection</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>ddosProtectionPlans</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/ddosProtectionPlans/{name}</tt></td></tr>
-              <tr><td><tt>defender</tt></td><td><tt>Microsoft.Security</tt></td><td><tt>pricings</tt></td><td>global-only</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Security/pricings/{name}</tt></td></tr>
-              <tr><td><tt>devops</tt></td><td><tt>Microsoft.DevOps</tt></td><td><tt>pipelines</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DevOps/pipelines/{name}</tt></td></tr>
-              <tr><td><tt>digital_twins</tt></td><td><tt>Microsoft.DigitalTwins</tt></td><td><tt>digitalTwinsInstances</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DigitalTwins/digitalTwinsInstances/{name}</tt></td></tr>
-              <tr><td><tt>disk</tt></td><td><tt>Microsoft.Compute</tt></td><td><tt>disks</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/disks/{name}</tt></td></tr>
-              <tr><td><tt>dns</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>dnsZones</tt></td><td>global-only</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/dnsZones/{name}</tt></td></tr>
-              <tr><td><tt>event_grid</tt></td><td><tt>Microsoft.EventGrid</tt></td><td><tt>domains</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.EventGrid/domains/{name}</tt></td></tr>
-              <tr><td><tt>event_grid</tt></td><td><tt>Microsoft.EventGrid</tt></td><td><tt>topics</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.EventGrid/topics/{name}</tt></td></tr>
-              <tr><td><tt>event_hubs</tt></td><td><tt>Microsoft.EventHub</tt></td><td><tt>namespaces</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.EventHub/namespaces/{name}</tt></td></tr>
-              <tr><td><tt>express_route</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>expressRouteCircuits</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/expressRouteCircuits/{name}</tt></td></tr>
-              <tr><td><tt>firewall</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>azureFirewalls</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/azureFirewalls/{name}</tt></td></tr>
-              <tr><td><tt>firewall</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>firewallPolicies</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/firewallPolicies/{name}</tt></td></tr>
-              <tr><td><tt>front_door</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>frontDoors</tt></td><td>global-only</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/frontDoors/{name}</tt></td></tr>
-              <tr><td><tt>function_app</tt></td><td><tt>Microsoft.Web</tt></td><td><tt>sites</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Web/sites/{name}</tt></td></tr>
-              <tr><td><tt>image_gallery</tt></td><td><tt>Microsoft.Compute</tt></td><td><tt>galleries</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/galleries/{name}</tt></td></tr>
-              <tr><td><tt>iot_hub</tt></td><td><tt>Microsoft.Devices</tt></td><td><tt>IotHubs</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Devices/IotHubs/{name}</tt></td></tr>
-              <tr><td><tt>key_vault</tt></td><td><tt>Microsoft.KeyVault</tt></td><td><tt>vaults</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.KeyVault/vaults/{name}</tt></td></tr>
-              <tr><td><tt>kubernetes_service</tt></td><td><tt>Microsoft.ContainerService</tt></td><td><tt>managedClusters</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ContainerService/managedClusters/{name}</tt></td></tr>
-              <tr><td><tt>load_balancer</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>loadBalancers</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/loadBalancers/{name}</tt></td></tr>
-              <tr><td><tt>log_analytics</tt></td><td><tt>Microsoft.OperationalInsights</tt></td><td><tt>workspaces</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.OperationalInsights/workspaces/{name}</tt></td></tr>
-              <tr><td><tt>logic_apps</tt></td><td><tt>Microsoft.Logic</tt></td><td><tt>workflows</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Logic/workflows/{name}</tt></td></tr>
-              <tr><td><tt>machine_learning</tt></td><td><tt>Microsoft.MachineLearningServices</tt></td><td><tt>workspaces</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.MachineLearningServices/workspaces/{name}</tt></td></tr>
-              <tr><td><tt>managed_identity</tt></td><td><tt>Microsoft.ManagedIdentity</tt></td><td><tt>userAssignedIdentities</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{name}</tt></td></tr>
-              <tr><td><tt>maps</tt></td><td><tt>Microsoft.Maps</tt></td><td><tt>accounts</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Maps/accounts/{name}</tt></td></tr>
-              <tr><td><tt>mariadb</tt></td><td><tt>Microsoft.DBforMariaDB</tt></td><td><tt>servers</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DBforMariaDB/servers/{name}</tt></td></tr>
-              <tr><td><tt>media_services</tt></td><td><tt>Microsoft.Media</tt></td><td><tt>mediaservices</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Media/mediaservices/{name}</tt></td></tr>
-              <tr><td><tt>monitor</tt></td><td><tt>Microsoft.Monitor</tt></td><td><tt>accounts</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Monitor/accounts/{name}</tt></td></tr>
-              <tr><td><tt>monitor</tt></td><td><tt>Microsoft.Insights</tt></td><td><tt>actionGroups</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Insights/actionGroups/{name}</tt></td></tr>
-              <tr><td><tt>monitor</tt></td><td><tt>Microsoft.Insights</tt></td><td><tt>metricAlerts</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Insights/metricAlerts/{name}</tt></td></tr>
-              <tr><td><tt>mysql</tt></td><td><tt>Microsoft.DBforMySQL</tt></td><td><tt>flexibleServers</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DBforMySQL/flexibleServers/{name}</tt></td></tr>
-              <tr><td><tt>nat_gateway</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>natGateways</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/natGateways/{name}</tt></td></tr>
-              <tr><td><tt>network_security_group</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>networkSecurityGroups</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/networkSecurityGroups/{name}</tt></td></tr>
-              <tr><td><tt>notification_hubs</tt></td><td><tt>Microsoft.NotificationHubs</tt></td><td><tt>namespaces</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.NotificationHubs/namespaces/{name}</tt></td></tr>
-              <tr><td><tt>openai</tt></td><td><tt>Microsoft.CognitiveServices</tt></td><td><tt>accounts</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CognitiveServices/accounts/{name}</tt></td></tr>
-              <tr><td><tt>postgresql</tt></td><td><tt>Microsoft.DBforPostgreSQL</tt></td><td><tt>flexibleServers</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{name}</tt></td></tr>
-              <tr><td><tt>private_dns</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>privateDnsZones</tt></td><td>global-only</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/privateDnsZones/{name}</tt></td></tr>
-              <tr><td><tt>private_endpoint</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>privateEndpoints</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/privateEndpoints/{name}</tt></td></tr>
-              <tr><td><tt>public_ip</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>publicIPAddresses</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/publicIPAddresses/{name}</tt></td></tr>
-              <tr><td><tt>purview</tt></td><td><tt>Microsoft.Purview</tt></td><td><tt>accounts</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Purview/accounts/{name}</tt></td></tr>
-              <tr><td><tt>redis_cache</tt></td><td><tt>Microsoft.Cache</tt></td><td><tt>Redis</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Cache/Redis/{name}</tt></td></tr>
-              <tr><td><tt>search</tt></td><td><tt>Microsoft.Search</tt></td><td><tt>searchServices</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Search/searchServices/{name}</tt></td></tr>
-              <tr><td><tt>sentinel</tt></td><td><tt>Microsoft.SecurityInsights</tt></td><td><tt>alertRules</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.SecurityInsights/alertRules/{name}</tt></td></tr>
-              <tr><td><tt>service_bus</tt></td><td><tt>Microsoft.ServiceBus</tt></td><td><tt>namespaces</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ServiceBus/namespaces/{name}</tt></td></tr>
-              <tr><td><tt>service_fabric</tt></td><td><tt>Microsoft.ServiceFabric</tt></td><td><tt>clusters</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ServiceFabric/clusters/{name}</tt></td></tr>
-              <tr><td><tt>signalr</tt></td><td><tt>Microsoft.SignalRService</tt></td><td><tt>SignalR</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.SignalRService/SignalR/{name}</tt></td></tr>
-              <tr><td><tt>spring_apps</tt></td><td><tt>Microsoft.AppPlatform</tt></td><td><tt>Spring</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AppPlatform/Spring/{name}</tt></td></tr>
-              <tr><td><tt>sql_database</tt></td><td><tt>Microsoft.Sql</tt></td><td><tt>servers/databases</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Sql/servers/databases/{name}</tt></td></tr>
-              <tr><td><tt>sql_managed_instance</tt></td><td><tt>Microsoft.Sql</tt></td><td><tt>managedInstances</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Sql/managedInstances/{name}</tt></td></tr>
-              <tr><td><tt>sql_server</tt></td><td><tt>Microsoft.Sql</tt></td><td><tt>servers</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Sql/servers/{name}</tt></td></tr>
-              <tr><td><tt>static_web_apps</tt></td><td><tt>Microsoft.Web</tt></td><td><tt>staticSites</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Web/staticSites/{name}</tt></td></tr>
-              <tr><td><tt>storage</tt></td><td><tt>Microsoft.Storage</tt></td><td><tt>storageAccounts</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Storage/storageAccounts/{name}</tt></td></tr>
-              <tr><td><tt>stream_analytics</tt></td><td><tt>Microsoft.StreamAnalytics</tt></td><td><tt>streamingjobs</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.StreamAnalytics/streamingjobs/{name}</tt></td></tr>
-              <tr><td><tt>synapse</tt></td><td><tt>Microsoft.Synapse</tt></td><td><tt>workspaces</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Synapse/workspaces/{name}</tt></td></tr>
-              <tr><td><tt>traffic_manager</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>trafficManagerProfiles</tt></td><td>global-only</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/trafficManagerProfiles/{name}</tt></td></tr>
-              <tr><td><tt>virtual_desktop</tt></td><td><tt>Microsoft.DesktopVirtualization</tt></td><td><tt>hostPools</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DesktopVirtualization/hostPools/{name}</tt></td></tr>
-              <tr><td><tt>virtual_desktop</tt></td><td><tt>Microsoft.DesktopVirtualization</tt></td><td><tt>workspaces</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DesktopVirtualization/workspaces/{name}</tt></td></tr>
-              <tr><td><tt>virtual_machines</tt></td><td><tt>Microsoft.Compute</tt></td><td><tt>availabilitySets</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/availabilitySets/{name}</tt></td></tr>
-              <tr><td><tt>virtual_machines</tt></td><td><tt>Microsoft.Compute</tt></td><td><tt>virtualMachineScaleSets</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachineScaleSets/{name}</tt></td></tr>
-              <tr><td><tt>virtual_machines</tt></td><td><tt>Microsoft.Compute</tt></td><td><tt>virtualMachines</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachines/{name}</tt></td></tr>
-              <tr><td><tt>virtual_network</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>networkInterfaces</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/networkInterfaces/{name}</tt></td></tr>
-              <tr><td><tt>virtual_network</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>routeTables</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/routeTables/{name}</tt></td></tr>
-              <tr><td><tt>virtual_network</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>virtualNetworks</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/virtualNetworks/{name}</tt></td></tr>
-              <tr><td><tt>vpn_gateway</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>virtualNetworkGateways</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/virtualNetworkGateways/{name}</tt></td></tr>
-              <tr><td><tt>vpn_gateway</tt></td><td><tt>Microsoft.Network</tt></td><td><tt>vpnGateways</tt></td><td>regional</td><td><tt>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/vpnGateways/{name}</tt></td></tr>
-            </tbody>
-          </table>
+          <figure>
+            <name>Azure CRIT template example</name>
+            <sourcecode type="text"><![CDATA[
+/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachines/{name}
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The namespace segment follows the <tt>Microsoft.{ServiceArea}</tt>
+            convention documented in the ARM provider list.  Resource path
+            depth varies by resource type and is authoritative in the ARM
+            REST API reference.
+          </t>
         </section>
 
         <section anchor="dictionary-gcp">
-          <name>GCP Entries</name>
+          <name>Google Cloud (gcp)</name>
           <t>
-            GCP resources are identified by GCP Resource Names
-            <xref target="GCP-ResourceName"/>.  The <tt>template_format</tt>
-            for all GCP entries is <tt>gcp_resource_name</tt>.
+            GCP resources are identified by canonical resource names
+            <xref target="GCP-ResourceName"/>, the full-resource-name form
+            used by Cloud Asset Inventory.  The format prefixes the API
+            service hostname with <tt>//</tt> followed by the resource path:
+            <tt>//serviceName.googleapis.com/projects/{project}/...</tt>.
+            The resource name structure is defined and maintained by Google;
+            this specification does not alter or extend it.  The
+            <tt>template_format</tt> value for all GCP entries is
+            <tt>gcp_resource_name</tt>.
           </t>
-          <table>
-            <thead>
-              <tr>
-                <th>service</th>
-                <th>resource_type</th>
-                <th>API service</th>
-                <th>region_behavior</th>
-                <th>Template</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td><tt>alloydb</tt></td><td><tt>cluster</tt></td><td><tt>alloydb.googleapis.com</tt></td><td>regional</td><td><tt>//alloydb.googleapis.com/projects/{project}/locations/{location}/clusters/{cluster}</tt></td></tr>
-              <tr><td><tt>api_gateway</tt></td><td><tt>api</tt></td><td><tt>apigateway.googleapis.com</tt></td><td>regional</td><td><tt>//apigateway.googleapis.com/projects/{project}/locations/{location}/apis/{api}</tt></td></tr>
-              <tr><td><tt>api_gateway</tt></td><td><tt>gateway</tt></td><td><tt>apigateway.googleapis.com</tt></td><td>regional</td><td><tt>//apigateway.googleapis.com/projects/{project}/locations/{location}/gateways/{gateway}</tt></td></tr>
-              <tr><td><tt>artifact_registry</tt></td><td><tt>repository</tt></td><td><tt>artifactregistry.googleapis.com</tt></td><td>regional</td><td><tt>//artifactregistry.googleapis.com/projects/{project}/locations/{location}/repositories/{repository}</tt></td></tr>
-              <tr><td><tt>bigquery</tt></td><td><tt>dataset</tt></td><td><tt>bigquery.googleapis.com</tt></td><td>regional</td><td><tt>//bigquery.googleapis.com/projects/{project}/datasets/{dataset}</tt></td></tr>
-              <tr><td><tt>bigquery</tt></td><td><tt>table</tt></td><td><tt>bigquery.googleapis.com</tt></td><td>regional</td><td><tt>//bigquery.googleapis.com/projects/{project}/datasets/{dataset}/tables/{table}</tt></td></tr>
-              <tr><td><tt>bigtable</tt></td><td><tt>cluster</tt></td><td><tt>bigtableadmin.googleapis.com</tt></td><td>regional</td><td><tt>//bigtableadmin.googleapis.com/projects/{project}/instances/{instance}/clusters/{cluster}</tt></td></tr>
-              <tr><td><tt>bigtable</tt></td><td><tt>instance</tt></td><td><tt>bigtableadmin.googleapis.com</tt></td><td>regional</td><td><tt>//bigtableadmin.googleapis.com/projects/{project}/instances/{instance}</tt></td></tr>
-              <tr><td><tt>certificate_authority</tt></td><td><tt>caPool</tt></td><td><tt>privateca.googleapis.com</tt></td><td>regional</td><td><tt>//privateca.googleapis.com/projects/{project}/locations/{location}/caPools/{caPool}</tt></td></tr>
-              <tr><td><tt>cloud_armor</tt></td><td><tt>securityPolicy</tt></td><td><tt>compute.googleapis.com</tt></td><td>global-only</td><td><tt>//compute.googleapis.com/projects/{project}/global/securityPolicies/{policy}</tt></td></tr>
-              <tr><td><tt>cloud_build</tt></td><td><tt>build</tt></td><td><tt>cloudbuild.googleapis.com</tt></td><td>regional</td><td><tt>//cloudbuild.googleapis.com/projects/{project}/locations/{location}/builds/{build}</tt></td></tr>
-              <tr><td><tt>cloud_build</tt></td><td><tt>trigger</tt></td><td><tt>cloudbuild.googleapis.com</tt></td><td>regional</td><td><tt>//cloudbuild.googleapis.com/projects/{project}/locations/{location}/triggers/{trigger}</tt></td></tr>
-              <tr><td><tt>cloud_deploy</tt></td><td><tt>pipeline</tt></td><td><tt>clouddeploy.googleapis.com</tt></td><td>regional</td><td><tt>//clouddeploy.googleapis.com/projects/{project}/locations/{location}/deliveryPipelines/{pipeline}</tt></td></tr>
-              <tr><td><tt>cloud_deploy</tt></td><td><tt>target</tt></td><td><tt>clouddeploy.googleapis.com</tt></td><td>regional</td><td><tt>//clouddeploy.googleapis.com/projects/{project}/locations/{location}/targets/{target}</tt></td></tr>
-              <tr><td><tt>cloud_dns</tt></td><td><tt>zone</tt></td><td><tt>dns.googleapis.com</tt></td><td>global-only</td><td><tt>//dns.googleapis.com/projects/{project}/managedZones/{zone}</tt></td></tr>
-              <tr><td><tt>cloud_functions</tt></td><td><tt>function</tt></td><td><tt>cloudfunctions.googleapis.com</tt></td><td>regional</td><td><tt>//cloudfunctions.googleapis.com/projects/{project}/locations/{location}/functions/{function}</tt></td></tr>
-              <tr><td><tt>cloud_iam</tt></td><td><tt>role</tt></td><td><tt>iam.googleapis.com</tt></td><td>global-only</td><td><tt>//iam.googleapis.com/projects/{project}/roles/{role}</tt></td></tr>
-              <tr><td><tt>cloud_iam</tt></td><td><tt>serviceAccount</tt></td><td><tt>iam.googleapis.com</tt></td><td>global-only</td><td><tt>//iam.googleapis.com/projects/{project}/serviceAccounts/{serviceAccount}</tt></td></tr>
-              <tr><td><tt>cloud_kms</tt></td><td><tt>cryptoKey</tt></td><td><tt>cloudkms.googleapis.com</tt></td><td>regional</td><td><tt>//cloudkms.googleapis.com/projects/{project}/locations/{location}/keyRings/{keyRing}/cryptoKeys/{cryptoKey}</tt></td></tr>
-              <tr><td><tt>cloud_kms</tt></td><td><tt>keyRing</tt></td><td><tt>cloudkms.googleapis.com</tt></td><td>regional</td><td><tt>//cloudkms.googleapis.com/projects/{project}/locations/{location}/keyRings/{keyRing}</tt></td></tr>
-              <tr><td><tt>cloud_logging</tt></td><td><tt>log</tt></td><td><tt>logging.googleapis.com</tt></td><td>global-only</td><td><tt>//logging.googleapis.com/projects/{project}/logs/{log}</tt></td></tr>
-              <tr><td><tt>cloud_logging</tt></td><td><tt>logBucket</tt></td><td><tt>logging.googleapis.com</tt></td><td>regional</td><td><tt>//logging.googleapis.com/projects/{project}/locations/{location}/buckets/{bucket}</tt></td></tr>
-              <tr><td><tt>cloud_logging</tt></td><td><tt>sink</tt></td><td><tt>logging.googleapis.com</tt></td><td>global-only</td><td><tt>//logging.googleapis.com/projects/{project}/sinks/{sink}</tt></td></tr>
-              <tr><td><tt>cloud_monitoring</tt></td><td><tt>alertPolicy</tt></td><td><tt>monitoring.googleapis.com</tt></td><td>global-only</td><td><tt>//monitoring.googleapis.com/projects/{project}/alertPolicies/{policy}</tt></td></tr>
-              <tr><td><tt>cloud_monitoring</tt></td><td><tt>notificationChannel</tt></td><td><tt>monitoring.googleapis.com</tt></td><td>global-only</td><td><tt>//monitoring.googleapis.com/projects/{project}/notificationChannels/{channel}</tt></td></tr>
-              <tr><td><tt>cloud_monitoring</tt></td><td><tt>uptimeCheckConfig</tt></td><td><tt>monitoring.googleapis.com</tt></td><td>global-only</td><td><tt>//monitoring.googleapis.com/projects/{project}/uptimeCheckConfigs/{config}</tt></td></tr>
-              <tr><td><tt>cloud_run</tt></td><td><tt>job</tt></td><td><tt>run.googleapis.com</tt></td><td>regional</td><td><tt>//run.googleapis.com/projects/{project}/locations/{location}/jobs/{job}</tt></td></tr>
-              <tr><td><tt>cloud_run</tt></td><td><tt>service</tt></td><td><tt>run.googleapis.com</tt></td><td>regional</td><td><tt>//run.googleapis.com/projects/{project}/locations/{location}/services/{service}</tt></td></tr>
-              <tr><td><tt>cloud_scheduler</tt></td><td><tt>job</tt></td><td><tt>cloudscheduler.googleapis.com</tt></td><td>regional</td><td><tt>//cloudscheduler.googleapis.com/projects/{project}/locations/{location}/jobs/{job}</tt></td></tr>
-              <tr><td><tt>cloud_sql</tt></td><td><tt>instance</tt></td><td><tt>sqladmin.googleapis.com</tt></td><td>regional</td><td><tt>//sqladmin.googleapis.com/projects/{project}/instances/{instance}</tt></td></tr>
-              <tr><td><tt>cloud_storage</tt></td><td><tt>bucket</tt></td><td><tt>storage.googleapis.com</tt></td><td>regional</td><td><tt>//storage.googleapis.com/projects/{project}/buckets/{bucket}</tt></td></tr>
-              <tr><td><tt>cloud_tasks</tt></td><td><tt>queue</tt></td><td><tt>cloudtasks.googleapis.com</tt></td><td>regional</td><td><tt>//cloudtasks.googleapis.com/projects/{project}/locations/{location}/queues/{queue}</tt></td></tr>
-              <tr><td><tt>composer</tt></td><td><tt>environment</tt></td><td><tt>composer.googleapis.com</tt></td><td>regional</td><td><tt>//composer.googleapis.com/projects/{project}/locations/{location}/environments/{environment}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>address</tt></td><td><tt>compute.googleapis.com</tt></td><td>regional</td><td><tt>//compute.googleapis.com/projects/{project}/regions/{region}/addresses/{address}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>backendService</tt></td><td><tt>compute.googleapis.com</tt></td><td>global-only</td><td><tt>//compute.googleapis.com/projects/{project}/global/backendServices/{backendService}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>disk</tt></td><td><tt>compute.googleapis.com</tt></td><td>regional</td><td><tt>//compute.googleapis.com/projects/{project}/zones/{zone}/disks/{disk}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>firewall</tt></td><td><tt>compute.googleapis.com</tt></td><td>global-only</td><td><tt>//compute.googleapis.com/projects/{project}/global/firewalls/{firewall}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>forwardingRule</tt></td><td><tt>compute.googleapis.com</tt></td><td>regional</td><td><tt>//compute.googleapis.com/projects/{project}/regions/{region}/forwardingRules/{rule}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>healthCheck</tt></td><td><tt>compute.googleapis.com</tt></td><td>global-only</td><td><tt>//compute.googleapis.com/projects/{project}/global/healthChecks/{healthCheck}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>image</tt></td><td><tt>compute.googleapis.com</tt></td><td>global-only</td><td><tt>//compute.googleapis.com/projects/{project}/global/images/{image}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>instance</tt></td><td><tt>compute.googleapis.com</tt></td><td>regional</td><td><tt>//compute.googleapis.com/projects/{project}/zones/{zone}/instances/{instance}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>instanceGroup</tt></td><td><tt>compute.googleapis.com</tt></td><td>regional</td><td><tt>//compute.googleapis.com/projects/{project}/zones/{zone}/instanceGroups/{group}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>instanceTemplate</tt></td><td><tt>compute.googleapis.com</tt></td><td>global-only</td><td><tt>//compute.googleapis.com/projects/{project}/global/instanceTemplates/{template}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>interconnect</tt></td><td><tt>compute.googleapis.com</tt></td><td>global-only</td><td><tt>//compute.googleapis.com/projects/{project}/global/interconnects/{interconnect}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>network</tt></td><td><tt>compute.googleapis.com</tt></td><td>global-only</td><td><tt>//compute.googleapis.com/projects/{project}/global/networks/{network}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>router</tt></td><td><tt>compute.googleapis.com</tt></td><td>regional</td><td><tt>//compute.googleapis.com/projects/{project}/regions/{region}/routers/{router}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>snapshot</tt></td><td><tt>compute.googleapis.com</tt></td><td>global-only</td><td><tt>//compute.googleapis.com/projects/{project}/global/snapshots/{snapshot}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>sslCertificate</tt></td><td><tt>compute.googleapis.com</tt></td><td>global-only</td><td><tt>//compute.googleapis.com/projects/{project}/global/sslCertificates/{certificate}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>subnetwork</tt></td><td><tt>compute.googleapis.com</tt></td><td>regional</td><td><tt>//compute.googleapis.com/projects/{project}/regions/{region}/subnetworks/{subnetwork}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>targetHttpProxy</tt></td><td><tt>compute.googleapis.com</tt></td><td>global-only</td><td><tt>//compute.googleapis.com/projects/{project}/global/targetHttpProxies/{proxy}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>urlMap</tt></td><td><tt>compute.googleapis.com</tt></td><td>global-only</td><td><tt>//compute.googleapis.com/projects/{project}/global/urlMaps/{urlMap}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>vpnGateway</tt></td><td><tt>compute.googleapis.com</tt></td><td>regional</td><td><tt>//compute.googleapis.com/projects/{project}/regions/{region}/vpnGateways/{gateway}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>vpnTunnel</tt></td><td><tt>compute.googleapis.com</tt></td><td>regional</td><td><tt>//compute.googleapis.com/projects/{project}/regions/{region}/vpnTunnels/{tunnel}</tt></td></tr>
-              <tr><td><tt>data_catalog</tt></td><td><tt>entryGroup</tt></td><td><tt>datacatalog.googleapis.com</tt></td><td>regional</td><td><tt>//datacatalog.googleapis.com/projects/{project}/locations/{location}/entryGroups/{entryGroup}</tt></td></tr>
-              <tr><td><tt>dataflow</tt></td><td><tt>job</tt></td><td><tt>dataflow.googleapis.com</tt></td><td>regional</td><td><tt>//dataflow.googleapis.com/projects/{project}/locations/{location}/jobs/{job}</tt></td></tr>
-              <tr><td><tt>dataproc</tt></td><td><tt>cluster</tt></td><td><tt>dataproc.googleapis.com</tt></td><td>regional</td><td><tt>//dataproc.googleapis.com/projects/{project}/regions/{region}/clusters/{cluster}</tt></td></tr>
-              <tr><td><tt>dataproc</tt></td><td><tt>job</tt></td><td><tt>dataproc.googleapis.com</tt></td><td>regional</td><td><tt>//dataproc.googleapis.com/projects/{project}/regions/{region}/jobs/{job}</tt></td></tr>
-              <tr><td><tt>dataproc</tt></td><td><tt>workflowTemplate</tt></td><td><tt>dataproc.googleapis.com</tt></td><td>regional</td><td><tt>//dataproc.googleapis.com/projects/{project}/regions/{region}/workflowTemplates/{template}</tt></td></tr>
-              <tr><td><tt>dialogflow</tt></td><td><tt>agent</tt></td><td><tt>dialogflow.googleapis.com</tt></td><td>regional</td><td><tt>//dialogflow.googleapis.com/projects/{project}/locations/{location}/agents/{agent}</tt></td></tr>
-              <tr><td><tt>eventarc</tt></td><td><tt>trigger</tt></td><td><tt>eventarc.googleapis.com</tt></td><td>regional</td><td><tt>//eventarc.googleapis.com/projects/{project}/locations/{location}/triggers/{trigger}</tt></td></tr>
-              <tr><td><tt>filestore</tt></td><td><tt>instance</tt></td><td><tt>file.googleapis.com</tt></td><td>regional</td><td><tt>//file.googleapis.com/projects/{project}/locations/{location}/instances/{instance}</tt></td></tr>
-              <tr><td><tt>firestore</tt></td><td><tt>database</tt></td><td><tt>firestore.googleapis.com</tt></td><td>regional</td><td><tt>//firestore.googleapis.com/projects/{project}/databases/{database}</tt></td></tr>
-              <tr><td><tt>gke_hub</tt></td><td><tt>membership</tt></td><td><tt>gkehub.googleapis.com</tt></td><td>regional</td><td><tt>//gkehub.googleapis.com/projects/{project}/locations/{location}/memberships/{membership}</tt></td></tr>
-              <tr><td><tt>kubernetes_engine</tt></td><td><tt>cluster</tt></td><td><tt>container.googleapis.com</tt></td><td>regional</td><td><tt>//container.googleapis.com/projects/{project}/locations/{location}/clusters/{cluster}</tt></td></tr>
-              <tr><td><tt>memorystore</tt></td><td><tt>instance</tt></td><td><tt>redis.googleapis.com</tt></td><td>regional</td><td><tt>//redis.googleapis.com/projects/{project}/locations/{location}/instances/{instance}</tt></td></tr>
-              <tr><td><tt>pubsub</tt></td><td><tt>subscription</tt></td><td><tt>pubsub.googleapis.com</tt></td><td>regional</td><td><tt>//pubsub.googleapis.com/projects/{project}/subscriptions/{subscription}</tt></td></tr>
-              <tr><td><tt>pubsub</tt></td><td><tt>topic</tt></td><td><tt>pubsub.googleapis.com</tt></td><td>regional</td><td><tt>//pubsub.googleapis.com/projects/{project}/topics/{topic}</tt></td></tr>
-              <tr><td><tt>secret_manager</tt></td><td><tt>secret</tt></td><td><tt>secretmanager.googleapis.com</tt></td><td>regional</td><td><tt>//secretmanager.googleapis.com/projects/{project}/secrets/{secret}</tt></td></tr>
-              <tr><td><tt>security_command_center</tt></td><td><tt>source</tt></td><td><tt>securitycenter.googleapis.com</tt></td><td>global-only</td><td><tt>//securitycenter.googleapis.com/organizations/{organization}/sources/{source}</tt></td></tr>
-              <tr><td><tt>service_directory</tt></td><td><tt>namespace</tt></td><td><tt>servicedirectory.googleapis.com</tt></td><td>regional</td><td><tt>//servicedirectory.googleapis.com/projects/{project}/locations/{location}/namespaces/{namespace}</tt></td></tr>
-              <tr><td><tt>spanner</tt></td><td><tt>database</tt></td><td><tt>spanner.googleapis.com</tt></td><td>regional</td><td><tt>//spanner.googleapis.com/projects/{project}/instances/{instance}/databases/{database}</tt></td></tr>
-              <tr><td><tt>spanner</tt></td><td><tt>instance</tt></td><td><tt>spanner.googleapis.com</tt></td><td>regional</td><td><tt>//spanner.googleapis.com/projects/{project}/instances/{instance}</tt></td></tr>
-              <tr><td><tt>vertex_ai</tt></td><td><tt>dataset</tt></td><td><tt>aiplatform.googleapis.com</tt></td><td>regional</td><td><tt>//aiplatform.googleapis.com/projects/{project}/locations/{location}/datasets/{dataset}</tt></td></tr>
-              <tr><td><tt>vertex_ai</tt></td><td><tt>endpoint</tt></td><td><tt>aiplatform.googleapis.com</tt></td><td>regional</td><td><tt>//aiplatform.googleapis.com/projects/{project}/locations/{location}/endpoints/{endpoint}</tt></td></tr>
-              <tr><td><tt>vertex_ai</tt></td><td><tt>model</tt></td><td><tt>aiplatform.googleapis.com</tt></td><td>regional</td><td><tt>//aiplatform.googleapis.com/projects/{project}/locations/{location}/models/{model}</tt></td></tr>
-              <tr><td><tt>vertex_ai</tt></td><td><tt>trainingPipeline</tt></td><td><tt>aiplatform.googleapis.com</tt></td><td>regional</td><td><tt>//aiplatform.googleapis.com/projects/{project}/locations/{location}/trainingPipelines/{pipeline}</tt></td></tr>
-              <tr><td><tt>workflows</tt></td><td><tt>workflow</tt></td><td><tt>workflows.googleapis.com</tt></td><td>regional</td><td><tt>//workflows.googleapis.com/projects/{project}/locations/{location}/workflows/{workflow}</tt></td></tr>
-            </tbody>
-          </table>
+          <figure>
+            <name>GCP CRIT template examples</name>
+            <sourcecode type="text"><![CDATA[
+//compute.googleapis.com/projects/{project}/zones/{location}/instances/{resource-id}
+//storage.googleapis.com/projects/{project}/buckets/{resource-id}
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The API hostname prefix and resource path structure are published
+            per-service in Google&#8217;s API documentation.  For inventory
+            queries, <tt>{location}</tt> may be set to the wildcard value
+            <tt>-</tt> to span all regions, as described in the Cloud Asset
+            Inventory documentation.
+          </t>
         </section>
 
         <section anchor="dictionary-cloudflare">
-          <name>Cloudflare Entries</name>
+          <name>Cloudflare (cloudflare)</name>
           <t>
-            Cloudflare resources are identified by the Cloudflare API Locator
-            format <xref target="CF-API"/>:
-            <tt>com.cloudflare.api.account.{account_id}.{resource-type}.{id}</tt>.
-            All Cloudflare resources are globally scoped
-            (<tt>region_behavior: global-only</tt>).
-            The <tt>template_format</tt> for all Cloudflare entries is
-            <tt>cloudflare_locator</tt>.
+            Cloudflare resources are identified using Cloudflare API locators
+            <xref target="CF-API"/>, a structured dotted-string form scoped
+            to a Cloudflare account.  All Cloudflare resources are globally
+            scoped; the <tt>region_behavior</tt> for every Cloudflare entry
+            is <tt>global-only</tt>.  The <tt>template_format</tt> value for
+            all Cloudflare entries is <tt>cloudflare_locator</tt>.
           </t>
-          <table>
-            <thead>
-              <tr>
-                <th>service</th>
-                <th>resource_type (hardcoded)</th>
-                <th>Template</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td><tt>access</tt></td><td><tt>access_application</tt></td><td><tt>com.cloudflare.api.account.{account_id}.access_application.{id}</tt></td></tr>
-              <tr><td><tt>access</tt></td><td><tt>access_group</tt></td><td><tt>com.cloudflare.api.account.{account_id}.access_group.{id}</tt></td></tr>
-              <tr><td><tt>access</tt></td><td><tt>access_identity_provider</tt></td><td><tt>com.cloudflare.api.account.{account_id}.access_identity_provider.{id}</tt></td></tr>
-              <tr><td><tt>access</tt></td><td><tt>access_service_token</tt></td><td><tt>com.cloudflare.api.account.{account_id}.access_service_token.{id}</tt></td></tr>
-              <tr><td><tt>ai_gateway</tt></td><td><tt>ai_gateway</tt></td><td><tt>com.cloudflare.api.account.{account_id}.ai_gateway.{id}</tt></td></tr>
-              <tr><td><tt>api_shield</tt></td><td><tt>api_shield</tt></td><td><tt>com.cloudflare.api.account.{account_id}.api_shield.{id}</tt></td></tr>
-              <tr><td><tt>argo</tt></td><td><tt>argo_tunnel</tt></td><td><tt>com.cloudflare.api.account.{account_id}.argo_tunnel.{id}</tt></td></tr>
-              <tr><td><tt>d1</tt></td><td><tt>d1_database</tt></td><td><tt>com.cloudflare.api.account.{account_id}.d1_database.{id}</tt></td></tr>
-              <tr><td><tt>dns</tt></td><td><tt>dns_record</tt></td><td><tt>com.cloudflare.api.account.{account_id}.dns_record.{id}</tt></td></tr>
-              <tr><td><tt>dns</tt></td><td><tt>zone</tt></td><td><tt>com.cloudflare.api.account.{account_id}.zone.{id}</tt></td></tr>
-              <tr><td><tt>durable_objects</tt></td><td><tt>durable_object_namespace</tt></td><td><tt>com.cloudflare.api.account.{account_id}.durable_object_namespace.{id}</tt></td></tr>
-              <tr><td><tt>email_routing</tt></td><td><tt>email_routing_rule</tt></td><td><tt>com.cloudflare.api.account.{account_id}.email_routing_rule.{id}</tt></td></tr>
-              <tr><td><tt>hyperdrive</tt></td><td><tt>hyperdrive_config</tt></td><td><tt>com.cloudflare.api.account.{account_id}.hyperdrive_config.{id}</tt></td></tr>
-              <tr><td><tt>images</tt></td><td><tt>image</tt></td><td><tt>com.cloudflare.api.account.{account_id}.image.{id}</tt></td></tr>
-              <tr><td><tt>kv</tt></td><td><tt>kv_namespace</tt></td><td><tt>com.cloudflare.api.account.{account_id}.kv_namespace.{id}</tt></td></tr>
-              <tr><td><tt>load_balancer</tt></td><td><tt>load_balancer</tt></td><td><tt>com.cloudflare.api.account.{account_id}.load_balancer.{id}</tt></td></tr>
-              <tr><td><tt>load_balancer</tt></td><td><tt>load_balancer_pool</tt></td><td><tt>com.cloudflare.api.account.{account_id}.load_balancer_pool.{id}</tt></td></tr>
-              <tr><td><tt>logpush</tt></td><td><tt>logpush_job</tt></td><td><tt>com.cloudflare.api.account.{account_id}.logpush_job.{id}</tt></td></tr>
-              <tr><td><tt>magic_firewall</tt></td><td><tt>magic_firewall_ruleset</tt></td><td><tt>com.cloudflare.api.account.{account_id}.magic_firewall_ruleset.{id}</tt></td></tr>
-              <tr><td><tt>magic_transit</tt></td><td><tt>magic_transit_tunnel</tt></td><td><tt>com.cloudflare.api.account.{account_id}.magic_transit_tunnel.{id}</tt></td></tr>
-              <tr><td><tt>magic_wan</tt></td><td><tt>magic_wan_connector</tt></td><td><tt>com.cloudflare.api.account.{account_id}.magic_wan_connector.{id}</tt></td></tr>
-              <tr><td><tt>pages</tt></td><td><tt>pages_project</tt></td><td><tt>com.cloudflare.api.account.{account_id}.pages_project.{id}</tt></td></tr>
-              <tr><td><tt>queues</tt></td><td><tt>queue</tt></td><td><tt>com.cloudflare.api.account.{account_id}.queue.{id}</tt></td></tr>
-              <tr><td><tt>r2</tt></td><td><tt>r2_bucket</tt></td><td><tt>com.cloudflare.api.account.{account_id}.r2_bucket.{id}</tt></td></tr>
-              <tr><td><tt>registrar</tt></td><td><tt>registrar_domain</tt></td><td><tt>com.cloudflare.api.account.{account_id}.registrar_domain.{id}</tt></td></tr>
-              <tr><td><tt>spectrum</tt></td><td><tt>spectrum_application</tt></td><td><tt>com.cloudflare.api.account.{account_id}.spectrum_application.{id}</tt></td></tr>
-              <tr><td><tt>ssl</tt></td><td><tt>custom_certificate</tt></td><td><tt>com.cloudflare.api.account.{account_id}.custom_certificate.{id}</tt></td></tr>
-              <tr><td><tt>ssl</tt></td><td><tt>origin_ca_certificate</tt></td><td><tt>com.cloudflare.api.account.{account_id}.origin_ca_certificate.{id}</tt></td></tr>
-              <tr><td><tt>stream</tt></td><td><tt>stream_live_input</tt></td><td><tt>com.cloudflare.api.account.{account_id}.stream_live_input.{id}</tt></td></tr>
-              <tr><td><tt>stream</tt></td><td><tt>stream_video</tt></td><td><tt>com.cloudflare.api.account.{account_id}.stream_video.{id}</tt></td></tr>
-              <tr><td><tt>tunnel</tt></td><td><tt>tunnel</tt></td><td><tt>com.cloudflare.api.account.{account_id}.tunnel.{id}</tt></td></tr>
-              <tr><td><tt>turnstile</tt></td><td><tt>turnstile_widget</tt></td><td><tt>com.cloudflare.api.account.{account_id}.turnstile_widget.{id}</tt></td></tr>
-              <tr><td><tt>vectorize</tt></td><td><tt>vectorize_index</tt></td><td><tt>com.cloudflare.api.account.{account_id}.vectorize_index.{id}</tt></td></tr>
-              <tr><td><tt>waf</tt></td><td><tt>waf</tt></td><td><tt>com.cloudflare.api.account.{account_id}.waf.{id}</tt></td></tr>
-              <tr><td><tt>waf</tt></td><td><tt>waf_ruleset</tt></td><td><tt>com.cloudflare.api.account.{account_id}.waf_ruleset.{id}</tt></td></tr>
-              <tr><td><tt>waiting_room</tt></td><td><tt>waiting_room</tt></td><td><tt>com.cloudflare.api.account.{account_id}.waiting_room.{id}</tt></td></tr>
-              <tr><td><tt>workers</tt></td><td><tt>worker</tt></td><td><tt>com.cloudflare.api.account.{account_id}.worker.{id}</tt></td></tr>
-              <tr><td><tt>workers</tt></td><td><tt>worker_cron_trigger</tt></td><td><tt>com.cloudflare.api.account.{account_id}.worker_cron_trigger.{id}</tt></td></tr>
-              <tr><td><tt>workers</tt></td><td><tt>worker_route</tt></td><td><tt>com.cloudflare.api.account.{account_id}.worker_route.{id}</tt></td></tr>
-              <tr><td><tt>workers_ai</tt></td><td><tt>workers_ai_model</tt></td><td><tt>com.cloudflare.api.account.{account_id}.workers_ai_model.{id}</tt></td></tr>
-              <tr><td><tt>zero_trust</tt></td><td><tt>access_policy</tt></td><td><tt>com.cloudflare.api.account.{account_id}.access_policy.{id}</tt></td></tr>
-              <tr><td><tt>zero_trust</tt></td><td><tt>dlp_profile</tt></td><td><tt>com.cloudflare.api.account.{account_id}.dlp_profile.{id}</tt></td></tr>
-              <tr><td><tt>zero_trust</tt></td><td><tt>gateway_rule</tt></td><td><tt>com.cloudflare.api.account.{account_id}.gateway_rule.{id}</tt></td></tr>
-            </tbody>
-          </table>
+          <figure>
+            <name>Cloudflare CRIT template example</name>
+            <sourcecode type="text"><![CDATA[
+com.cloudflare.api.account.{account_id}.zone.{id}
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The resource type segment corresponds to the Cloudflare API
+            object category as documented in the Cloudflare API reference.
+            Zone-scoped resources share the same account-rooted prefix.
+          </t>
         </section>
 
         <section anchor="dictionary-oracle">
-          <name>Oracle Cloud Entries</name>
+          <name>Oracle Cloud Infrastructure (oracle)</name>
           <t>
-            Oracle Cloud resources are identified by Oracle Cloud IDs (OCIDs)
-            <xref target="OCI-OCID"/>.  Regional format:
-            <tt>ocid1.{type}.{realm}.{region}..{unique-id}</tt>.
-            Global format:
-            <tt>ocid1.{type}.{realm}...{unique-id}</tt>.
-            The realm slot is hardcoded to <tt>oc1</tt> for commercial regions.
-            The <tt>template_format</tt> for all Oracle entries is
+            OCI resources are identified by Oracle Cloud IDs (OCIDs)
+            <xref target="OCI-OCID"/>, structured opaque identifiers with
+            realm and region components.  Regional resources include the
+            region segment; globally-scoped resources structurally omit both
+            the region and availability domain segments, resulting in
+            consecutive dots in the OCID.  The OCID format is defined and
+            maintained by Oracle; this specification does not alter or extend
+            it.  The <tt>template_format</tt> value for all OCI entries is
             <tt>oracle_ocid</tt>.
           </t>
-          <table>
-            <thead>
-              <tr>
-                <th>service</th>
-                <th>OCID type</th>
-                <th>region_behavior</th>
-                <th>Template</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td><tt>api_gateway</tt></td><td><tt>apigateway</tt></td><td>regional</td><td><tt>ocid1.apigateway.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>api_gateway</tt></td><td><tt>apideployment</tt></td><td>regional</td><td><tt>ocid1.apideployment.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>autonomous_database</tt></td><td><tt>autonomousdatabase</tt></td><td>regional</td><td><tt>ocid1.autonomousdatabase.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>bastion</tt></td><td><tt>bastion</tt></td><td>regional</td><td><tt>ocid1.bastion.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>bastion</tt></td><td><tt>bastionsession</tt></td><td>regional</td><td><tt>ocid1.bastionsession.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>block_storage</tt></td><td><tt>bootvolume</tt></td><td>regional</td><td><tt>ocid1.bootvolume.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>block_storage</tt></td><td><tt>bootvolumebackup</tt></td><td>regional</td><td><tt>ocid1.bootvolumebackup.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>block_storage</tt></td><td><tt>volume</tt></td><td>regional</td><td><tt>ocid1.volume.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>block_storage</tt></td><td><tt>volumebackup</tt></td><td>regional</td><td><tt>ocid1.volumebackup.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>block_storage</tt></td><td><tt>volumegroup</tt></td><td>regional</td><td><tt>ocid1.volumegroup.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>cloud_guard</tt></td><td><tt>cloudguardtarget</tt></td><td>regional</td><td><tt>ocid1.cloudguardtarget.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>dedicatedvmhost</tt></td><td>regional</td><td><tt>ocid1.dedicatedvmhost.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>image</tt></td><td>regional</td><td><tt>ocid1.image.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>instance</tt></td><td>regional</td><td><tt>ocid1.instance.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>compute</tt></td><td><tt>instancepool</tt></td><td>regional</td><td><tt>ocid1.instancepool.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>container_instances</tt></td><td><tt>containerinstance</tt></td><td>regional</td><td><tt>ocid1.containerinstance.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>data_science</tt></td><td><tt>datasciencemodel</tt></td><td>regional</td><td><tt>ocid1.datasciencemodel.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>data_science</tt></td><td><tt>datasciencenotebooksession</tt></td><td>regional</td><td><tt>ocid1.datasciencenotebooksession.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>data_science</tt></td><td><tt>datascienceproject</tt></td><td>regional</td><td><tt>ocid1.datascienceproject.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>database</tt></td><td><tt>database</tt></td><td>regional</td><td><tt>ocid1.database.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>database</tt></td><td><tt>dbhome</tt></td><td>regional</td><td><tt>ocid1.dbhome.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>database</tt></td><td><tt>dbsystem</tt></td><td>regional</td><td><tt>ocid1.dbsystem.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>database</tt></td><td><tt>exadatainfrastructure</tt></td><td>regional</td><td><tt>ocid1.exadatainfrastructure.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>devops</tt></td><td><tt>devopsbuildpipeline</tt></td><td>regional</td><td><tt>ocid1.devopsbuildpipeline.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>devops</tt></td><td><tt>devopsdeploypipeline</tt></td><td>regional</td><td><tt>ocid1.devopsdeploypipeline.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>devops</tt></td><td><tt>devopsproject</tt></td><td>regional</td><td><tt>ocid1.devopsproject.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>devops</tt></td><td><tt>devopsrepository</tt></td><td>regional</td><td><tt>ocid1.devopsrepository.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>dns</tt></td><td><tt>dns-zone</tt></td><td>regional</td><td><tt>ocid1.dns-zone.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>events</tt></td><td><tt>eventrule</tt></td><td>regional</td><td><tt>ocid1.eventrule.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>file_storage</tt></td><td><tt>exportset</tt></td><td>regional</td><td><tt>ocid1.exportset.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>file_storage</tt></td><td><tt>filesystem</tt></td><td>regional</td><td><tt>ocid1.filesystem.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>file_storage</tt></td><td><tt>mounttarget</tt></td><td>regional</td><td><tt>ocid1.mounttarget.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>functions</tt></td><td><tt>fnapp</tt></td><td>regional</td><td><tt>ocid1.fnapp.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>functions</tt></td><td><tt>fnfunc</tt></td><td>regional</td><td><tt>ocid1.fnfunc.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>identity</tt></td><td><tt>compartment</tt></td><td>global-only</td><td><tt>ocid1.compartment.{realm=oc1}...{unique-id}</tt></td></tr>
-              <tr><td><tt>identity</tt></td><td><tt>group</tt></td><td>global-only</td><td><tt>ocid1.group.{realm=oc1}...{unique-id}</tt></td></tr>
-              <tr><td><tt>identity</tt></td><td><tt>policy</tt></td><td>global-only</td><td><tt>ocid1.policy.{realm=oc1}...{unique-id}</tt></td></tr>
-              <tr><td><tt>identity</tt></td><td><tt>user</tt></td><td>global-only</td><td><tt>ocid1.user.{realm=oc1}...{unique-id}</tt></td></tr>
-              <tr><td><tt>integration</tt></td><td><tt>integrationinstance</tt></td><td>regional</td><td><tt>ocid1.integrationinstance.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>key_management</tt></td><td><tt>key</tt></td><td>regional</td><td><tt>ocid1.key.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>load_balancer</tt></td><td><tt>loadbalancer</tt></td><td>regional</td><td><tt>ocid1.loadbalancer.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>load_balancer</tt></td><td><tt>networkloadbalancer</tt></td><td>regional</td><td><tt>ocid1.networkloadbalancer.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>logging</tt></td><td><tt>log</tt></td><td>regional</td><td><tt>ocid1.log.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>logging</tt></td><td><tt>loggroup</tt></td><td>regional</td><td><tt>ocid1.loggroup.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>monitoring</tt></td><td><tt>alarm</tt></td><td>regional</td><td><tt>ocid1.alarm.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>mysql</tt></td><td><tt>mysqldbsystem</tt></td><td>regional</td><td><tt>ocid1.mysqldbsystem.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>networking</tt></td><td><tt>drg</tt></td><td>regional</td><td><tt>ocid1.drg.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>networking</tt></td><td><tt>internetgateway</tt></td><td>regional</td><td><tt>ocid1.internetgateway.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>networking</tt></td><td><tt>natgateway</tt></td><td>regional</td><td><tt>ocid1.natgateway.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>networking</tt></td><td><tt>networksecuritygroup</tt></td><td>regional</td><td><tt>ocid1.networksecuritygroup.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>networking</tt></td><td><tt>publicip</tt></td><td>regional</td><td><tt>ocid1.publicip.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>networking</tt></td><td><tt>routetable</tt></td><td>regional</td><td><tt>ocid1.routetable.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>networking</tt></td><td><tt>securitylist</tt></td><td>regional</td><td><tt>ocid1.securitylist.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>networking</tt></td><td><tt>servicegateway</tt></td><td>regional</td><td><tt>ocid1.servicegateway.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>networking</tt></td><td><tt>subnet</tt></td><td>regional</td><td><tt>ocid1.subnet.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>nosql</tt></td><td><tt>nosqltable</tt></td><td>regional</td><td><tt>ocid1.nosqltable.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>notifications</tt></td><td><tt>onstopic</tt></td><td>regional</td><td><tt>ocid1.onstopic.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>object_storage</tt></td><td><tt>bucket</tt></td><td>regional</td><td><tt>ocid1.bucket.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>oke</tt></td><td><tt>cluster</tt></td><td>regional</td><td><tt>ocid1.cluster.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>oke</tt></td><td><tt>nodepool</tt></td><td>regional</td><td><tt>ocid1.nodepool.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>resource_manager</tt></td><td><tt>ormstack</tt></td><td>regional</td><td><tt>ocid1.ormstack.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>streaming</tt></td><td><tt>stream</tt></td><td>regional</td><td><tt>ocid1.stream.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>streaming</tt></td><td><tt>streampool</tt></td><td>regional</td><td><tt>ocid1.streampool.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>vault</tt></td><td><tt>vault</tt></td><td>regional</td><td><tt>ocid1.vault.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>vcn</tt></td><td><tt>vcn</tt></td><td>regional</td><td><tt>ocid1.vcn.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>vulnerability_scanning</tt></td><td><tt>vssscantarget</tt></td><td>regional</td><td><tt>ocid1.vssscantarget.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-              <tr><td><tt>waf</tt></td><td><tt>waaspolicy</tt></td><td>regional</td><td><tt>ocid1.waaspolicy.{realm=oc1}.{region}..{unique-id}</tt></td></tr>
-            </tbody>
-          </table>
+          <figure>
+            <name>OCI CRIT template examples</name>
+            <sourcecode type="text"><![CDATA[
+ocid1.instance.{realm=oc1}.{region}..{unique-id}
+ocid1.compartment.{realm=oc1}...{unique-id}
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The <tt>realm</tt> component identifies the OCI infrastructure
+            partition; <tt>oc1</tt> is the commercial realm.  The
+            dot-separated positional structure is authoritative in the OCI
+            Resource Identifiers documentation.
+          </t>
+        </section>
+
+        <section anchor="dictionary-salesforce">
+          <name>Salesforce Platform (salesforce)</name>
+          <t>
+            Salesforce resources are addressed by REST API resource URLs
+            <xref target="SF-REST-API"/>, the canonical programmatic address
+            for every sObject record in a Salesforce org.  Resources are
+            org-scoped rather than region-scoped; the
+            <tt>region_behavior</tt> for every Salesforce entry is
+            <tt>global-only</tt>.  The <tt>template_format</tt> value for
+            all Salesforce entries is <tt>salesforce_url</tt>.
+          </t>
+          <figure>
+            <name>Salesforce CRIT template example</name>
+            <sourcecode type="text"><![CDATA[
+https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/{object-type}/{record-id}
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The instance subdomain identifies the Salesforce org.  The
+            <tt>api-version</tt> slot follows the Salesforce seasonal release
+            cadence (e.g., <tt>v61.0</tt>).  The sObject name in the path
+            identifies the resource type and corresponds to the
+            <tt>resource_type</tt> field in the dictionary entry.
+          </t>
+        </section>
+
+        <section anchor="dictionary-sap">
+          <name>SAP Business Technology Platform (sap)</name>
+          <t>
+            SAP BTP resource URL conventions vary by product tier
+            <xref target="SAP-BTP"/>: BTP core services use the BTP API
+            endpoint form; ABAP Cloud systems use OData service paths; SAP
+            SuccessFactors uses a dedicated API host pattern.  The
+            authoritative URL form for each service is published by SAP in
+            its API Hub and product documentation.  SAP does not publish a
+            single unified resource identifier scheme; this specification
+            encodes the per-tier URL patterns as CRIT templates without
+            altering or extending the URL structures SAP defines.
+          </t>
+          <figure>
+            <name>SAP CRIT template examples (one per product tier)</name>
+            <sourcecode type="text"><![CDATA[
+https://api.{region}.hana.ondemand.com/resourcemanager/v1/instances/{resource-id}
+https://{host}/sap/opu/odata/sap/{service-path}/{object-id}
+https://api{api-server}.sapsf.com/odata/v2/{entity-set}('{resource-id}')
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The product tier determines both the URL structure and the
+            <tt>template_format</tt> value: <tt>sap_btp_url</tt> for BTP
+            core services, <tt>sap_odata_url</tt> for ABAP Cloud and OData
+            services, and <tt>sap_sf_url</tt> for SAP SuccessFactors.
+            Implementers <bcp14>SHOULD</bcp14> consult the SAP API Hub entry
+            for the specific SAP product to identify the canonical resource
+            URL form before constructing dictionary entries.
+          </t>
+        </section>
+
+        <section anchor="dictionary-servicenow">
+          <name>ServiceNow (servicenow)</name>
+          <t>
+            ServiceNow resources are addressed by Table API URLs
+            <xref target="SN-TABLE-API"/>, the REST-addressable form of
+            every Now Platform record.  Resources are instance-scoped with
+            no regional sub-division; the <tt>region_behavior</tt> for every
+            ServiceNow entry is <tt>global-only</tt>.  The
+            <tt>template_format</tt> value for all ServiceNow entries is
+            <tt>servicenow_table_url</tt>.
+          </t>
+          <figure>
+            <name>ServiceNow CRIT template example</name>
+            <sourcecode type="text"><![CDATA[
+https://{instance}.service-now.com/api/now/table/{table-name}/{sys-id}
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The <tt>table-name</tt> slot is the ServiceNow database table
+            name (e.g., <tt>incident</tt>, <tt>sys_script_include</tt>).
+            The <tt>sys-id</tt> slot is the 32-character hex unique
+            identifier assigned to every Now Platform record, as documented
+            in the ServiceNow Table API reference.
+          </t>
         </section>
 
       </section>
+
 
     </section>
 
@@ -3020,6 +2739,36 @@ if resource.deployed_date < provider_fix_date
             <title>Resource Identifiers</title>
             <author>
               <organization>Oracle Cloud Infrastructure</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+        <reference anchor="SF-REST-API" target="https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/">
+          <front>
+            <title>Salesforce REST API Developer Guide</title>
+            <author>
+              <organization>Salesforce</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+        <reference anchor="SAP-BTP" target="https://help.sap.com/docs/btp/sap-business-technology-platform/btp-api-overview">
+          <front>
+            <title>SAP Business Technology Platform Documentation</title>
+            <author>
+              <organization>SAP SE</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+        <reference anchor="SN-TABLE-API" target="https://developer.servicenow.com/dev.do#!/reference/api/latest/rest/c_TableAPI">
+          <front>
+            <title>ServiceNow Table API Reference</title>
+            <author>
+              <organization>ServiceNow</organization>
             </author>
             <date year="2024"/>
           </front>
