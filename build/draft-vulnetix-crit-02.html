@@ -32,7 +32,7 @@
 <meta content="CVE" name="keyword">
 <meta content="cloud resource identifier" name="keyword">
 <meta content="exposure window" name="keyword">
-<meta content="draft-vulnetix-crit-01" name="ietf.draft">
+<meta content="draft-vulnetix-crit-02" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.31.0
     Python 3.14.3
@@ -47,7 +47,7 @@
     requests 2.32.5
     wcwidth 0.6.0
 -->
-<link href="draft-vulnetix-crit-01.xml" rel="alternate" type="application/rfc+xml">
+<link href="draft-vulnetix-crit-02.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
 <style type="text/css">/*
 
@@ -1250,7 +1250,7 @@ li > p:last-of-type:only-child {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">Independent Submission</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-vulnetix-crit-01</dd>
+<dd class="internet-draft">draft-vulnetix-crit-02</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
 <time datetime="2026-03-27" class="published">27 March 2026</time>
@@ -2052,8 +2052,13 @@ li > p:last-of-type:only-child {
 </dd>
             <dd class="break"></dd>
 <dt id="section-1.6.2-2.17">Provider:</dt>
-            <dd style="margin-left: 1.5em" id="section-1.6.2-2.18">A cloud service vendor. This specification defines five
-            providers: aws, azure, gcp, cloudflare, and oracle.<a href="#section-1.6.2-2.18" class="pilcrow">¶</a>
+            <dd style="margin-left: 1.5em" id="section-1.6.2-2.18">A cloud service vendor whose resources are covered by this
+            specification.  Supported values are: <code>aws</code>,
+            <code>azure</code>, <code>gcp</code>, <code>cloudflare</code>,
+            <code>oracle</code>, <code>salesforce</code>, <code>sap</code>, and
+            <code>servicenow</code>.  Each provider maintains its own resource
+            identification scheme; CRIT encodes those schemes as templates
+            without altering or extending them.<a href="#section-1.6.2-2.18" class="pilcrow">¶</a>
 </dd>
             <dd class="break"></dd>
 <dt id="section-1.6.2-2.19">Service:</dt>
@@ -2586,7 +2591,7 @@ literal-value   = 1*( ALPHA / DIGIT / "-" / "_" / "." / ":" )
               <td class="text-left" rowspan="1" colspan="1">provider</td>
               <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
               <td class="text-left" rowspan="1" colspan="1">enum</td>
-              <td class="text-left" rowspan="1" colspan="1">One of: <code>aws</code>, <code>azure</code>, <code>gcp</code>, <code>cloudflare</code>, <code>oracle</code>.</td>
+              <td class="text-left" rowspan="1" colspan="1">One of: <code>aws</code>, <code>azure</code>, <code>gcp</code>, <code>cloudflare</code>, <code>oracle</code>, <code>salesforce</code>, <code>sap</code>, <code>servicenow</code>.</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">service</td>
@@ -3127,7 +3132,7 @@ CRITv0.2.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-20
               <td class="text-left" rowspan="1" colspan="1">template_format</td>
               <td class="text-left" rowspan="1" colspan="1">REQUIRED</td>
               <td class="text-left" rowspan="1" colspan="1">enum</td>
-              <td class="text-left" rowspan="1" colspan="1">One of: <code>aws_arn</code>, <code>azure_resource_id</code>, <code>gcp_resource_name</code>, <code>cloudflare_locator</code>, <code>oracle_ocid</code>.</td>
+              <td class="text-left" rowspan="1" colspan="1">One of: <code>aws_arn</code>, <code>azure_resource_id</code>, <code>gcp_resource_name</code>, <code>cloudflare_locator</code>, <code>oracle_ocid</code>, <code>salesforce_url</code>, <code>sap_btp_url</code>, <code>sap_odata_url</code>, <code>sap_sf_url</code>, <code>servicenow_table_url</code>.</td>
             </tr>
           </tbody>
         </table>
