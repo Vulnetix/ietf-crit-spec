@@ -17,7 +17,7 @@
       "description": "Semantic version tracking the CRIT specification version."
     },
     "provider": {
-      "enum": ["aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow"],
+      "enum": ["aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow", "ibm"],
       "description": "Canonical provider key."
     },
     "entries": {
@@ -59,6 +59,10 @@
     {
       "if": { "properties": { "provider": { "const": "servicenow" } }, "required": ["provider"] },
       "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "servicenow_table_url" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "ibm" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "ibm_url" } } } } } }
     }
   ],
   "$defs": {
@@ -83,7 +87,7 @@
           "description": "CRIT template string using slot syntax."
         },
         "template_format": {
-          "enum": ["aws_arn", "azure_resource_id", "gcp_resource_name", "cloudflare_locator", "oracle_ocid", "salesforce_url", "sap_btp_url", "sap_odata_url", "sap_sf_url", "servicenow_table_url"],
+          "enum": ["aws_arn", "azure_resource_id", "gcp_resource_name", "cloudflare_locator", "oracle_ocid", "salesforce_url", "sap_btp_url", "sap_odata_url", "sap_sf_url", "servicenow_table_url", "ibm_url"],
           "description": "Format of the resolved template."
         },
         "region_behavior": {

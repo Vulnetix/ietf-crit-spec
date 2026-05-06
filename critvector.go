@@ -58,6 +58,7 @@ var providerToCode = map[string]string{
 	"salesforce": "SF",
 	"sap":        "SP",
 	"servicenow": "SN",
+	"ibm":        "IB",
 }
 
 var vexStatusToCode = map[string]string{
