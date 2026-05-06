@@ -59,6 +59,7 @@ var providerToCode = map[string]string{
 	"sap":        "SP",
 	"servicenow": "SN",
 	"ibm":        "IB",
+	"vmware":     "VW",
 }
 
 var vexStatusToCode = map[string]string{

@@ -42,7 +42,7 @@
       "additionalProperties": false,
       "properties": {
         "provider": {
-          "enum": ["aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow", "ibm"],
+          "enum": ["aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow", "ibm", "vmware"],
           "description": "Cloud provider key."
         },
         "service": {
@@ -58,7 +58,7 @@
           "description": "Original CRIT template string with slot syntax."
         },
         "template_format": {
-          "enum": ["aws_arn", "azure_resource_id", "gcp_resource_name", "cloudflare_locator", "oracle_ocid", "salesforce_url", "sap_btp_url", "sap_odata_url", "sap_sf_url", "servicenow_table_url", "ibm_url"],
+          "enum": ["aws_arn", "azure_resource_id", "gcp_resource_name", "cloudflare_locator", "oracle_ocid", "salesforce_url", "sap_btp_url", "sap_odata_url", "sap_sf_url", "servicenow_table_url", "ibm_url", "vmware_url"],
           "description": "Format of the resolved template."
         },
         "region_behavior": {

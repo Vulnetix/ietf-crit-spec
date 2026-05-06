@@ -33,7 +33,7 @@
       "description": "Vulnerability identifier (e.g., CVE-2024-6387)."
     },
     "provider": {
-      "enum": ["aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow", "ibm"],
+      "enum": ["aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow", "ibm", "vmware"],
       "description": "Cloud provider key."
     },
     "service": {
@@ -64,7 +64,7 @@
       "description": "Parameterised identifier string with variable slots."
     },
     "template_format": {
-      "enum": ["aws_arn", "azure_resource_id", "gcp_resource_name", "cloudflare_locator", "oracle_ocid", "salesforce_url", "sap_btp_url", "sap_odata_url", "sap_sf_url", "servicenow_table_url", "ibm_url"],
+      "enum": ["aws_arn", "azure_resource_id", "gcp_resource_name", "cloudflare_locator", "oracle_ocid", "salesforce_url", "sap_btp_url", "sap_odata_url", "sap_sf_url", "servicenow_table_url", "ibm_url", "vmware_url"],
       "description": "Provider-native identifier schema."
     },
     "temporal": { "$ref": "#/$defs/temporal" },
