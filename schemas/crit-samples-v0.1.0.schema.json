@@ -42,7 +42,13 @@
       "additionalProperties": false,
       "properties": {
         "provider": {
-          "enum": ["aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow", "ibm", "vmware"],
+          "enum": [
+            "aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow",
+            "ibm", "vmware",
+            "adobe", "akamai", "alibaba", "atlassian", "digitalocean", "elastic", "fastly",
+            "gitlab", "hashicorp", "hetzner", "linode", "mongodb", "ovh", "snowflake", "tailscale",
+            "tencent", "twilio", "vercel", "vultr", "zoom"
+          ],
           "description": "Cloud provider key."
         },
         "service": {
@@ -58,12 +64,21 @@
           "description": "Original CRIT template string with slot syntax."
         },
         "template_format": {
-          "enum": ["aws_arn", "azure_resource_id", "gcp_resource_name", "cloudflare_locator", "oracle_ocid", "salesforce_url", "sap_btp_url", "sap_odata_url", "sap_sf_url", "servicenow_table_url", "ibm_url", "vmware_url"],
+          "enum": [
+            "aws_arn", "azure_resource_id", "gcp_resource_name", "cloudflare_locator",
+            "oracle_ocid", "salesforce_url", "sap_btp_url", "sap_odata_url", "sap_sf_url",
+            "servicenow_table_url", "ibm_url", "vmware_url",
+            "akamai_url", "alibaba_arn", "atlassian_locator", "digitalocean_url",
+            "elastic_locator", "gitlab_locator", "hetzner_locator", "linode_locator",
+            "mongodb_locator", "ovh_locator", "snowflake_locator", "tencent_arn",
+            "twilio_resource_id", "vercel_locator", "vultr_locator", "zoom_locator",
+            "uri"
+          ],
           "description": "Format of the resolved template."
         },
         "region_behavior": {
-          "enum": ["regional", "global-only"],
-          "description": "Whether the resource is regional or globally scoped."
+          "enum": ["regional", "global-only", "multi-region", "endpoint-only", "self-hosted"],
+          "description": "Deployment scoping of the resource type."
         },
         "slot_values": {
           "type": "object",

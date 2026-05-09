@@ -1,0 +1,34 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "ovh",
+  "entries": [
+    {
+      "service": "public_cloud_compute",
+      "resource_type": "instance",
+      "template": "https://api.ovh.com/v1/cloud/project/{project-id}/instance/{instance-id}",
+      "template_format": "ovh_locator",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "public_cloud_kubernetes",
+      "resource_type": "cluster",
+      "template": "https://api.ovh.com/v1/cloud/project/{project-id}/kube/{cluster-id}",
+      "template_format": "ovh_locator",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "object_storage",
+      "resource_type": "bucket",
+      "template": "https://{region}.cloud.ovh.net/v1/{tenant-id}/{bucket-name}",
+      "template_format": "ovh_locator",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "dedicated_server",
+      "resource_type": "server",
+      "template": "https://api.ovh.com/v1/dedicated/server/{server-name}",
+      "template_format": "ovh_locator",
+      "region_behavior": "global-only"
+    }
+  ]
+}

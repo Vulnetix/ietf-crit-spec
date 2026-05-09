@@ -8,7 +8,7 @@
 //
 // Example:
 //
-//	CRITv0.2.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance
+//	CRITv0.3.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance
 package critspec
 
 import (
@@ -50,16 +50,36 @@ type Warning struct {
 // ---------------------------------------------------------------------------
 
 var providerToCode = map[string]string{
-	"aws":        "AW",
-	"azure":      "MA",
-	"gcp":        "GC",
-	"cloudflare": "CF",
-	"oracle":     "OC",
-	"salesforce": "SF",
-	"sap":        "SP",
-	"servicenow": "SN",
-	"ibm":        "IB",
-	"vmware":     "VW",
+	"aws":          "AW",
+	"azure":        "MA",
+	"gcp":          "GC",
+	"cloudflare":   "CF",
+	"oracle":       "OC",
+	"salesforce":   "SF",
+	"sap":          "SP",
+	"servicenow":   "SN",
+	"ibm":          "IB",
+	"vmware":       "VM",
+	"adobe":        "AD",
+	"akamai":       "AK",
+	"alibaba":      "AL",
+	"atlassian":    "AT",
+	"digitalocean": "DO",
+	"elastic":      "EL",
+	"fastly":       "FA",
+	"gitlab":       "GL",
+	"hetzner":      "HE",
+	"linode":       "LI",
+	"mongodb":      "MO",
+	"ovh":          "OV",
+	"snowflake":    "SO",
+	"tailscale":    "TS",
+	"tencent":      "TC",
+	"twilio":       "TW",
+	"vercel":       "VC",
+	"vultr":        "VL",
+	"zoom":         "ZM",
+	"hashicorp":    "HC",
 }
 
 var vexStatusToCode = map[string]string{

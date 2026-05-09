@@ -1,0 +1,41 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "tencent",
+  "entries": [
+    {
+      "service": "cvm",
+      "resource_type": "instance",
+      "template": "qcs::cvm:{region}:uin/{uin}:instance/{instance-id}",
+      "template_format": "tencent_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cos",
+      "resource_type": "bucket",
+      "template": "qcs::cos:{region}:uid/{appid}:{bucket-name}",
+      "template_format": "tencent_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "tke",
+      "resource_type": "cluster",
+      "template": "qcs::ccs:{region}:uin/{uin}:cluster/{cluster-id}",
+      "template_format": "tencent_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cdb",
+      "resource_type": "db_instance",
+      "template": "qcs::cdb:{region}:uin/{uin}:instanceId/{instance-id}",
+      "template_format": "tencent_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "scf",
+      "resource_type": "function",
+      "template": "qcs::scf:{region}:uin/{uin}:function/{function-name}",
+      "template_format": "tencent_arn",
+      "region_behavior": "regional"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "twilio",
+  "entries": [
+    {
+      "service": "authy",
+      "resource_type": "device",
+      "template": "twilio:authy:{account}:device/{resource-id}",
+      "template_format": "twilio_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "authy",
+      "resource_type": "account",
+      "template": "twilio:authy:{account}",
+      "template_format": "twilio_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "sendgrid",
+      "resource_type": "account",
+      "template": "twilio:sendgrid:{account}",
+      "template_format": "twilio_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "messaging_api",
+      "resource_type": "phone_number",
+      "template": "twilio:messaging:{account}:phone_number/{resource-id}",
+      "template_format": "twilio_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "voice_api",
+      "resource_type": "phone_number",
+      "template": "twilio:voice:{account}:phone_number/{resource-id}",
+      "template_format": "twilio_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "flex",
+      "resource_type": "account",
+      "template": "twilio:flex:{account}",
+      "template_format": "twilio_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "segment",
+      "resource_type": "workspace",
+      "template": "twilio:segment:{account}:workspace/{resource-id}",
+      "template_format": "twilio_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "video_api",
+      "resource_type": "room",
+      "template": "twilio:video:{account}:room/{resource-id}",
+      "template_format": "twilio_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "studio",
+      "resource_type": "flow",
+      "template": "twilio:studio:{account}:flow/{resource-id}",
+      "template_format": "twilio_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "functions",
+      "resource_type": "service",
+      "template": "twilio:functions:{account}:service/{resource-id}",
+      "template_format": "twilio_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "lookup_api",
+      "resource_type": "phone_number",
+      "template": "twilio:lookup:{account}:phone_number/{resource-id}",
+      "template_format": "twilio_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "verify_api",
+      "resource_type": "service",
+      "template": "twilio:verify:{account}:service/{resource-id}",
+      "template_format": "twilio_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "platform",
+      "resource_type": "account",
+      "template": "twilio:platform:{account}",
+      "template_format": "twilio_resource_id",
+      "region_behavior": "global-only"
+    }
+  ]
+}

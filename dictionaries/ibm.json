@@ -1,0 +1,265 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "ibm",
+  "entries": [
+    {
+      "service": "cloud_pak",
+      "resource_type": "instance",
+      "template": "https://{host}/cpd/{instance-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ibm_cloud",
+      "resource_type": "account",
+      "template": "https://cloud.ibm.com/api/v2/accounts/{account-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "watson",
+      "resource_type": "instance",
+      "template": "https://{region}.watson.cloud.ibm.com/instances/{instance-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "watsonx",
+      "resource_type": "instance",
+      "template": "https://{region}.watsonx.ai/api/v1/projects/{project-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "instana",
+      "resource_type": "instance",
+      "template": "https://{tenant}.instana.io/api/{instance-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "apptio",
+      "resource_type": "tenant",
+      "template": "https://{tenant}.apptio.com/api/v1/{tenant-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "red_hat_openshift",
+      "resource_type": "cluster",
+      "template": "https://api.{cluster-host}/apis/v1/clusters/{cluster-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "db2",
+      "resource_type": "instance",
+      "template": "db2://{host}:{port}/{database}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "informix",
+      "resource_type": "instance",
+      "template": "informix://{host}:{port}/{database}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "mq",
+      "resource_type": "queue-manager",
+      "template": "ibmmq://{host}:{port}/{queue-manager-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "websphere_app_server",
+      "resource_type": "install",
+      "template": "https://{host}:{port}/ibm/console/{cell-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "websphere_liberty",
+      "resource_type": "server",
+      "template": "https://{host}:{port}/liberty/{server-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cics",
+      "resource_type": "region",
+      "template": "cics://{host}/{region-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "tivoli",
+      "resource_type": "install",
+      "template": "https://{host}/tivoli/{install-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "netcool",
+      "resource_type": "install",
+      "template": "https://{host}/netcool/{install-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cognos",
+      "resource_type": "server",
+      "template": "https://{host}/ibmcognos/cgi-bin/{server-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "spss",
+      "resource_type": "install",
+      "template": "https://{host}/spss/{install-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "datastage",
+      "resource_type": "project",
+      "template": "https://{host}/datastage/projects/{project-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "infosphere",
+      "resource_type": "install",
+      "template": "https://{host}/infosphere/{install-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "planning_analytics",
+      "resource_type": "server",
+      "template": "https://{host}/pa/api/v1/servers/{server-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "aix",
+      "resource_type": "partition",
+      "template": "aix://{host}/{partition-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "power_systems",
+      "resource_type": "lpar",
+      "template": "powervm://{host}/{lpar-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "zos",
+      "resource_type": "lpar",
+      "template": "zos://{sysplex}/{lpar-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ibm_i",
+      "resource_type": "partition",
+      "template": "ibmi://{host}/{partition-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "storage",
+      "resource_type": "array",
+      "template": "https://{host}/storage/api/v1/arrays/{array-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "bladecenter",
+      "resource_type": "chassis",
+      "template": "bladecenter://{host}/{chassis-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "qradar",
+      "resource_type": "console",
+      "template": "https://{host}/api/qradar/consoles/{console-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "guardium",
+      "resource_type": "appliance",
+      "template": "https://{host}/api/guardium/appliances/{appliance-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "verify",
+      "resource_type": "tenant",
+      "template": "https://{tenant}.verify.ibm.com/v1.0/{tenant-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "maas360",
+      "resource_type": "tenant",
+      "template": "https://services.fiberlink.com/api/v1/{tenant-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "trusteer",
+      "resource_type": "install",
+      "template": "https://{host}/trusteer/{install-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "maximo",
+      "resource_type": "install",
+      "template": "https://{host}/maximo/api/v1/{install-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "tririga",
+      "resource_type": "install",
+      "template": "https://{host}/tririga/{install-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "urbancode",
+      "resource_type": "install",
+      "template": "https://{host}/urbancode/{install-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "api_connect",
+      "resource_type": "gateway",
+      "template": "https://{host}/api/api-connect/gateways/{gateway-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "app_connect",
+      "resource_type": "install",
+      "template": "https://{host}/app-connect/{install-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "sterling",
+      "resource_type": "install",
+      "template": "https://{host}/sterling/{install-id}",
+      "template_format": "ibm_url",
+      "region_behavior": "regional"
+    }
+  ]
+}

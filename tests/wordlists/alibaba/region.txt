@@ -1,0 +1,2 @@
+cn-hangzhou
+ap-southeast-1

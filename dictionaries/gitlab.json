@@ -1,0 +1,48 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "gitlab",
+  "entries": [
+    {
+      "service": "gitlab_saas",
+      "resource_type": "instance",
+      "template": "https://gitlab.com/{group}/{project}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "gitlab_self_managed",
+      "resource_type": "instance",
+      "template": "gitlab-self-managed:{deployment}:{host}",
+      "template_format": "gitlab_locator",
+      "region_behavior": "self-hosted"
+    },
+    {
+      "service": "gitlab_dedicated",
+      "resource_type": "instance",
+      "template": "https://{tenant}.gitlab-dedicated.com/{group}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "runner",
+      "resource_type": "agent",
+      "template": "gitlab-runner:{deployment}:{runner-id}",
+      "template_format": "gitlab_locator",
+      "region_behavior": "endpoint-only"
+    },
+    {
+      "service": "dependency_proxy",
+      "resource_type": "proxy",
+      "template": "https://gitlab.com/{group}/dependency_proxy",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "container_registry",
+      "resource_type": "registry",
+      "template": "https://gitlab.com/{group}/{project}/container_registry",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    }
+  ]
+}

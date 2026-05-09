@@ -1,0 +1,2 @@
+us-south
+eu-de

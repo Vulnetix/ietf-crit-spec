@@ -1,0 +1,34 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "vultr",
+  "entries": [
+    {
+      "service": "compute",
+      "resource_type": "instance",
+      "template": "https://api.vultr.com/v2/instances/{instance-id}",
+      "template_format": "vultr_locator",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "kubernetes",
+      "resource_type": "cluster",
+      "template": "https://api.vultr.com/v2/kubernetes/clusters/{cluster-id}",
+      "template_format": "vultr_locator",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "object_storage",
+      "resource_type": "bucket",
+      "template": "https://{cluster}.vultrobjects.com/{bucket-name}",
+      "template_format": "vultr_locator",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "managed_database",
+      "resource_type": "db_instance",
+      "template": "https://api.vultr.com/v2/databases/{database-id}",
+      "template_format": "vultr_locator",
+      "region_behavior": "regional"
+    }
+  ]
+}

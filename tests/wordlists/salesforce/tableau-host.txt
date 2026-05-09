@@ -1,0 +1,2 @@
+tableau.example.com
+tableau.acme.com

@@ -1,6 +1,6 @@
 # Australian Cloud Security Vendor Outreach
 
-IETF CRIT Spec (draft-vulnetix-crit-02) & Vulnetix VDB outreach campaign targeting Australian-registered cloud security vendors.
+IETF CRIT Spec (draft-vulnetix-crit-03) & Vulnetix VDB outreach campaign targeting Australian-registered cloud security vendors.
 
 **Key talking points:**
 - IETF submission: Cloud Resource Identifier Templates (CRIT) — machine-readable format for mapping CVEs to cloud-native resources

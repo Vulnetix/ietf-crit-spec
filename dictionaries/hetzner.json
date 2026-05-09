@@ -1,0 +1,34 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "hetzner",
+  "entries": [
+    {
+      "service": "cloud",
+      "resource_type": "server",
+      "template": "https://api.hetzner.cloud/v1/servers/{server-id}",
+      "template_format": "hetzner_locator",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "robot",
+      "resource_type": "dedicated_server",
+      "template": "https://robot-ws.your-server.de/server/{server-number}",
+      "template_format": "hetzner_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "object_storage",
+      "resource_type": "bucket",
+      "template": "https://{location}.your-objectstorage.com/{bucket-name}",
+      "template_format": "hetzner_locator",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "load_balancer",
+      "resource_type": "load_balancer",
+      "template": "https://api.hetzner.cloud/v1/load_balancers/{lb-id}",
+      "template_format": "hetzner_locator",
+      "region_behavior": "regional"
+    }
+  ]
+}

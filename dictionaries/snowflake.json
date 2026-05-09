@@ -1,0 +1,41 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "snowflake",
+  "entries": [
+    {
+      "service": "warehouse",
+      "resource_type": "instance",
+      "template": "https://app.snowflake.com/{org}/{account}/warehouses/{warehouse}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "snowpark",
+      "resource_type": "container",
+      "template": "https://app.snowflake.com/{org}/{account}/snowpark/{container}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "connector",
+      "resource_type": "integration",
+      "template": "https://app.snowflake.com/{org}/{account}/integrations/{connector}",
+      "template_format": "uri",
+      "region_behavior": "endpoint-only"
+    },
+    {
+      "service": "native_app",
+      "resource_type": "application",
+      "template": "https://app.snowflake.com/{org}/{account}/applications/{app}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "driver",
+      "resource_type": "library",
+      "template": "snowflake-driver:{language}:{package}",
+      "template_format": "snowflake_locator",
+      "region_behavior": "endpoint-only"
+    }
+  ]
+}

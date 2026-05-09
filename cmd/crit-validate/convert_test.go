@@ -158,11 +158,11 @@ func TestConvertFromVector_ValidatesOutput(t *testing.T) {
 	bin := binaryPath(t)
 
 	vectors := []string{
-		"CRITv0.2.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1187740800#CVE-2024-6387:ec2:instance",
-		"CRITv0.2.0/CP:MA/VS:AF/FP:CC/SR:SH/RL:CF/EV:T/PP:1719237600/SA:1596240000#CVE-2024-37085:azure_vmware_solution:privateClouds",
-		"CRITv0.2.0/CP:CF/VS:FX/FP:AU/SR:PO/RL:GC/EV:F/PP:1696856400/SA:1222300800#CVE-2023-44487:dns:zone",
-		"CRITv0.2.0/CP:OC/VS:FX/FP:CC/SR:CA/RL:SC/EV:T/PP:1705323600/SA:1475280000#CVE-2024-20953:compute:instance",
-		"CRITv0.2.0/CP:GC/VS:FX/FP:CC/SR:SH/RL:EP/EV:T/PP:1721570400/SA:1500940800#TRA-2024-20:cloud_functions:function",
+		"CRITv0.3.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1187740800#CVE-2024-6387:ec2:instance",
+		"CRITv0.3.0/CP:MA/VS:AF/FP:CC/SR:SH/RL:CF/EV:T/PP:1719237600/SA:1596240000#CVE-2024-37085:azure_vmware_solution:privateClouds",
+		"CRITv0.3.0/CP:CF/VS:FX/FP:AU/SR:PO/RL:GC/EV:F/PP:1696856400/SA:1222300800#CVE-2023-44487:dns:zone",
+		"CRITv0.3.0/CP:OC/VS:FX/FP:CC/SR:CA/RL:SC/EV:T/PP:1705323600/SA:1475280000#CVE-2024-20953:compute:instance",
+		"CRITv0.3.0/CP:GC/VS:FX/FP:CC/SR:SH/RL:EP/EV:T/PP:1721570400/SA:1500940800#TRA-2024-20:cloud_functions:function",
 	}
 
 	requiredFields := []string{
@@ -256,7 +256,7 @@ func TestConvertFromVector_UnknownMetrics(t *testing.T) {
 	bin := binaryPath(t)
 
 	// Valid vector with an extra unknown metric "XX:foo" appended
-	v := "CRITv0.2.0/CP:AW/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000000000/SA:900000000/XX:foo#CVE-2024-0001:svc:rt"
+	v := "CRITv0.3.0/CP:AW/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000000000/SA:900000000/XX:foo#CVE-2024-0001:svc:rt"
 
 	cmd := exec.Command(bin, "convert", "--from-vector", v)
 	// Use Output() to capture only stdout (warnings go to stderr)
@@ -287,10 +287,10 @@ func TestConvertFromVector_InvalidVector(t *testing.T) {
 		name   string
 		vector string
 	}{
-		{"missing_hash", "CRITv0.2.0/CP:AW/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900"},
+		{"missing_hash", "CRITv0.3.0/CP:AW/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900"},
 		{"bad_prefix", "FOOv0.2.0/CP:AW/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE:svc:rt"},
-		{"missing_metric", "CRITv0.2.0/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE:svc:rt"},
-		{"bad_code", "CRITv0.2.0/CP:ZZ/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE:svc:rt"},
+		{"missing_metric", "CRITv0.3.0/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE:svc:rt"},
+		{"bad_code", "CRITv0.3.0/CP:ZZ/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE:svc:rt"},
 	}
 
 	for _, tc := range invalid {

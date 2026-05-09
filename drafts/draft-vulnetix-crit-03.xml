@@ -1,0 +1,3039 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="rfc7991bis.rnc"?>
+<!DOCTYPE rfc [
+  <!ENTITY nbsp    "&#160;">
+  <!ENTITY zwsp   "&#8203;">
+  <!ENTITY nbhy   "&#8209;">
+  <!ENTITY wj     "&#8288;">
+]>
+<rfc
+  xmlns:xi="http://www.w3.org/2001/XInclude"
+  category="info"
+  docName="draft-vulnetix-crit-03"
+  ipr="trust200902"
+  submissionType="independent"
+  xml:lang="en"
+  version="3">
+
+  <front>
+    <title abbrev="CRIT">Cloud Resource Identifier Templates (CRIT)</title>
+
+    <seriesInfo name="Internet-Draft" value="draft-vulnetix-crit-03"/>
+
+    <author fullname="CD Langton" initials="CD" surname="Langton">
+      <organization>Vulnetix</organization>
+      <address>
+        <postal>
+          <country>AU</country>
+        </postal>
+        <email>chris@vulnetix.com</email>
+        <uri>https://www.vulnetix.com</uri>
+      </address>
+    </author>
+
+    <date year="2026" month="March" day="27"/>
+
+    <area>Security</area>
+    <workgroup>Independent Submission</workgroup>
+
+    <keyword>cloud security</keyword>
+    <keyword>vulnerability</keyword>
+    <keyword>CSPM</keyword>
+    <keyword>CVE</keyword>
+    <keyword>cloud resource identifier</keyword>
+    <keyword>exposure window</keyword>
+
+    <abstract>
+      <t>
+        This document specifies the Cloud Resource Identifier Templates (CRIT) format.
+        A CRIT record provides a machine-readable, parameterised template for locating
+        cloud-native resources affected by a known vulnerability. CRITs do not define
+        cloud resource identifier schemas; those are defined normatively by each cloud
+        provider. CRITs define a variable system for expressing partially-known or
+        consumer-resolved values within those provider-defined schemas, together with
+        temporal, remediation, and detection metadata sufficient to determine exposure
+        status and drive remediation workflows.
+      </t>
+      <t>
+        Each CRIT record is bound to exactly one vulnerability identifier.
+        Cross-provider and multi-resource-type coverage of a single vulnerability is
+        expressed as a set of CRIT records sharing the same vulnerability identifier, each
+        independently specifying the provider-specific fix details, propagation
+        mechanism, and detection strategy applicable to that resource type.
+      </t>
+    </abstract>
+
+  </front>
+
+  <middle>
+
+    <!-- ============================================================ -->
+    <section anchor="intro">
+      <name>Introduction</name>
+      <t>
+        This document specifies the Cloud Resource Identifier Templates (CRIT)
+        format, a machine-readable schema for describing cloud infrastructure
+        resources affected by known vulnerabilities. CRIT provides parameterised
+        templates over provider-native identifier schemas, together with fix
+        propagation semantics, exposure window computation rules, and detection
+        metadata sufficient to drive automated remediation workflows.
+      </t>
+
+      <section anchor="overview">
+        <name>Overview</name>
+        <t>
+          <xref target="CPE23">CPE</xref> and <xref target="PURL">PURL</xref>
+          model the vulnerable entity as a build-from-source artifact — something
+          with a static name, a version string, and a build-time identity that
+          persists across deployment. Cloud infrastructure resources do not have
+          these properties. An RDS instance, an EKS cluster, and a Cloudflare
+          Worker are each identified by provider-native runtime identifiers whose
+          components include consumer-specific variables (account identifiers,
+          region codes, resource IDs) that do not exist until the resource is
+          deployed. No package name, version string, or source repository URL
+          applies.
+        </t>
+        <t>
+          CRIT defines a parameterised template system over these provider-native
+          identifier schemas, together with fix propagation semantics, exposure
+          window computation rules, and detection metadata. It integrates with
+          CVEListv5 (<xref target="CVEListv5"/>) ADP containers and OSV schema
+          (<xref target="OSV-Schema"/>) using their existing extension mechanisms.
+          Risk-based prioritisation signals such as EPSS (<xref target="EPSS"/>)
+          remain complementary inputs to consumer tooling.
+        </t>
+      </section>
+
+      <section anchor="problem-statement">
+        <name>The Identifier Gap</name>
+        <t>
+          CPE and PURL both assume the vulnerable entity is produced by a build
+          process — compiled from source, packaged into a distributable artifact,
+          and deployed by installing that artifact. This assumption holds for
+          operating systems, libraries, and application binaries. It does not
+          hold for cloud infrastructure resources.
+        </t>
+        <t>
+          A cloud resource is instantiated by a provider API call, not by
+          installing a package. It is identified by a provider-native runtime
+          identifier — an ARN, an Azure Resource ID, a GCP Resource Name, an
+          OCID, or a Cloudflare Locator — that is assigned at creation time and
+          contains components specific to the consumer's account, region, and
+          deployment. These identifiers have no analogue in any package registry.
+          There is no source repository, no version string, and no build
+          manifest.
+        </t>
+        <t>
+          Representing a cloud resource as a <tt>pkg:generic/</tt> PURL, a
+          synthesised CPE string, or a custom PURL type does not resolve this
+          gap. The <xref target="PURL">PURL specification</xref> defines no
+          registered type for cloud infrastructure resources. The
+          <tt>pkg:cloud/</tt> convention observed in the OSV ecosystem (see
+          <xref target="ui-osv-conventions"/>) is not a registered PURL type.
+          Regardless of identifier scheme, the resulting string carries none
+          of the information required to determine whether a specific deployed
+          resource is affected: the deployment date relative to the fix, the
+          propagation mechanism, whether the consumer has taken the required
+          action, or whether a configuration change has since been reverted.
+        </t>
+      </section>
+
+      <section anchor="exposure-model">
+        <name>Cloud Resource Exposure Model</name>
+        <t>
+          For package vulnerabilities, affected status is determined by a version
+          comparison: if the installed version falls within the affected range,
+          the package is vulnerable. Cloud resources have no equivalent
+          comparison. Affected status is a function of four factors that must be
+          evaluated simultaneously:
+        </t>
+        <ul>
+          <li>When the resource was deployed relative to when the provider fix
+          became available.</li>
+          <li>The fix propagation type — whether the fix applies automatically,
+          requires a version update, requires a configuration change, or
+          requires the resource to be destroyed and recreated.</li>
+          <li>Whether the consumer has taken the required action, if any.</li>
+          <li>Whether a previously applied remediation has been reverted by
+          subsequent configuration drift.</li>
+        </ul>
+        <t>
+          No static identifier carries these factors. A CPE or PURL string
+          identifies what the resource is; it does not encode how the fix
+          reaches the resource or whether a specific instance has been
+          remediated. Each consumer tool that evaluates cloud resource exposure
+          must independently model these semantics.
+        </t>
+        <t>
+          Discovery additionally requires interpolation. The identifier for a
+          specific resource instance contains consumer-specific variables —
+          account, region, resource ID — that must be substituted at resolution
+          time. A single CRIT template represents all instances of a resource
+          type; resolution produces the concrete identifier for a specific
+          instance.
+        </t>
+      </section>
+
+      <section anchor="crit-approach">
+        <name>CRIT Approach</name>
+        <t>
+          CRIT addresses the identifier gap by defining a parameterisation layer
+          over provider-native identifier schemas. A CRIT record does not invent
+          a new identifier format. It parameterises the identifier format the
+          provider already defines, expressing consumer-specific and
+          context-dependent values as variable slots within the provider's own
+          schema.
+        </t>
+        <t>
+          Each CRIT record carries the fix propagation type, shared
+          responsibility model, temporal metadata, remediation actions, and
+          detection queries required for a consumer to evaluate exposure and
+          drive remediation for a specific vulnerability on a specific cloud
+          resource type. The record is bound to exactly one vulnerability
+          identifier. Cross-provider and multi-resource-type coverage of a
+          single vulnerability is expressed as a set of records sharing the same
+          vulnerability identifier, each independently specifying the
+          provider-specific semantics.
+        </t>
+        <t>
+          CRIT does not replace CVE, CPE, or PURL. It complements them by
+          providing the cloud resource scope, fix propagation semantics, and
+          exposure window computation that those schemes do not address.
+        </t>
+      </section>
+
+      <section anchor="crit-is-and-is-not">
+        <name>What CRIT Is and What It Is Not</name>
+        <t>
+          If the problem could be described in one word, that word is
+          <strong>affected</strong>. For packages, "affected" is a version
+          comparison. For cloud, "affected" is a function of four factors
+          evaluated simultaneously: when the resource was deployed relative to
+          the fix, the fix propagation type, whether the consumer has acted, and
+          whether a previously applied remediation has been reverted by
+          configuration drift. No static identifier carries these factors. CRIT
+          encodes all four.
+        </t>
+
+        <section anchor="crit-is">
+          <name>CRIT Is</name>
+          <ul>
+            <li><strong>A template engine for cloud-native resources.</strong>
+            Discovery requires interpolation of consumer-specific variables
+            (account, region, resource ID) at resolution time. No static
+            identifier can express this.</li>
+
+            <li><strong>A solution to the "affected" problem.</strong> It
+            encodes deployment timing, fix propagation type, consumer action
+            state, and configuration drift status — everything required to
+            determine whether a specific deployed resource is impacted.</li>
+
+            <li><strong>A parameterisation layer over provider-native identifier
+            schemas.</strong> CRITs do not invent identifier formats. AWS ARNs,
+            Azure Resource IDs, GCP Resource Names, Cloudflare Locators, and
+            Oracle OCIDs are adopted as-is. CRIT parameterises them with
+            variable slots.</li>
+
+            <li><strong>An extension to existing vulnerability data
+            formats.</strong> CRIT integrates with CVEListv5 ADP containers and
+            OSV schema using their existing extension mechanisms. It does not
+            require changes to those specifications.</li>
+
+            <li><strong>A machine-readable encoding of fix propagation,
+            remediation actions, detection queries, and exposure window
+            computation</strong> — the metadata that turns a vulnerability
+            advisory into an actionable remediation workflow for cloud
+            resources.</li>
+          </ul>
+        </section>
+
+        <section anchor="crit-is-not">
+          <name>CRIT Is Not</name>
+          <ul>
+            <li><strong>Not an identifier.</strong> Cloud resources already have
+            identifiers. CRITs reference them; they do not define new ones. The
+            CRIT vectorString is a natural composite key (replacing the UUID),
+            not a resource identifier.</li>
+
+            <li><strong>Not a replacement for CPE, PURL, CycloneDX, or
+            SPDX.</strong> Those standards solve identification, inventory, and
+            risk prioritisation for build-from-source artifacts. CRIT
+            complements them by addressing cloud resource scope where they do
+            not apply.</li>
+
+            <li><strong>Not a single string that can encode the full
+            record.</strong> The CRIT vectorString is a lossy compact encoding
+            of 12 enumerable fields from a 30+ field record. Descriptive
+            values, detection queries, remediation action descriptions,
+            provider-native templates, and consumer-specific variables cannot be
+            represented in any static string. Any attempt to reduce CRIT to a
+            single-string identifier discards the metadata that solves the
+            problem.</li>
+
+            <li><strong>Not a risk scoring or prioritisation
+            system.</strong> CRIT does not assign severity, CVSS scores, or
+            risk rankings. Risk-based prioritisation signals (EPSS, CVSS, SSVC)
+            remain complementary inputs to consumer tooling.</li>
+
+            <li><strong>Not a replacement for cloud provider security
+            advisories.</strong> CRIT references provider advisories; it does
+            not replace them. Provider advisory URLs and identifiers are carried
+            as metadata within the record.</li>
+
+            <li><strong>Not a software inventory or bill-of-materials
+            format.</strong> CRIT records describe how vulnerabilities affect
+            cloud resources. They are not an inventory of deployed resources or
+            a software composition.</li>
+          </ul>
+        </section>
+
+        <section anchor="why-not-purl">
+          <name>Why Not PURL?</name>
+          <t>
+            <xref target="PURL">PURL</xref> succeeds because package identity
+            is static: <tt>pkg:npm/@angular/core@12.3.1</tt> is the same string
+            regardless of where the package is installed. Cloud resource identity
+            is not static. An RDS instance's ARN contains an account ID, region,
+            and resource ID that do not exist until the resource is deployed.
+            Even if a PURL were constructed at that granularity, it would carry
+            none of the information required to determine affected status: the
+            deployment date relative to the fix, the propagation mechanism,
+            whether the consumer has acted, or whether a configuration change
+            has been reverted.
+          </t>
+          <t>
+            The <tt>pkg:cloud/</tt> convention observed in the OSV ecosystem
+            (see <xref target="ui-osv-conventions"/>) is not a registered PURL
+            type. Regardless of the type scheme, a static string cannot express
+            the interpolation that discovery requires or the temporal and
+            propagation logic that affected-status determination demands.
+          </t>
+        </section>
+      </section>
+
+      <section anchor="conventions">
+        <name>Conventions and Terminology</name>
+
+        <section anchor="requirements-language">
+          <name>Requirements Language</name>
+          <t>
+            The key words "<bcp14>MUST</bcp14>", "<bcp14>MUST NOT</bcp14>",
+            "<bcp14>REQUIRED</bcp14>", "<bcp14>SHALL</bcp14>",
+            "<bcp14>SHALL NOT</bcp14>", "<bcp14>SHOULD</bcp14>",
+            "<bcp14>SHOULD NOT</bcp14>", "<bcp14>RECOMMENDED</bcp14>",
+            "<bcp14>NOT RECOMMENDED</bcp14>", "<bcp14>MAY</bcp14>", and
+            "<bcp14>OPTIONAL</bcp14>" in this document are to be interpreted as
+            described in BCP&nbsp;14 <xref target="RFC2119"/>
+            <xref target="RFC8174"/> when, and only when, they appear in all
+            capitals, as shown here.
+          </t>
+        </section>
+
+        <section anchor="terminology">
+          <name>Terminology</name>
+          <t>
+            The following terms are used throughout this document.
+          </t>
+          <dl newline="true" spacing="normal">
+            <dt>CRIT Record:</dt>
+            <dd>A JSON object conforming to this specification that describes
+            the scope, remediation, and detection characteristics of a single
+            vulnerability as it applies to a single cloud resource type.</dd>
+
+            <dt>CRIT Template:</dt>
+            <dd>A parameterised string in which variable slots represent
+            consumer-specific or context-dependent values. After all slots are
+            resolved, the result is a valid provider-native resource
+            identifier.</dd>
+
+            <dt>CRIT Dictionary:</dt>
+            <dd>A machine-readable catalogue enumerating valid (provider,
+            service, resource_type) tuples with their corresponding templates
+            and metadata. See <xref target="dictionary"/>.</dd>
+
+            <dt>CRIT Vector String:</dt>
+            <dd>A compact, deterministic, human-readable encoding of a CRIT
+            record's classification and identity fields, modelled on CVSS
+            vector strings. See <xref target="crit-vector-string"/>.</dd>
+
+            <dt>Natural Key:</dt>
+            <dd>The tuple (vuln_id, provider, service, resource_type) that
+            uniquely identifies a CRIT record within a conformant corpus.</dd>
+
+            <dt>Producer:</dt>
+            <dd>An entity that creates and emits CRIT records.</dd>
+
+            <dt>Consumer:</dt>
+            <dd>An entity that processes CRIT records to evaluate cloud
+            resource exposure, deploy detections, or drive remediation
+            workflows.</dd>
+
+            <dt>Conformant Corpus:</dt>
+            <dd>A collection of CRIT records in which no two records share the
+            same natural key.</dd>
+
+            <dt>Provider:</dt>
+            <dd>A cloud service vendor whose resources are covered by this
+            specification.  Supported values are: <tt>aws</tt>,
+            <tt>azure</tt>, <tt>gcp</tt>, <tt>cloudflare</tt>,
+            <tt>oracle</tt>, <tt>salesforce</tt>, <tt>sap</tt>, and
+            <tt>servicenow</tt>.  Each provider maintains its own resource
+            identification scheme; CRIT encodes those schemes as templates
+            without altering or extending them.</dd>
+
+            <dt>Service:</dt>
+            <dd>A distinct offering within a provider's portfolio, identified
+            by a lowercase underscore-delimited key (e.g., <tt>ec2</tt>,
+            <tt>kubernetes_engine</tt>, <tt>waf</tt>).</dd>
+
+            <dt>Resource Type:</dt>
+            <dd>A specific kind of resource within a service, identified by a
+            key matching the provider's API conventions (e.g., <tt>instance</tt>,
+            <tt>cluster</tt>, <tt>waf_ruleset</tt>).</dd>
+
+            <dt>Template Format:</dt>
+            <dd>The provider-native identifier schema used by a template:
+            <tt>aws_arn</tt>, <tt>azure_resource_id</tt>,
+            <tt>gcp_resource_name</tt>, <tt>cloudflare_locator</tt>, or
+            <tt>oracle_ocid</tt>.</dd>
+
+            <dt>Variable Slot:</dt>
+            <dd>A delimited placeholder within a CRIT template, enclosed in
+            braces, that represents a value to be supplied or fixed.</dd>
+
+            <dt>Named Variable:</dt>
+            <dd>A slot whose value the consumer must supply at resolution time.
+            Syntax: <tt>{field-name}</tt>.</dd>
+
+            <dt>Wildcard:</dt>
+            <dd>A slot representing any value, used for inventory enumeration.
+            Syntax: <tt>{field-name=*}</tt>.</dd>
+
+            <dt>Hardcoded:</dt>
+            <dd>A slot with a fixed value determined by the provider schema.
+            Syntax: <tt>{field-name=value}</tt>.</dd>
+
+            <dt>Empty:</dt>
+            <dd>A slot for a field that is structurally present but
+            semantically inapplicable to the resource type. Syntax:
+            <tt>{field-name=}</tt>.</dd>
+
+            <dt>Slot Resolution:</dt>
+            <dd>The process of substituting concrete values into variable
+            slots to produce a live provider identifier.</dd>
+
+            <dt>Resource Lifecycle:</dt>
+            <dd>A classification of a resource type's operational behaviour
+            with respect to data durability and replacement. See
+            <xref target="schema-lifecycle"/>.</dd>
+
+            <dt>Shared Responsibility:</dt>
+            <dd>The remediation responsibility model describing whether the
+            provider, the consumer, or both must act to remediate a
+            vulnerability. See <xref target="schema-shared-resp"/>.</dd>
+
+            <dt>VEX Status:</dt>
+            <dd>The Vulnerability Exploitability eXchange status of a record:
+            affected, fixed, not_affected, or under_investigation. Aligns with
+            the OpenVEX (<xref target="OpenVEX"/>) and CSAF VEX
+            (<xref target="CSAF-VEX"/>) vocabularies. See
+            <xref target="schema-vex"/>.</dd>
+
+            <dt>Fix Propagation:</dt>
+            <dd>The mechanism by which a provider-released fix reaches
+            existing deployed resources. See
+            <xref target="schema-propagation"/>.</dd>
+
+            <dt>Exposure Window:</dt>
+            <dd>The time interval [W_start, W_end] during which a specific
+            resource instance is vulnerable. See
+            <xref target="exposure-window"/>.</dd>
+
+            <dt>Existing Deployments Remain Vulnerable:</dt>
+            <dd>A boolean indicating whether resources deployed before the
+            provider fix date remain in the exposure window absent explicit
+            consumer action.</dd>
+
+            <dt>Remediation Action:</dt>
+            <dd>An ordered step a consumer takes to remediate or mitigate a
+            vulnerability on a specific resource type. See
+            <xref target="schema-remediation-actions"/>.</dd>
+
+            <dt>Compensating Control:</dt>
+            <dd>A remediation action that reduces exploitability but does not
+            fully remediate the vulnerability.</dd>
+
+            <dt>Detection Entry:</dt>
+            <dd>A log query, metric filter, or alerting rule for identifying
+            vulnerable configurations, active exploitation, or configuration
+            drift. See <xref target="schema-detections"/>.</dd>
+
+            <dt>Detection Phase:</dt>
+            <dd>The lifecycle stage of a detection: pre_fix, exploitation,
+            post_fix, or misconfiguration. See
+            <xref target="detection-phase"/>.</dd>
+
+            <dt>Pending Reason:</dt>
+            <dd>An enumerated value indicating why a detection entry is a
+            placeholder without a functional query. See
+            <xref target="detection-pending"/>.</dd>
+
+            <dt>Vulnerability Identifier:</dt>
+            <dd>A string uniquely identifying the vulnerability a CRIT record
+            relates to (e.g., CVE-2024-6387).</dd>
+
+            <dt>Provider Fix Date:</dt>
+            <dd>The date a provider made a fix generally available.</dd>
+
+            <dt>Vulnerability Published Date:</dt>
+            <dd>The date the vulnerability was publicly disclosed.</dd>
+
+            <dt>Service Available Date:</dt>
+            <dd>The date a provider's service became generally available,
+            bounding the earliest possible deployment of affected
+            resources.</dd>
+          </dl>
+        </section>
+
+      </section>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <section anchor="scope">
+      <name>Scope and Relationship to Provider Schemas</name>
+      <t>
+        CRITs operate as a parameterisation layer over externally-defined resource
+        identifier schemas. The authoritative definition of each identifier format is
+        owned by its respective provider:
+      </t>
+      <table>
+        <thead>
+          <tr><th>Provider</th><th>Identifier Type</th><th>Normative Reference</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>AWS</td><td>Amazon Resource Name (ARN)</td><td><xref target="AWS-ARN"/></td></tr>
+          <tr><td>Azure</td><td>Azure Resource ID</td><td><xref target="Azure-ResourceID"/></td></tr>
+          <tr><td>GCP</td><td>GCP Resource Name</td><td><xref target="GCP-ResourceName"/></td></tr>
+          <tr><td>Cloudflare</td><td>Cloudflare API Locator</td><td><xref target="CF-API"/></td></tr>
+          <tr><td>Oracle</td><td>Oracle Cloud ID (OCID)</td><td><xref target="OCI-OCID"/></td></tr>
+          <tr><td>Salesforce</td><td>REST API Resource URL</td><td><xref target="SF-REST-API"/></td></tr>
+          <tr><td>SAP BTP</td><td>BTP / OData / SuccessFactors URL</td><td><xref target="SAP-BTP"/></td></tr>
+          <tr><td>ServiceNow</td><td>Table API URL</td><td><xref target="SN-TABLE-API"/></td></tr>
+        </tbody>
+      </table>
+      <t>
+        This specification does not alter, extend, or redefine any provider identifier
+        schema. A conformant CRIT template <bcp14>MUST</bcp14> produce a string that,
+        after variable resolution, is a valid identifier according to the applicable
+        provider schema.
+      </t>
+      <t>
+        A CRIT template <bcp14>MUST NOT</bcp14> use <tt>pkg:generic/</tt> or any PURL
+        type that implies a build-from-source artifact to represent a cloud
+        infrastructure resource. Such usage introduces ambiguous semantics in tooling
+        designed around the build-artifact assumption and is explicitly out of scope for
+        this specification.
+      </t>
+      <t>This specification does not cover:</t>
+      <ul>
+        <li>How CRIT records are extracted from vulnerability data sources.</li>
+        <li>Internal database schemas or persistence mechanisms.</li>
+        <li>Vulnerability ingestion pipelines or NLP-based service detection.</li>
+        <li>Source corpus processing.</li>
+      </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section anchor="variable-system">
+      <name>The CRIT Variable System</name>
+
+      <section anchor="vs-overview">
+        <name>Overview</name>
+        <t>
+          A CRIT record is a template engine for cloud-native resources: discovery
+          requires interpolation of consumer-specific variables at resolution time,
+          which no static identifier can express.
+        </t>
+        <t>
+          A CRIT template string is a provider identifier format with zero or more
+          variable slots. Each slot expresses one of four states. The choice of state
+          is normative: it is determined by the semantics of the field for the given
+          resource type, not by what the consumer happens to know.
+        </t>
+      </section>
+
+      <section anchor="vs-syntax">
+        <name>Slot Syntax</name>
+        <t>
+          Variable slots are delimited with <tt>{</tt> and <tt>}</tt>. The content
+          within the delimiters is a slot descriptor with the following ABNF (<xref target="RFC5234"/>) grammar:
+        </t>
+        <figure>
+          <name>Slot ABNF Grammar</name>
+          <sourcecode type="abnf"><![CDATA[
+slot            = "{" slot-descriptor "}"
+slot-descriptor = named-var / wildcard / empty-marker / hardcoded
+named-var       = field-name
+wildcard        = field-name "=" "*"
+empty-marker    = field-name "="
+hardcoded       = field-name "=" literal-value
+field-name      = 1*( ALPHA / DIGIT / "-" / "_" )
+literal-value   = 1*( ALPHA / DIGIT / "-" / "_" / "." / ":" )
+          ]]></sourcecode>
+        </figure>
+        <t>
+          The characters <tt>{</tt> and <tt>}</tt> are reserved as slot delimiters and
+          <bcp14>MUST NOT</bcp14> appear in <tt>literal-value</tt> or as literal
+          characters within a template string outside of slot expressions.
+        </t>
+      </section>
+
+      <section anchor="vs-design">
+        <name>Design Relationship to RFC 6570</name>
+        <t>
+          CRIT slot syntax uses curly-brace delimiters that resemble
+          <xref target="RFC6570"/> URI Templates. This resemblance is
+          intentional but superficial. CRIT slots are <strong>not</strong>
+          URI Templates and implementations <bcp14>MUST NOT</bcp14> process
+          them with an RFC 6570 expansion engine.
+        </t>
+        <t>
+          The CRIT variable system defines exactly four slot states. The
+          number four is a design invariant: each additional state
+          multiplies the number of producer-consumer interactions that
+          require specification and testing. Because cloud provider
+          identifier schemas are not standardised, and the number of
+          providers is unbounded, the slot state vocabulary must remain
+          fixed to prevent combinatorial growth in conformance surface
+          area. The four states are the minimum set that satisfies all
+          operational requirements defined in this specification:
+        </t>
+        <ol>
+          <li><strong>Named variable</strong> (<tt>{field}</tt>):
+          Consumer-supplied value. This is the only state that
+          corresponds to <xref target="RFC6570"/> Level 1 simple string
+          expansion.</li>
+          <li><strong>Wildcard</strong> (<tt>{field=*}</tt>): Population
+          enumeration. No <xref target="RFC6570"/> equivalent exists.
+          The semantic is an inventory operation, not a URI
+          construction.</li>
+          <li><strong>Empty</strong> (<tt>{field=}</tt>): Structurally
+          present but inapplicable. The resolved value is the empty
+          string. <xref target="RFC6570"/> does not distinguish between
+          an undefined variable and a field that is normatively absent
+          from the provider schema; CRIT requires this distinction to
+          prevent consumers from treating a structurally absent field as
+          an unknown value requiring resolution.</li>
+          <li><strong>Hardcoded</strong> (<tt>{field=literal}</tt>):
+          Provider-fixed value. The value is determined by the provider
+          schema, not by the consumer. This state is required because
+          some provider identifier schemas contain positional fields
+          whose value is invariant for a given resource type (e.g., a
+          region field that is always <tt>us-east-1</tt> for a global
+          service). Without a distinct hardcoded state, a consumer
+          cannot distinguish a provider-fixed value from a
+          consumer-specific value that coincidentally matches.</li>
+        </ol>
+        <t>
+          <xref target="RFC6570"/> operators (<tt>+</tt>, <tt>#</tt>,
+          <tt>.</tt>, <tt>/</tt>, <tt>;</tt>, <tt>?</tt>,
+          <tt>&amp;</tt>) are not supported. CRIT templates use simple
+          string replacement only. A fully-resolved CRIT template — one
+          in which every named-variable slot has been substituted with a
+          concrete value, every empty slot resolved to the empty string,
+          and every hardcoded slot resolved to its literal — produces a
+          valid provider-native resource identifier. The result is a
+          plain string, not a URI Template expansion.
+        </t>
+      </section>
+
+      <section anchor="vs-states">
+        <name>The Four Slot States</name>
+
+        <section anchor="vs-named">
+          <name>Named Variable</name>
+          <t>
+            Syntax: <tt>{field-name}</tt>
+          </t>
+          <t>
+            The slot represents a value the consumer <bcp14>MUST</bcp14> supply at
+            resolution time. A consumer <bcp14>MUST NOT</bcp14> treat a named variable
+            as implying any default value. A consumer <bcp14>MUST</bcp14> substitute a
+            concrete value before using the template as a live identifier.
+          </t>
+          <t>
+            Examples: <tt>{region}</tt>, <tt>{account}</tt>, <tt>{resource-id}</tt>.
+          </t>
+        </section>
+
+        <section anchor="vs-wildcard">
+          <name>Wildcard</name>
+          <t>
+            Syntax: <tt>{field-name=*}</tt>
+          </t>
+          <t>
+            The slot represents "any value" and is used for inventory matching across a
+            population of resources. A wildcard <bcp14>MUST NOT</bcp14> be used as a
+            live identifier against a provider API; it is a query pattern only. A
+            consumer <bcp14>MAY</bcp14> expand a wildcard by enumerating known values
+            from their inventory. A consumer <bcp14>MUST</bcp14> record when a wildcard
+            remains unexpanded, as an unexpanded wildcard indicates incomplete inventory
+            coverage.
+          </t>
+          <t>
+            Examples: <tt>{region=*}</tt> matches all regions; <tt>{account=*}</tt>
+            matches all accounts.
+          </t>
+        </section>
+
+        <section anchor="vs-empty">
+          <name>Empty</name>
+          <t>
+            Syntax: <tt>{field-name=}</tt>
+          </t>
+          <t>
+            The slot represents a field that is structurally present in the provider
+            schema but not applicable for this resource type. The resolved value is the
+            empty string. This <bcp14>MUST NOT</bcp14> be confused with an unknown
+            value (use named variable) or a match-all (use wildcard). It is a precise
+            semantic statement that the field does not apply to this resource type.
+          </t>
+          <t>
+            Example: GCP global resources carry no zone; the zone slot is expressed as
+            <tt>{zone=}</tt>.
+          </t>
+        </section>
+
+        <section anchor="vs-hardcoded">
+          <name>Hardcoded</name>
+          <t>
+            Syntax: <tt>{field-name=literal-value}</tt>
+          </t>
+          <t>
+            The slot represents a fixed value determined by the provider schema for this
+            resource type. A CRIT producer <bcp14>MUST</bcp14> use hardcoded state only
+            for values normatively fixed by the provider schema. A consumer
+            <bcp14>MUST</bcp14> use the hardcoded value as-is and <bcp14>MUST
+            NOT</bcp14> substitute an alternative value.
+          </t>
+          <t>
+            Example: <tt>{region=us-east-1}</tt> for AWS IAM resources, which the AWS
+            ARN schema requires to always be <tt>us-east-1</tt>.
+          </t>
+        </section>
+
+      </section>
+
+      <section anchor="vs-selection">
+        <name>Slot State Selection Rules</name>
+        <t>
+          A CRIT producer <bcp14>MUST</bcp14> select the slot state according to the
+          following precedence:
+        </t>
+        <ol>
+          <li>If the provider schema normatively fixes this field to a specific value
+          for the resource type: <strong>hardcoded</strong>.</li>
+          <li>If the provider schema specifies the field is structurally absent or
+          inapplicable for this resource type: <strong>empty</strong>.</li>
+          <li>If the field represents a cross-resource population query rather than a
+          specific resource: <strong>wildcard</strong>.</li>
+          <li>Otherwise: <strong>named variable</strong>.</li>
+        </ol>
+        <t>
+          A CRIT producer <bcp14>MUST NOT</bcp14> use wildcard as a fallback when the
+          correct state is unknown. An unknown consumer-specific value is always a named
+          variable; wildcard is a deliberate semantic choice meaning "enumerate all".
+        </t>
+      </section>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <section anchor="schema">
+      <name>CRIT Record Schema</name>
+      <t>
+        All field names are lowercase snake_case. The schema is expressed in JSON.
+        Unless stated otherwise, absent optional fields are interpreted as null. All
+        date values <bcp14>MUST</bcp14> be expressed in ISO&nbsp;8601 <xref target="ISO8601"/> full-date format
+        (<tt>YYYY-MM-DD</tt>) in UTC. Time-of-day components <bcp14>SHOULD</bcp14> be
+        omitted unless a provider advisory specifies intraday precision is meaningful.
+      </t>
+
+      <section anchor="schema-envelope">
+        <name>Envelope and Identity</name>
+        <figure>
+          <name>Envelope Fields</name>
+          <sourcecode type="json"><![CDATA[
+{
+  "vectorString": "<crit-vector>",
+  "vuln_id": "<string>",
+  "provider": "<enum>",
+  "service": "<string>",
+  "resource_type": "<string>",
+  "resource_lifecycle": "<enum>",
+  "shared_responsibility": "<enum>",
+  "vex_status": "<enum>"
+}
+          ]]></sourcecode>
+        </figure>
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Required</th><th>Type</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>vectorString</td><td>REQUIRED</td><td>string</td><td>Canonical CRIT vector string computed from record fields. See <xref target="crit-vector-string"/>.</td></tr>
+            <tr><td>vuln_id</td><td>REQUIRED</td><td>string</td><td>The vulnerability this record relates to. <bcp14>MUST</bcp14> match exactly one vulnerability per record.</td></tr>
+            <tr><td>provider</td><td>REQUIRED</td><td>enum</td><td>One of: <tt>aws</tt>, <tt>azure</tt>, <tt>gcp</tt>, <tt>cloudflare</tt>, <tt>oracle</tt>, <tt>salesforce</tt>, <tt>sap</tt>, <tt>servicenow</tt>.</td></tr>
+            <tr><td>service</td><td>REQUIRED</td><td>string</td><td>Provider service key (e.g., <tt>lambda</tt>, <tt>aks</tt>, <tt>cloud_sql</tt>).</td></tr>
+            <tr><td>resource_type</td><td>REQUIRED</td><td>string</td><td>Specific resource type within the service (e.g., <tt>function</tt>, <tt>cluster</tt>, <tt>instance</tt>).</td></tr>
+            <tr><td>resource_lifecycle</td><td>REQUIRED</td><td>enum</td><td>See <xref target="schema-lifecycle"/>.</td></tr>
+            <tr><td>shared_responsibility</td><td>REQUIRED</td><td>enum</td><td>See <xref target="schema-shared-resp"/>.</td></tr>
+            <tr><td>vex_status</td><td>REQUIRED</td><td>enum</td><td>See <xref target="schema-vex"/>.</td></tr>
+          </tbody>
+        </table>
+
+        <section anchor="schema-naturalkey">
+          <name>Natural Key and Uniqueness</name>
+          <t>
+            The tuple <tt>(vuln_id, provider, service, resource_type)</tt> constitutes
+            the natural key of a CRIT record. Within a conformant corpus, no two records
+            <bcp14>MAY</bcp14> share the same natural key. A producer <bcp14>MUST</bcp14>
+            enforce this uniqueness constraint before emitting records.
+          </t>
+          <t>
+            When a single vulnerability affects multiple resource types within the same service,
+            or the same resource type across multiple providers, the correct
+            representation is multiple CRIT records each with a distinct natural key and
+            independently specified fix version, propagation mechanism, and detection
+            entries. The <tt>vuln_id</tt> field is the join key allowing a consumer to
+            retrieve the complete set of records for a given vulnerability.
+          </t>
+          <t>
+            Example: a Kubernetes vulnerability affecting EKS, AKS, and GKE yields three records:
+          </t>
+          <ul>
+            <li><tt>(CVE-2024-XXXX, aws, eks, cluster)</tt></li>
+            <li><tt>(CVE-2024-XXXX, azure, aks, cluster)</tt></li>
+            <li><tt>(CVE-2024-XXXX, gcp, gke, cluster)</tt></li>
+          </ul>
+          <t>
+            The natural key components are embedded in the CRIT vector string:
+            <tt>provider</tt> as the CP metric and <tt>vuln_id</tt>,
+            <tt>service</tt>, <tt>resource_type</tt> as the three positional
+            qualifiers. The <tt>vectorString</tt> is therefore a canonical
+            single-string encoding of the record's natural key combined with
+            its classification state.
+          </t>
+        </section>
+
+        <section anchor="crit-vector-string">
+          <name>CRIT Vector String</name>
+          <t>
+            The CRIT vector string is a compact, deterministic, human-readable
+            encoding of a record's classification and identity fields. Its
+            format is modelled on CVSS vector strings: a versioned prefix
+            followed by slash-delimited metric-value pairs and a qualifier
+            section.
+          </t>
+
+          <t>The ABNF (<xref target="RFC5234"/>) grammar is:</t>
+          <sourcecode type="abnf"><![CDATA[
+crit-vector     = prefix "/" metrics "#" qualifiers
+prefix          = "CRITv" semver
+semver          = 1*DIGIT "." 1*DIGIT "." 1*DIGIT
+                  [ "-" 1*(ALPHA / DIGIT / ".") ]
+metrics         = metric *("/" metric)
+metric          = metric-key ":" metric-value
+metric-key      = 2ALPHA
+metric-value    = 1*(ALPHA / DIGIT)
+qualifiers      = qual-value ":" qual-value ":" qual-value
+qual-value      = 1*(ALPHA / DIGIT / "-" / "_" / ".")
+          ]]></sourcecode>
+
+          <t>Example:</t>
+          <sourcecode type="text"><![CDATA[
+CRITv0.3.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance
+          ]]></sourcecode>
+
+          <section anchor="vs-metrics">
+            <name>Registered Metrics</name>
+            <t>
+              A conformant CRIT vector string <bcp14>MUST</bcp14> include all
+              registered metrics listed below. Registered metrics
+              <bcp14>MUST</bcp14> appear in the canonical order defined by this
+              section. A producer <bcp14>MAY</bcp14> append additional
+              metrics after the registered set and before the <tt>#</tt>
+              delimiter; a consumer <bcp14>MUST</bcp14> ignore unknown metric
+              keys without error.
+            </t>
+
+            <t><strong>Table 1: Cloud Provider (CP)</strong></t>
+            <table>
+              <thead><tr><th>Value</th><th>Code</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>aws</td><td>AW</td><td>Amazon Web Services</td></tr>
+                <tr><td>azure</td><td>MA</td><td>Microsoft Azure</td></tr>
+                <tr><td>gcp</td><td>GC</td><td>Google Cloud Platform</td></tr>
+                <tr><td>cloudflare</td><td>CF</td><td>Cloudflare</td></tr>
+                <tr><td>oracle</td><td>OC</td><td>Oracle Cloud Infrastructure</td></tr>
+                <tr><td>salesforce</td><td>SF</td><td>Salesforce</td></tr>
+                <tr><td>sap</td><td>SP</td><td>SAP</td></tr>
+                <tr><td>servicenow</td><td>SN</td><td>ServiceNow</td></tr>
+                <tr><td>ibm</td><td>IB</td><td>IBM Cloud</td></tr>
+                <tr><td>vmware</td><td>VM</td><td>VMware (Broadcom)</td></tr>
+                <tr><td>adobe</td><td>AD</td><td>Adobe</td></tr>
+                <tr><td>akamai</td><td>AK</td><td>Akamai</td></tr>
+                <tr><td>alibaba</td><td>AL</td><td>Alibaba Cloud</td></tr>
+                <tr><td>atlassian</td><td>AT</td><td>Atlassian</td></tr>
+                <tr><td>digitalocean</td><td>DO</td><td>DigitalOcean</td></tr>
+                <tr><td>elastic</td><td>EL</td><td>Elastic</td></tr>
+                <tr><td>fastly</td><td>FA</td><td>Fastly</td></tr>
+                <tr><td>gitlab</td><td>GL</td><td>GitLab</td></tr>
+                <tr><td>hashicorp</td><td>HC</td><td>HashiCorp</td></tr>
+                <tr><td>hetzner</td><td>HE</td><td>Hetzner Cloud</td></tr>
+                <tr><td>linode</td><td>LI</td><td>Linode (Akamai Connected Cloud)</td></tr>
+                <tr><td>mongodb</td><td>MO</td><td>MongoDB Atlas</td></tr>
+                <tr><td>ovh</td><td>OV</td><td>OVHcloud</td></tr>
+                <tr><td>snowflake</td><td>SO</td><td>Snowflake</td></tr>
+                <tr><td>tailscale</td><td>TS</td><td>Tailscale</td></tr>
+                <tr><td>tencent</td><td>TC</td><td>Tencent Cloud</td></tr>
+                <tr><td>twilio</td><td>TW</td><td>Twilio</td></tr>
+                <tr><td>vercel</td><td>VC</td><td>Vercel</td></tr>
+                <tr><td>vultr</td><td>VL</td><td>Vultr</td></tr>
+                <tr><td>zoom</td><td>ZM</td><td>Zoom</td></tr>
+              </tbody>
+            </table>
+            <t>
+              Note: the codes <tt>CF</tt> and <tt>GC</tt> appear in both
+              Table 1 (Cloud Provider) and Table 5 (Resource Lifecycle).
+              The grammar disambiguates by metric key prefix: <tt>CP:CF</tt>
+              identifies Cloudflare while <tt>RL:CF</tt> identifies a
+              configuration-only resource lifecycle. Producers and consumers
+              <bcp14>MUST NOT</bcp14> rely on raw two-letter codes outside of
+              their <tt>metric-key</tt> context.
+            </t>
+
+            <t><strong>Table 2: VEX Status (VS)</strong></t>
+            <table>
+              <thead><tr><th>Value</th><th>Code</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>affected</td><td>AF</td><td>Resource type is affected; no fix available or not applied.</td></tr>
+                <tr><td>fixed</td><td>FX</td><td>Provider fix is available; provider_fix_date is set.</td></tr>
+                <tr><td>not_affected</td><td>NA</td><td>Resource type is not affected or vulnerability is not reachable.</td></tr>
+                <tr><td>under_investigation</td><td>UI</td><td>Provider has acknowledged but not confirmed status.</td></tr>
+              </tbody>
+            </table>
+
+            <t><strong>Table 3: Fix Propagation (FP)</strong></t>
+            <table>
+              <thead><tr><th>Value</th><th>Code</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>automatic</td><td>AU</td><td>Provider applies fix transparently.</td></tr>
+                <tr><td>config_change</td><td>CC</td><td>Configuration change on existing resource.</td></tr>
+                <tr><td>opt_in</td><td>OI</td><td>Fix available but applies to non-default option.</td></tr>
+                <tr><td>version_update</td><td>VU</td><td>Consumer must update pinned version or runtime.</td></tr>
+                <tr><td>redeploy</td><td>RD</td><td>Consumer must redeploy using existing configuration.</td></tr>
+                <tr><td>rebuild_and_redeploy</td><td>RR</td><td>Consumer must rebuild artifact with updated base.</td></tr>
+                <tr><td>destroy_recreate</td><td>DC</td><td>Resource must be destroyed and recreated.</td></tr>
+                <tr><td>rolling_replace</td><td>RL</td><td>Fleet replacement with coexistence during transition.</td></tr>
+                <tr><td>no_fix_available</td><td>NF</td><td>No vendor fix has been released.</td></tr>
+              </tbody>
+            </table>
+
+            <t><strong>Table 4: Shared Responsibility (SR)</strong></t>
+            <table>
+              <thead><tr><th>Value</th><th>Code</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>provider_only</td><td>PO</td><td>Provider is solely responsible for remediation.</td></tr>
+                <tr><td>customer_action_required</td><td>CA</td><td>Provider fix exists but customer action is needed.</td></tr>
+                <tr><td>customer_only</td><td>CO</td><td>Customer is solely responsible.</td></tr>
+                <tr><td>shared</td><td>SH</td><td>Remediation requires coordinated provider and customer action.</td></tr>
+              </tbody>
+            </table>
+
+            <t><strong>Table 5: Resource Lifecycle (RL)</strong></t>
+            <table>
+              <thead><tr><th>Value</th><th>Code</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>ephemeral</td><td>EP</td><td>Short-lived; replaced rather than patched.</td></tr>
+                <tr><td>stateful_managed</td><td>SM</td><td>Long-lived; provider manages OS and runtime.</td></tr>
+                <tr><td>stateful_customer</td><td>SC</td><td>Long-lived; customer manages OS and runtime.</td></tr>
+                <tr><td>config_only</td><td>CF</td><td>No runtime; configuration-only resource.</td></tr>
+                <tr><td>global_control_plane</td><td>GC</td><td>Shared control-plane infrastructure.</td></tr>
+              </tbody>
+            </table>
+
+            <t><strong>Table 6: Existing Deployments Remain Vulnerable (EV)</strong></t>
+            <table>
+              <thead><tr><th>Value</th><th>Code</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>true</td><td>T</td><td>Resources deployed before the fix remain vulnerable.</td></tr>
+                <tr><td>false</td><td>F</td><td>Provider fix applies retroactively to existing resources.</td></tr>
+              </tbody>
+            </table>
+
+            <t><strong>Table 7: Vulnerability Published Date (PP)</strong></t>
+            <t>
+              Unix epoch timestamp (integer seconds). <bcp14>REQUIRED</bcp14>.
+              The date the vulnerability was publicly disclosed. Corresponds to
+              <tt>temporal.vuln_published_date</tt> converted to epoch seconds.
+            </t>
+
+            <t><strong>Table 8: Service Available Date (SA)</strong></t>
+            <t>
+              Unix epoch timestamp (integer seconds). <bcp14>REQUIRED</bcp14>.
+              The date the cloud service became generally available. Corresponds
+              to <tt>temporal.service_available_date</tt> converted to epoch
+              seconds.
+            </t>
+          </section>
+
+          <section anchor="vs-qualifiers">
+            <name>Qualifiers</name>
+            <t>
+              Qualifiers appear after the <tt>#</tt> delimiter as positional
+              colon-separated values with no metric keys. All three qualifiers
+              are <bcp14>REQUIRED</bcp14> and <bcp14>MUST</bcp14> appear in the
+              following fixed order:
+            </t>
+            <table>
+              <thead><tr><th>Position</th><th>Field</th><th>Description</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>vuln_id</td><td>Vulnerability identifier (e.g., CVE-2024-6387).</td></tr>
+                <tr><td>2</td><td>service</td><td>Provider service key.</td></tr>
+                <tr><td>3</td><td>resource_type</td><td>Provider resource type key.</td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section anchor="vs-computation">
+            <name>Computation and Validation</name>
+            <t>A conformant CRIT producer:</t>
+            <ul>
+              <li><bcp14>MUST</bcp14> compute <tt>vectorString</tt> from the record's own fields.</li>
+              <li><bcp14>MUST</bcp14> include all registered metrics in canonical order (CP, VS, FP, SR, RL, EV, PP, SA).</li>
+              <li><bcp14>MUST</bcp14> use the CRIT specification version the record conforms to as the semver prefix.</li>
+              <li><bcp14>MUST</bcp14> use only registered abbreviation codes from the tables in <xref target="vs-metrics"/>.</li>
+              <li><bcp14>MUST</bcp14> ensure qualifier values match the corresponding record field values exactly.</li>
+              <li><bcp14>MAY</bcp14> append additional metrics after the registered set and before the <tt>#</tt> delimiter.</li>
+            </ul>
+            <t>A conformant CRIT consumer:</t>
+            <ul>
+              <li><bcp14>MUST</bcp14> validate all known metric keys and their values.</li>
+              <li><bcp14>MUST</bcp14> ignore unknown metric keys without error.</li>
+              <li><bcp14>MUST</bcp14> reject a <tt>vectorString</tt> missing any registered metric.</li>
+              <li><bcp14>MUST</bcp14> reject a <tt>vectorString</tt> where registered metrics appear out of canonical order.</li>
+              <li><bcp14>SHOULD</bcp14> emit a warning when encountering unknown metric keys.</li>
+            </ul>
+          </section>
+
+          <section anchor="vs-information-scope">
+            <name>Information Scope</name>
+            <t>
+              The CRIT vector string is a lossy encoding. It carries 12 fields
+              from the full CRIT record; the remaining fields are not
+              representable in the vector and are discarded during conversion.
+            </t>
+            <t>Fields carried in the vector string:</t>
+            <ul>
+              <li>CRIT specification version (prefix).</li>
+              <li>Six enumerated classification fields: provider (CP),
+              vex_status (VS), fix_propagation (FP), shared_responsibility (SR),
+              resource_lifecycle (RL), existing_deployments_remain_vulnerable
+              (EV).</li>
+              <li>Two required temporal dates as epoch timestamps:
+              vuln_published_date (PP), service_available_date (SA).</li>
+              <li>Three identity qualifiers: vuln_id, service,
+              resource_type.</li>
+            </ul>
+            <t>Fields not carried in the vector string:</t>
+            <ul>
+              <li><tt>template</tt> and <tt>template_format</tt> — recoverable
+              via dictionary lookup from the <tt>(provider, service,
+              resource_type)</tt> tuple embedded in the vector qualifiers and CP
+              metric.</li>
+              <li>Optional temporal dates: <tt>vulnerability_introduced_date</tt>,
+              <tt>provider_acknowledged_date</tt>,
+              <tt>provider_fix_date</tt>,
+              <tt>customer_deadline_date</tt>, and related fields. A producer
+              <bcp14>MAY</bcp14> include these as additional metrics appended
+              after the registered set.</li>
+              <li>Fix version details: <tt>version_type</tt>,
+              <tt>comparison</tt>, <tt>version</tt>, <tt>build_date</tt>,
+              <tt>auto_upgrade</tt>, <tt>note</tt>.</li>
+              <li>Remediation actions: the complete
+              <tt>remediation_actions</tt> array including step-by-step
+              instructions, downtime estimates, and compensating control
+              flags.</li>
+              <li>Detection entries: the complete <tt>detections</tt> array
+              including detection queries, query languages, detection phases,
+              and pending reasons.</li>
+              <li>Advisory metadata: <tt>advisory_id</tt>,
+              <tt>advisory_url</tt>.</li>
+              <li>Any producer-appended additional metrics beyond the registered
+              set are also not preserved when converting from a full JSON record
+              to a vector string, unless the converter explicitly retains
+              them.</li>
+            </ul>
+            <t>
+              A consumer <bcp14>MUST NOT</bcp14> treat a <tt>vectorString</tt>
+              as a complete record representation. A consumer
+              <bcp14>MUST</bcp14> use the full JSON record for operational
+              decisions that require fields not carried in the vector, including
+              but not limited to: deploying detection queries, executing
+              remediation actions, evaluating fix version comparisons, and
+              computing exposure windows.
+            </t>
+          </section>
+        </section>
+
+      </section>
+
+      <section anchor="schema-template">
+        <name>Resource Template</name>
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Required</th><th>Type</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>template</td><td>REQUIRED</td><td>string</td><td>Parameterised identifier string. After all named variables are substituted, the result <bcp14>MUST</bcp14> be a valid provider identifier for the declared <tt>template_format</tt>.</td></tr>
+            <tr><td>template_format</td><td>REQUIRED</td><td>enum</td><td>One of: <tt>aws_arn</tt>, <tt>azure_resource_id</tt>, <tt>gcp_resource_name</tt>, <tt>cloudflare_locator</tt>, <tt>oracle_ocid</tt>, <tt>salesforce_url</tt>, <tt>sap_btp_url</tt>, <tt>sap_odata_url</tt>, <tt>sap_sf_url</tt>, <tt>servicenow_table_url</tt>.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section anchor="schema-temporal">
+        <name>Temporal Fields and Exposure Window</name>
+        <t>
+          These fields collectively define the bounds of exposure. No single field closes
+          the exposure window for a given consumer resource; see
+          <xref target="exposure-window"/> for the formal computation.
+        </t>
+        <figure>
+          <name>Temporal Object</name>
+          <sourcecode type="json"><![CDATA[
+{
+  "temporal": {
+    "service_available_date": "<date>",
+    "vulnerability_introduced_date": "<date>",
+    "vulnerability_introduced_date_estimated": "<boolean>",
+    "vuln_published_date": "<date>",
+    "provider_acknowledged_date": "<date>",
+    "provider_fix_date": "<date>",
+    "customer_deadline_date": "<date>",
+    "customer_deadline_source": "<enum>"
+  }
+}
+          ]]></sourcecode>
+        </figure>
+        <dl newline="true" spacing="normal">
+          <dt><tt>service_available_date</tt> (OPTIONAL):</dt>
+          <dd>When the provider first made this service or feature generally
+          available. Bounds the earliest any resource could have been deployed
+          into a vulnerable configuration.</dd>
+          <dt><tt>vulnerability_introduced_date</tt> (OPTIONAL):</dt>
+          <dd>When the vulnerability was first present. <bcp14>MAY</bcp14>
+          predate <tt>vuln_published_date</tt> by months or years. When present,
+          <bcp14>MUST</bcp14> be used as W_start of the exposure window.</dd>
+          <dt><tt>vulnerability_introduced_date_estimated</tt> (OPTIONAL):</dt>
+          <dd>When <tt>true</tt>, <tt>vulnerability_introduced_date</tt> is an
+          estimate. Consumers <bcp14>SHOULD</bcp14> surface this flag in
+          exposure window reporting.</dd>
+          <dt><tt>vuln_published_date</tt> (REQUIRED):</dt>
+          <dd>Date the vulnerability record was first published. <bcp14>MUST</bcp14>
+          match the vulnerability record's <tt>datePublished</tt> field.</dd>
+          <dt><tt>provider_acknowledged_date</tt> (OPTIONAL):</dt>
+          <dd>When the provider first confirmed the vulnerability.</dd>
+          <dt><tt>provider_fix_date</tt> (OPTIONAL):</dt>
+          <dd>When the provider made a fix generally available.
+          <bcp14>MUST NOT</bcp14> be interpreted as the date a consumer
+          resource is remediated. Absent when no fix has been released.</dd>
+          <dt><tt>customer_deadline_date</tt> (OPTIONAL):</dt>
+          <dd>A normative remediation deadline. Conformant consumer tools
+          <bcp14>SHOULD</bcp14> use this for SLA computations.</dd>
+          <dt><tt>customer_deadline_source</tt> (OPTIONAL):</dt>
+          <dd>One of: <tt>cisa_kev</tt>, <tt>pci_dss</tt>, <tt>hipaa</tt>,
+          <tt>sox</tt>, <tt>internal_policy</tt>, <tt>other</tt>.
+          <bcp14>REQUIRED</bcp14> when <tt>customer_deadline_date</tt>
+          is present.</dd>
+        </dl>
+      </section>
+
+      <section anchor="schema-fix-propagation">
+        <name>Fix Propagation and Remediation Actions</name>
+
+        <section anchor="schema-lifecycle">
+          <name>Resource Lifecycle</name>
+          <t>
+            The <tt>resource_lifecycle</tt> field characterises the operational behaviour
+            of the resource type with respect to data durability and replacement. This is
+            a property of the resource type, not of any specific consumer deployment.
+          </t>
+          <table>
+            <thead>
+              <tr><th>Value</th><th>Meaning</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>ephemeral</td><td>No durable state; can be replaced without data concern. Examples: Lambda functions, containers, serverless workers.</td></tr>
+              <tr><td>stateful_managed</td><td>Provider manages data durability but replacement is disruptive. Examples: RDS, ElastiCache, Cosmos DB, Cloud SQL.</td></tr>
+              <tr><td>stateful_customer</td><td>Customer owns data migration entirely. Examples: EBS-backed EC2, self-managed databases on compute.</td></tr>
+              <tr><td>config_only</td><td>Pure configuration with no application data. Examples: IAM roles, security groups, WAF rules, DNS records.</td></tr>
+              <tr><td>global_control_plane</td><td>Globally scoped; changes propagate with eventual consistency. Examples: CloudFront, Route53, GCP global forwarding rules.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section anchor="schema-shared-resp">
+          <name>Shared Responsibility</name>
+          <table>
+            <thead>
+              <tr><th>Value</th><th>Meaning</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>provider_only</td><td>Provider remediates transparently. The exposure window closes automatically at <tt>provider_fix_date</tt> for all resources.</td></tr>
+              <tr><td>customer_action_required</td><td>A fix is available but the consumer <bcp14>MUST</bcp14> take explicit action. <tt>provider_fix_date</tt> does not close the window for existing resources.</td></tr>
+              <tr><td>customer_only</td><td>Misconfiguration or insecure default. No provider fix involved. No <tt>provider_fix_date</tt>.</td></tr>
+              <tr><td>shared</td><td>Both provider and consumer action are required.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section anchor="schema-propagation">
+          <name>Fix Propagation</name>
+          <t>
+            For package vulnerabilities, remediation status is largely derivable from a
+            version comparison: if the installed version is at or above the fixed
+            version, the package is remediated. Cloud resources have no equivalent.
+            There is no installed version to query. A fix becoming available at the
+            provider level does not mean any running resource is remediated. Whether a
+            specific resource is exposed depends on when it was deployed, what action
+            the consumer has taken since, and how the fix propagates to existing
+            resources.
+          </t>
+          <t>
+            Some fixes apply automatically to all existing resources regardless of
+            deployment date. Most do not. A resource deployed before the fix date under
+            a <tt>rebuild_and_redeploy</tt> propagation type is still fully exposed the
+            day after <tt>provider_fix_date</tt>. A resource of the same type deployed
+            the day after is clean. The two resources are indistinguishable by version
+            string -- because neither has one.
+          </t>
+          <t>
+            <tt>existing_deployments_remain_vulnerable</tt> makes this distinction
+            normative and machine-readable. It cannot be derived from a version
+            comparison.
+          </t>
+          <dl newline="true" spacing="normal">
+            <dt><tt>fix_propagation</tt> (REQUIRED):</dt>
+            <dd>The mechanism by which the fix reaches existing deployed
+            resources. See values below.</dd>
+            <dt><tt>existing_deployments_remain_vulnerable</tt> (REQUIRED):</dt>
+            <dd>When <tt>true</tt>, resources deployed before
+            <tt>provider_fix_date</tt> remain in the exposure window unless
+            an explicit consumer action has been taken. <bcp14>MUST</bcp14>
+            be <tt>false</tt> only when <tt>fix_propagation</tt> is
+            <tt>automatic</tt> AND <tt>shared_responsibility</tt> is
+            <tt>provider_only</tt>.</dd>
+          </dl>
+          <t>Fix propagation enum values:</t>
+          <table>
+            <thead>
+              <tr><th>Value</th><th>Meaning</th><th>Typical Consumer Action</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>automatic</td><td>Provider applies the fix transparently to all existing resources.</td><td>Verify fix is active; no operational change required.</td></tr>
+              <tr><td>config_change</td><td>A configuration change on the existing resource is sufficient.</td><td>Apply the change via API, console, or IaC.</td></tr>
+              <tr><td>opt_in</td><td>A fix exists but applies to a non-default option.</td><td>Enable the option; update IaC defaults.</td></tr>
+              <tr><td>version_update</td><td>Update a pinned version, runtime, or dependency reference.</td><td>Update version reference; trigger redeployment if required.</td></tr>
+              <tr><td>redeploy</td><td>Redeploy using the existing configuration.</td><td>Trigger redeployment.</td></tr>
+              <tr><td>rebuild_and_redeploy</td><td>Rebuild the artifact with updated base or patched dependencies, then redeploy.</td><td>Update base image, rebuild, push, redeploy.</td></tr>
+              <tr><td>destroy_recreate</td><td>The resource <bcp14>MUST</bcp14> be destroyed and recreated. In-place upgrade not supported.</td><td>Back up state if applicable, destroy, recreate at fixed version.</td></tr>
+              <tr><td>rolling_replace</td><td>Fleet or cluster replacement; old and new instances coexist during transition.</td><td>Trigger rolling update; monitor fleet until 100% replacement.</td></tr>
+              <tr><td>no_fix_available</td><td>Provider has not released a fix. <tt>provider_fix_date</tt> <bcp14>MUST</bcp14> be absent.</td><td>Apply compensating controls; monitor advisory.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section anchor="schema-remediation-actions">
+          <name>Remediation Actions</name>
+          <t>
+            <tt>remediation_actions</tt> is an ordered array. The first entry is the
+            primary recommended path. A consumer tool <bcp14>SHOULD</bcp14> present
+            actions in declared sequence order.
+          </t>
+          <table>
+            <thead>
+              <tr><th>Field</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>sequence</td><td>REQUIRED</td><td>1-based ordering index. <bcp14>MUST</bcp14> be unique and contiguous within the array starting at 1.</td></tr>
+              <tr><td>type</td><td>REQUIRED</td><td>One of the <tt>fix_propagation</tt> enum values.</td></tr>
+              <tr><td>title</td><td>REQUIRED</td><td>Short imperative description suitable for a task or ticket title.</td></tr>
+              <tr><td>description</td><td>REQUIRED</td><td>Step-by-step instructions sufficient for an engineer to execute without additional research. <bcp14>SHOULD</bcp14> include CLI invocations or IaC equivalents where applicable.</td></tr>
+              <tr><td>provider_guidance_url</td><td>OPTIONAL</td><td>Direct link to the provider's advisory or remediation documentation.</td></tr>
+              <tr><td>auto_remediable</td><td>REQUIRED</td><td>Whether a conformant consumer tool <bcp14>MAY</bcp14> automate this action without human approval.</td></tr>
+              <tr><td>requires_downtime</td><td>REQUIRED</td><td>Whether this action causes a service interruption.</td></tr>
+              <tr><td>stateful_impact</td><td>REQUIRED</td><td>One of: <tt>none</tt>, <tt>backup_recommended</tt>, <tt>backup_restore_required</tt>, <tt>data_migration_required</tt>.</td></tr>
+              <tr><td>estimated_downtime_range_seconds</td><td>OPTIONAL</td><td>Object with <tt>min</tt> and <tt>max</tt> integer bounds. <bcp14>REQUIRED</bcp14> when <tt>requires_downtime</tt> is <tt>true</tt>. Informative only.</td></tr>
+              <tr><td>compensating_control</td><td>REQUIRED</td><td>When <tt>true</tt>, this action reduces exploitability but does not fully remediate. A record with only compensating actions <bcp14>MUST</bcp14> have <tt>vex_status</tt> of <tt>affected</tt>, not <tt>fixed</tt>.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+      </section>
+
+      <section anchor="schema-fix-version">
+        <name>Provider Fix Version</name>
+        <t>
+          Cloud resources do not use package-style versioning. There is no semver
+          string to compare against a fixed bound, no registry entry to look up, and no
+          universal version format that applies across providers or even across services
+          within a single provider. "Version" for a cloud resource might mean an engine
+          release string, a runtime build date, a Kubernetes minor version within a
+          release channel, a container image digest, or a platform image creation date
+          -- depending on the service. In some cases, such as Cloudflare Workers, there
+          is no consumer-visible version at all; only a platform build date.
+        </t>
+        <t>
+          The <tt>provider_fix_version</tt> field is a discriminated object whose
+          structure is determined by the <tt>version_type</tt> discriminator. Each
+          <tt>version_type</tt> value defines a specific set of fields and a
+          <tt>comparison</tt> operator that together give a consumer everything needed
+          to evaluate whether a deployed resource meets the fix threshold.
+        </t>
+
+        <section anchor="fv-envelope">
+          <name>Envelope</name>
+          <table>
+            <thead>
+              <tr><th>Field</th><th>Required</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>version_type</td><td>REQUIRED</td><td>Discriminator. Determines which additional fields are present. See Sections <xref target="fv-aws"/> through <xref target="fv-oracle"/>.</td></tr>
+              <tr><td>comparison</td><td>REQUIRED</td><td>How a consumer evaluates whether a deployed resource meets the fix threshold. See <xref target="fv-comparison"/>.</td></tr>
+              <tr><td>auto_upgrade</td><td>OPTIONAL</td><td>When <tt>false</tt>, the provider does not automatically apply this version update. When <tt>false</tt>, <tt>existing_deployments_remain_vulnerable</tt> <bcp14>MUST</bcp14> be <tt>true</tt>.</td></tr>
+              <tr><td>note</td><td>OPTIONAL</td><td>Human-readable clarification. <bcp14>REQUIRED</bcp14> when a fix arrives at different dates across release channels.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section anchor="fv-comparison">
+          <name>Comparison Values</name>
+          <table>
+            <thead>
+              <tr><th>Value</th><th>Meaning</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>gte</td><td>Deployed version <bcp14>MUST</bcp14> be greater than or equal to the specified value per the service's versioning scheme.</td></tr>
+              <tr><td>exact</td><td>Deployed version <bcp14>MUST</bcp14> exactly match. Used for content-addressed identifiers (image digests, AMI IDs, OCIDs).</td></tr>
+              <tr><td>date_gte</td><td>Resource's runtime build date or deployment date <bcp14>MUST</bcp14> be on or after the specified <tt>build_date</tt>.</td></tr>
+              <tr><td>channel_and_gte</td><td>Resource <bcp14>MUST</bcp14> be subscribed to a qualifying release channel AND be at or above the specified version within that channel.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section anchor="fv-aws">
+          <name>AWS Version Types</name>
+          <t>
+            Defined <tt>version_type</tt> values for AWS services: <tt>runtime</tt>
+            (Lambda and runtime-based services), <tt>engine_version</tt> (RDS,
+            ElastiCache, Redshift), <tt>ami</tt> (EC2 and AMI-backed services),
+            <tt>agent_version</tt> (SSM Agent, CodeDeploy Agent, ECS Agent),
+            <tt>kubernetes_version</tt> (EKS), <tt>container_image</tt> (ECS tasks),
+            <tt>managed_policy_version</tt> (AWS-managed IAM policies).
+          </t>
+          <t>
+            For <tt>engine_version</tt>, the <tt>auto_upgrade</tt> field indicates
+            whether RDS auto minor version upgrade is sufficient. When
+            <tt>auto_upgrade</tt> is <tt>false</tt>, consumers must explicitly trigger
+            the upgrade and <tt>existing_deployments_remain_vulnerable</tt>
+            <bcp14>MUST</bcp14> be <tt>true</tt>.
+          </t>
+          <t>
+            For <tt>container_image</tt>, <tt>image_digest</tt> (SHA256) is
+            <bcp14>RECOMMENDED</bcp14> over <tt>image_tag</tt>. When
+            <tt>image_digest</tt> is present with <tt>comparison: exact</tt>, consumers
+            <bcp14>MUST</bcp14> verify digest, not tag. Tags are mutable and
+            <bcp14>MUST NOT</bcp14> be used as the sole verification method.
+          </t>
+        </section>
+
+        <section anchor="fv-azure">
+          <name>Azure Version Types</name>
+          <t>
+            Defined <tt>version_type</tt> values for Azure services: <tt>api_version</tt>
+            (ARM API operations), <tt>kubernetes_version</tt> (AKS clusters and node
+            pools, with optional <tt>node_image_version</tt>), <tt>extension_version</tt>
+            (VM Extensions), <tt>os_image_version</tt> (VM Scale Sets),
+            <tt>runtime_version</tt> (App Service and Azure Functions).
+          </t>
+        </section>
+
+        <section anchor="fv-gcp">
+          <name>GCP Version Types</name>
+          <t>
+            Defined <tt>version_type</tt> values for GCP services:
+            <tt>kubernetes_version</tt> (GKE, with <tt>release_channel</tt> field and
+            <tt>channel_and_gte</tt> comparison for channel-gated fixes),
+            <tt>database_version</tt> (Cloud SQL), <tt>runtime_version</tt> (Cloud
+            Functions and Cloud Run, using <tt>date_gte</tt> comparison),
+            <tt>image_family</tt> (Compute Engine public image families).
+          </t>
+          <t>
+            For GKE, fix availability differs by release channel (RAPID, REGULAR,
+            STABLE). The <tt>note</tt> field <bcp14>MUST</bcp14> enumerate
+            channel-specific availability dates.
+          </t>
+        </section>
+
+        <section anchor="fv-cloudflare">
+          <name>Cloudflare Version Types</name>
+          <t>
+            Cloudflare Workers does not expose a semantic version. Defined
+            <tt>version_type</tt> values: <tt>runtime_build_date</tt> (Workers runtime,
+            using <tt>date_gte</tt> comparison against <tt>build_date</tt>),
+            <tt>deployment_id</tt> (Pages or Workers deployments where the fix requires
+            consumer-controlled redeployment).
+          </t>
+        </section>
+
+        <section anchor="fv-oracle">
+          <name>Oracle Version Types</name>
+          <t>
+            Defined <tt>version_type</tt> values for Oracle Cloud services:
+            <tt>database_version</tt> (Autonomous Database, Base Database Service),
+            <tt>kubernetes_version</tt> (OKE, with optional <tt>node_pool_image</tt>),
+            <tt>image_ocid</tt> (Compute platform images, using <tt>date_gte</tt>
+            comparison against <tt>build_date</tt>; OCID is region-specific so
+            <tt>build_date</tt> is the normative threshold).
+          </t>
+        </section>
+
+      </section>
+
+      <section anchor="schema-detections">
+        <name>Detection Fields</name>
+        <t>
+          Detection fields enable consumers to deploy log queries, metric filters, and
+          alerting rules that identify vulnerable configurations, active exploitation, or
+          configuration drift. A record with <tt>vex_status</tt> of <tt>affected</tt> or
+          <tt>fixed</tt> <bcp14>SHOULD</bcp14> include at least one detection entry.
+        </t>
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Required</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>provider</td><td>REQUIRED</td><td>Cloud provider for this detection.</td></tr>
+            <tr><td>service</td><td>REQUIRED</td><td>Log, event, or security service for which the query is written. See <xref target="detection-services"/>.</td></tr>
+            <tr><td>query_language</td><td>REQUIRED</td><td>Query language of the <tt>query</tt> string. See <xref target="detection-languages"/>.</td></tr>
+            <tr><td>query</td><td>REQUIRED</td><td>Detection query string. <bcp14>MUST</bcp14> be syntactically valid for the declared <tt>query_language</tt>. Variable slots <bcp14>MAY</bcp14> appear where consumer-specific values must be substituted before deployment.</td></tr>
+            <tr><td>detection_phase</td><td>REQUIRED</td><td>See <xref target="detection-phase"/>.</td></tr>
+            <tr><td>description</td><td>REQUIRED</td><td>Explanation of what the query detects, why it is relevant, and any false positive caveats.</td></tr>
+            <tr><td>pending_reason</td><td>OPTIONAL</td><td>When present, indicates this detection entry is a placeholder without a functional query. The <tt>query</tt> field <bcp14>MUST</bcp14> be an empty string when <tt>pending_reason</tt> is set. See <xref target="detection-pending"/>.</td></tr>
+          </tbody>
+        </table>
+
+        <section anchor="detection-services">
+          <name>Detection Service Values</name>
+          <table>
+            <thead>
+              <tr><th>Provider</th><th>Service values</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>aws</td><td>cloudwatch_logs_insights, cloudwatch_metric_filter, cloudtrail, security_hub, guardduty, config_rule</td></tr>
+              <tr><td>azure</td><td>monitor_kql, sentinel_analytics, defender_alert</td></tr>
+              <tr><td>gcp</td><td>cloud_logging, security_command_center, chronicle</td></tr>
+              <tr><td>cloudflare</td><td>logpush, firewall_events</td></tr>
+              <tr><td>oracle</td><td>oci_logging, cloud_guard</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section anchor="detection-languages">
+          <name>Query Language Values</name>
+          <table>
+            <thead>
+              <tr><th>Value</th><th>Language</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>cwli</td><td>CloudWatch Logs Insights</td></tr>
+              <tr><td>cloudwatch_filter</td><td>CloudWatch Metric Filter pattern syntax</td></tr>
+              <tr><td>kql</td><td>Kusto Query Language (Azure Monitor and Sentinel)</td></tr>
+              <tr><td>gcp_logging_filter</td><td>GCP Cloud Logging filter syntax</td></tr>
+              <tr><td>oci_logging_query</td><td>OCI Logging query syntax</td></tr>
+              <tr><td>lucene</td><td>Lucene query syntax (Cloudflare and SIEM integrations)</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section anchor="detection-phase">
+          <name>Detection Phase</name>
+          <t>
+            The <tt>detection_phase</tt> field is normative. A consumer tool
+            <bcp14>MUST</bcp14> use this field to determine whether a detection is
+            currently applicable and whether it should remain active after remediation.
+          </t>
+          <table>
+            <thead>
+              <tr><th>Value</th><th>Meaning</th><th>Retention Policy</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>pre_fix</td><td>Detects the vulnerable condition. <bcp14>MAY</bcp14> become misleading after remediation.</td><td>Deactivate or suppress after per-resource remediation is confirmed.</td></tr>
+              <tr><td>exploitation</td><td>Detects active exploitation attempts regardless of fix status.</td><td><bcp14>MUST</bcp14> remain active permanently.</td></tr>
+              <tr><td>post_fix</td><td>Detects exploitation attempts that remain possible after apparent remediation.</td><td>Activate at <tt>provider_fix_date</tt>; retain permanently.</td></tr>
+              <tr><td>misconfiguration</td><td>Detects drift back to a vulnerable configuration after remediation. A confirmed match <bcp14>MUST</bcp14> be treated as a window-reopening event.</td><td><bcp14>MUST</bcp14> remain active indefinitely after any <tt>opt_in</tt> or <tt>config_change</tt> remediation.</td></tr>
+            </tbody>
+          </table>
+          <t>
+            A record with <tt>fix_propagation</tt> of <tt>opt_in</tt> or
+            <tt>config_change</tt> <bcp14>MUST</bcp14> include at least one
+            <tt>misconfiguration</tt> detection entry.
+          </t>
+          <t>
+            If a functional detection query cannot be authored at publication
+            time, the producer <bcp14>MUST</bcp14> include a placeholder entry
+            with <tt>detection_phase</tt> of <tt>misconfiguration</tt> and a
+            <tt>pending_reason</tt> value from
+            <xref target="detection-pending"/>.
+          </t>
+        </section>
+
+        <section anchor="detection-pending">
+          <name>Pending Detection Reasons</name>
+          <t>
+            When a producer cannot author a functional detection query at
+            publication time, the producer <bcp14>MUST</bcp14> still include a
+            detection entry with <tt>detection_phase</tt> set to the required
+            phase and <tt>pending_reason</tt> set to one of the following values.
+            The <tt>query</tt> field <bcp14>MUST</bcp14> be an empty string. The
+            <tt>description</tt> field <bcp14>SHOULD</bcp14> provide additional
+            human-readable context explaining the gap.
+          </t>
+          <t>
+            A producer <bcp14>SHOULD</bcp14> publish an updated record with a
+            functional query replacing the placeholder once the constraint is
+            resolved.
+          </t>
+          <table>
+            <thead>
+              <tr><th>Value</th><th>Meaning</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>query_in_development</td><td>The detection query is being authored or tested and will be published in a future record update.</td></tr>
+              <tr><td>awaiting_provider_telemetry</td><td>The cloud provider does not yet expose the log, event, or API data needed to detect this condition. Pending provider capability.</td></tr>
+              <tr><td>no_detection_surface</td><td>No provider service currently offers telemetry sufficient to detect this misconfiguration programmatically. This value indicates a permanent or long-term gap.</td></tr>
+              <tr><td>access_constraint</td><td>The record author lacks the provider environment access needed to develop and validate the query.</td></tr>
+              <tr><td>pending_review</td><td>A candidate query exists but is under review (security, accuracy, or false-positive assessment) before publication.</td></tr>
+            </tbody>
+          </table>
+          <t>
+            A consumer <bcp14>MUST NOT</bcp14> deploy a detection entry that has
+            <tt>pending_reason</tt> set. A consumer <bcp14>SHOULD</bcp14> surface
+            placeholder entries in operator-facing dashboards to indicate
+            detection coverage gaps.
+          </t>
+        </section>
+
+      </section>
+
+      <section anchor="schema-advisory">
+        <name>Provider Advisory</name>
+        <table>
+          <thead>
+            <tr><th>Field</th><th>Required</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>advisory_id</td><td>OPTIONAL</td><td>Provider's own advisory identifier (e.g., <tt>ALAS2-2024-2456</tt>, <tt>MSRC-2024-0034</tt>, <tt>GCP-SA-2024-001</tt>).</td></tr>
+            <tr><td>advisory_url</td><td>OPTIONAL</td><td>Direct URL to the provider's security advisory.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section anchor="schema-vex">
+        <name>VEX Status</name>
+        <t>
+          The <tt>vex_status</tt> field aligns CRIT records with the OpenVEX (<xref target="OpenVEX"/>) / CSAF VEX (<xref target="CSAF-VEX"/>)
+          vocabulary for composability with VEX-aware tooling.
+        </t>
+        <table>
+          <thead>
+            <tr><th>Value</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>affected</td><td>The resource type is affected. No fix is available, or fix has not been applied.</td></tr>
+            <tr><td>not_affected</td><td>The resource type is not affected, or the vulnerability is not reachable in this deployment context.</td></tr>
+            <tr><td>fixed</td><td>A provider fix is available and <tt>provider_fix_date</tt> is set.</td></tr>
+            <tr><td>under_investigation</td><td>Provider has acknowledged the vulnerability but has not yet confirmed affected status.</td></tr>
+          </tbody>
+        </table>
+        <t>
+          A consumer <bcp14>MUST</bcp14> treat <tt>vex_status</tt> as a record-level
+          statement about provider fix availability, not as a per-resource remediation
+          status. A record with <tt>vex_status = fixed</tt> and
+          <tt>existing_deployments_remain_vulnerable = true</tt> represents the common
+          real-world condition: a fix exists at the provider level, but existing
+          deployed resources are not automatically remediated. Both facts are
+          simultaneously true and <bcp14>MUST</bcp14> both be surfaced to operators.
+        </t>
+      </section>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <section anchor="provider-templates">
+      <name>Provider Template Reference</name>
+
+      <section anchor="pt-aws">
+        <name>AWS ARN</name>
+        <t>Canonical formats:</t>
+        <figure>
+          <sourcecode type="text"><![CDATA[
+arn:aws:{service-prefix}:{region}:{account}:{resource-type}/{id}
+arn:aws:{service-prefix}:{region}:{account}:{resource-type}:{id}
+          ]]></sourcecode>
+        </figure>
+        <t>
+          The <tt>{service-prefix}</tt> slot is always hardcoded (e.g., <tt>iam</tt>,
+          <tt>s3</tt>, <tt>ec2</tt>, <tt>lambda</tt>, <tt>eks</tt>, <tt>rds</tt>).
+        </t>
+        <t>
+          The <tt>{region}</tt> slot <bcp14>MUST</bcp14> be hardcoded to
+          <tt>us-east-1</tt> for globally-scoped services whose ARN schema
+          requires the region field to carry a fixed value: <tt>iam</tt>,
+          <tt>cloudfront</tt>, <tt>route53</tt>, <tt>waf</tt>, <tt>wafv2</tt>,
+          <tt>shield</tt>, <tt>organizations</tt>, <tt>sts</tt>,
+          <tt>globalaccelerator</tt>. For globally-scoped services whose ARN
+          schema structurally omits the region field (the field is positionally
+          present but the value is the empty string), the region slot
+          <bcp14>MUST</bcp14> be empty (<tt>{region=}</tt>). S3 buckets and
+          objects are the principal example: the ARN format is
+          <tt>arn:aws:s3:::{resource}</tt>. For all other AWS services the
+          region slot <bcp14>MUST</bcp14> be a named variable or wildcard and
+          <bcp14>MUST NOT</bcp14> be empty.
+        </t>
+        <t>
+          The <tt>{account}</tt> slot is a named variable, except for resource
+          types whose ARN schema structurally omits the account field (e.g., S3
+          buckets and objects), in which case it <bcp14>MUST</bcp14> be empty
+          (<tt>{account=}</tt>). The <tt>{resource-type}</tt> slot is hardcoded
+          or empty per the service schema. The <tt>{resource-id}</tt> slot is a
+          named variable or wildcard.
+        </t>
+        <figure>
+          <name>AWS ARN Examples</name>
+          <sourcecode type="text"><![CDATA[
+arn:aws:iam:{region=us-east-1}:{account}:role/{resource-id}
+arn:aws:s3:{region=}:{account=}:{resource-id}
+arn:aws:ec2:{region}:{account}:instance/{resource-id}
+arn:aws:lambda:{region}:{account}:function:{resource-id}
+arn:aws:eks:{region}:{account}:cluster/{resource-id}
+          ]]></sourcecode>
+        </figure>
+      </section>
+
+      <section anchor="pt-azure">
+        <name>Azure Resource ID</name>
+        <t>Canonical format:</t>
+        <figure>
+          <sourcecode type="text"><![CDATA[
+/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}
+  /providers/{namespace}/{type}/{name}
+          ]]></sourcecode>
+        </figure>
+        <t>
+          <tt>{subscriptionId}</tt> and <tt>{name}</tt> are always named variables.
+          <tt>{resourceGroup}</tt> is a named variable or wildcard.
+          <tt>{namespace}</tt> and <tt>{type}</tt> are always hardcoded (e.g.,
+          <tt>Microsoft.Compute/virtualMachines</tt>,
+          <tt>Microsoft.ContainerService/managedClusters</tt>).
+        </t>
+      </section>
+
+      <section anchor="pt-gcp">
+        <name>GCP Resource Name</name>
+        <t>Canonical format:</t>
+        <figure>
+          <sourcecode type="text"><![CDATA[
+//{api}.googleapis.com/{collection-path}
+          ]]></sourcecode>
+        </figure>
+        <t>
+          <tt>{api}</tt> is always hardcoded (e.g., <tt>compute</tt>,
+          <tt>container</tt>, <tt>sqladmin</tt>). <tt>{project}</tt> is always a named
+          variable. <tt>{zone}</tt> is a named variable for zonal resources and empty
+          (<tt>{zone=}</tt>) for global or regional resources.
+        </t>
+      </section>
+
+      <section anchor="pt-cloudflare">
+        <name>Cloudflare Locator</name>
+        <t>Canonical format:</t>
+        <figure>
+          <sourcecode type="text"><![CDATA[
+com.cloudflare.api.account.{account_id}.{resource-type}.{id}
+          ]]></sourcecode>
+        </figure>
+        <t>
+          Cloudflare resources are globally scoped. There is no region component.
+          A CRIT producer <bcp14>MUST NOT</bcp14> add a region slot to a Cloudflare
+          template. <tt>{resource-type}</tt> is always hardcoded (e.g., <tt>worker</tt>,
+          <tt>r2_bucket</tt>, <tt>zone</tt>, <tt>d1_database</tt>).
+        </t>
+      </section>
+
+      <section anchor="pt-oracle">
+        <name>Oracle OCID</name>
+        <t>Canonical formats:</t>
+        <figure>
+          <sourcecode type="text"><![CDATA[
+ocid1.{type}.{realm}.{region}..{unique-id}       (regional)
+ocid1.{type}.{realm}...{unique-id}               (global)
+          ]]></sourcecode>
+        </figure>
+        <t>
+          <tt>{type}</tt> is always hardcoded. <tt>{realm}</tt> is hardcoded to
+          <tt>oc1</tt> for commercial regions. Separate CRIT records
+          <bcp14>SHOULD</bcp14> be produced for government realms (<tt>oc2</tt>,
+          <tt>oc3</tt>) when fix timelines differ. <tt>{region}</tt> is a named
+          variable for regional resources and empty (<tt>{region=}</tt>) for global
+          resources.
+        </t>
+      </section>
+
+      <section anchor="pt-naming-conventions">
+        <name>Parameter Naming Conventions</name>
+        <t>
+          Slot field names vary between providers by design. AWS ARNs use a
+          consistent positional structure so slot names are uniform across
+          services (<tt>region</tt>, <tt>account</tt>, <tt>resource-id</tt>).
+          GCP, Azure, Oracle, and Cloudflare use service-specific path
+          components (<tt>project</tt>, <tt>location</tt>,
+          <tt>subscriptionId</tt>, <tt>resourceGroup</tt>, <tt>realm</tt>,
+          <tt>account_id</tt>) because their resource path structures are
+          service-specific. This asymmetry is intentional: CRIT adopts
+          provider-native naming conventions rather than imposing a normalised
+          abstraction. Consumers <bcp14>SHOULD</bcp14> expect different slot
+          vocabularies per provider and <bcp14>MUST NOT</bcp14> assume that
+          all providers use the same field names.
+        </t>
+      </section>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <section anchor="resolution">
+      <name>Variable Resolution Rules</name>
+
+      <section anchor="resolution-order">
+        <name>Resolution Order</name>
+        <t>
+          A consumer resolving a CRIT template to a live identifier <bcp14>MUST</bcp14>
+          apply substitutions in the following order:
+        </t>
+        <ol>
+          <li>Replace all hardcoded slots (<tt>{field=literal}</tt>) with their literal value.</li>
+          <li>Replace all empty slots (<tt>{field=}</tt>) with the empty string.</li>
+          <li>Replace all named variable slots (<tt>{field}</tt>) with consumer-supplied concrete values.</li>
+          <li>Wildcard slots (<tt>{field=*}</tt>) <bcp14>MUST NOT</bcp14> be resolved to a live identifier. For inventory enumeration, a consumer <bcp14>MAY</bcp14> enumerate known values to produce a set of resolved templates.</li>
+        </ol>
+        <t>
+          After step 3, the resulting string <bcp14>MUST</bcp14> be a valid provider
+          identifier conforming to the declared <tt>template_format</tt>. A consumer
+          <bcp14>MUST</bcp14> validate this and <bcp14>MUST</bcp14> reject a template
+          that fails validation after full substitution.
+        </t>
+      </section>
+
+      <section anchor="resolution-fields">
+        <name>Reserved Field Names</name>
+        <t>
+          The following field names carry defined semantics across all providers.
+          A CRIT producer <bcp14>MUST</bcp14> use these names where applicable and
+          <bcp14>MUST NOT</bcp14> reuse them for different semantics.
+        </t>
+        <table>
+          <thead>
+            <tr><th>Field Name</th><th>Semantics</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>account</td><td>AWS account ID or equivalent top-level ownership identifier.</td></tr>
+            <tr><td>subscriptionId</td><td>Azure subscription ID.</td></tr>
+            <tr><td>project</td><td>GCP project ID.</td></tr>
+            <tr><td>account_id</td><td>Cloudflare account ID.</td></tr>
+            <tr><td>region</td><td>Provider geographic region identifier.</td></tr>
+            <tr><td>zone</td><td>Provider availability zone or GCP zone identifier.</td></tr>
+            <tr><td>location</td><td>GCP region or multi-region identifier as used in resource paths.</td></tr>
+            <tr><td>resource-id</td><td>Unique identifier of the specific resource instance.</td></tr>
+            <tr><td>name</td><td>Azure resource name.</td></tr>
+            <tr><td>id</td><td>Cloudflare or Oracle resource identifier.</td></tr>
+            <tr><td>unique-id</td><td>Oracle OCID unique identifier component.</td></tr>
+            <tr><td>realm</td><td>Oracle OCID realm component.</td></tr>
+            <tr><td>service-prefix</td><td>AWS service prefix as used in ARN construction.</td></tr>
+            <tr><td>resource-type</td><td>Resource type component within an ARN.</td></tr>
+            <tr><td>namespace</td><td>Azure resource provider namespace.</td></tr>
+            <tr><td>type</td><td>Azure resource type or Oracle OCID type component.</td></tr>
+            <tr><td>api</td><td>GCP API host prefix.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <section anchor="exposure-window">
+      <name>Exposure Window Computation</name>
+
+      <section anchor="ew-definition">
+        <name>Definition</name>
+        <t>
+          For package vulnerabilities, an exposure window can be approximated from
+          version data alone: a package was exposed from the time the vulnerable version
+          was released until the time the fixed version was installed. Cloud resources
+          have no equivalent computation. There is no "installed version" to timestamp,
+          no registry entry recording when a resource was last updated, and no version
+          comparison that determines whether a specific running resource is currently in
+          the affected range.
+        </t>
+        <t>
+          The CRIT exposure window is therefore defined over time and consumer action,
+          not over version ranges. A resource enters the window when it is deployed into
+          a vulnerable configuration. It exits the window when a qualifying remediation
+          event is recorded -- which may be long after <tt>provider_fix_date</tt> for
+          resources where <tt>existing_deployments_remain_vulnerable</tt> is
+          <tt>true</tt>, or never, for resources under <tt>no_fix_available</tt>
+          propagation.
+        </t>
+        <t>
+          Formally, the exposure window is the interval [W_start, W_end] where:
+        </t>
+        <ul>
+          <li>W_start = <tt>vulnerability_introduced_date</tt> when present; otherwise
+          <tt>vuln_published_date</tt>. When <tt>vulnerability_introduced_date_estimated</tt>
+          is <tt>true</tt>, consumers <bcp14>SHOULD</bcp14> indicate this in user-facing
+          reporting.</li>
+          <li>W_end is determined per <xref target="ew-wend"/>.</li>
+        </ul>
+      </section>
+
+      <section anchor="ew-wend">
+        <name>Record-Level W_end</name>
+        <table>
+          <thead>
+            <tr><th>Condition</th><th>W_end</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><tt>shared_responsibility = provider_only</tt> AND <tt>provider_fix_date</tt> is present</td><td>W_end = <tt>provider_fix_date</tt>. Window closed for all resources automatically. <tt>existing_deployments_remain_vulnerable</tt> <bcp14>MUST</bcp14> be <tt>false</tt>.</td></tr>
+            <tr><td><tt>shared_responsibility</tt> is <tt>customer_action_required</tt> or <tt>shared</tt></td><td>W_end undefined at record level. <tt>provider_fix_date</tt> opens remediation possibility but does not close the window. Per-resource closure requires a confirmed consumer action.</td></tr>
+            <tr><td><tt>shared_responsibility = customer_only</tt></td><td>W_end undefined. No <tt>provider_fix_date</tt>. Per-resource closure requires confirmed consumer remediation.</td></tr>
+            <tr><td><tt>fix_propagation = no_fix_available</tt></td><td>W_end = null. Window open. <tt>provider_fix_date</tt> <bcp14>MUST</bcp14> be absent.</td></tr>
+            <tr><td><tt>provider_fix_date</tt> absent for any other reason</td><td>W_end = null. Window open.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section anchor="ew-deployed-before-fix">
+        <name>The Deployed-Before-Fix Problem</name>
+        <t>
+          When <tt>existing_deployments_remain_vulnerable</tt> is <tt>true</tt>, the
+          exposure window for a specific resource instance is NOT closed by
+          <tt>provider_fix_date</tt>. A consumer <bcp14>MUST</bcp14> apply the following
+          logic per resource:
+        </t>
+        <figure>
+          <sourcecode type="pseudocode"><![CDATA[
+if resource.deployed_date < provider_fix_date
+  AND existing_deployments_remain_vulnerable == true
+  AND no confirmed remediation action recorded for this resource:
+    resource.exposure_window_end = null  // open
+          ]]></sourcecode>
+        </figure>
+        <t>
+          A consumer <bcp14>MUST</bcp14> record a per-resource remediation event to
+          close the window for that resource. A consumer <bcp14>MUST NOT</bcp14> mark a
+          resource as remediated solely because <tt>provider_fix_date</tt> has passed.
+        </t>
+      </section>
+
+      <section anchor="ew-drift">
+        <name>Opt-In and Config Change Drift</name>
+        <t>
+          When <tt>fix_propagation</tt> is <tt>opt_in</tt> or <tt>config_change</tt>,
+          a remediation may be reversed by a subsequent configuration change, reopening
+          the window. When a <tt>misconfiguration</tt>-phase detection fires for a
+          resource, a consumer <bcp14>MUST</bcp14> treat this as a window-reopening
+          event. A consumer <bcp14>MUST</bcp14> keep <tt>misconfiguration</tt>-phase
+          detections active indefinitely for any resource remediated via <tt>opt_in</tt>
+          or <tt>config_change</tt>.
+        </t>
+      </section>
+
+      <section anchor="ew-rolling">
+        <name>Rolling Replace Fleet Exposure</name>
+        <t>
+          When <tt>fix_propagation</tt> is <tt>rolling_replace</tt>, the exposure window
+          is partially open during the fleet transition. A consumer <bcp14>MUST
+          NOT</bcp14> consider the window closed until fleet replacement is confirmed
+          at 100%.
+        </t>
+      </section>
+
+      <section anchor="ew-channel">
+        <name>Channel-Gated Exposure</name>
+        <t>
+          When <tt>provider_fix_version.comparison</tt> is <tt>channel_and_gte</tt>,
+          the effective fix availability date differs by release channel. A consumer
+          <bcp14>MUST</bcp14> use the channel-specific fix date derived from the
+          <tt>note</tt> field when computing per-cluster exposure windows.
+        </t>
+      </section>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <section anchor="conformance">
+      <name>Conformance</name>
+
+      <section anchor="conformance-producer">
+        <name>Producer Conformance</name>
+        <t>A conformant CRIT producer <bcp14>MUST</bcp14>:</t>
+        <ul>
+          <li>Emit records that validate against the schema defined in <xref target="schema"/>.</li>
+          <li>Enforce the natural key uniqueness constraint: no two records in a corpus <bcp14>MAY</bcp14> share <tt>(vuln_id, provider, service, resource_type)</tt>.</li>
+          <li>Apply slot state selection rules defined in <xref target="vs-selection"/>.</li>
+          <li>Apply AWS region hardcoding rules defined in <xref target="pt-aws"/>.</li>
+          <li>Set <tt>existing_deployments_remain_vulnerable = false</tt> only when <tt>fix_propagation = automatic</tt> AND <tt>shared_responsibility = provider_only</tt>.</li>
+          <li>Set <tt>existing_deployments_remain_vulnerable = true</tt> when <tt>provider_fix_version.auto_upgrade</tt> is present and <tt>false</tt>.</li>
+          <li>Set <tt>fix_propagation = no_fix_available</tt> and omit <tt>provider_fix_date</tt> when no fix exists.</li>
+          <li>Include at least one <tt>remediation_actions</tt> entry for every record where <tt>vex_status</tt> is <tt>affected</tt> or <tt>fixed</tt>.</li>
+          <li>Use ISO&nbsp;8601 <xref target="ISO8601"/> full-date format for all date fields.</li>
+          <li>Include at least one <tt>misconfiguration</tt>-phase detection entry for records where <tt>fix_propagation</tt> is <tt>opt_in</tt> or <tt>config_change</tt>. A placeholder entry with <tt>pending_reason</tt> (<xref target="detection-pending"/>) satisfies this requirement.</li>
+          <li>Compute <tt>vectorString</tt> as the canonical CRIT vector string from the record's own fields per <xref target="crit-vector-string"/>.</li>
+          <li>Encode <tt>temporal.vuln_published_date</tt> as the PP metric value in Unix epoch seconds (UTC).</li>
+          <li>Encode <tt>temporal.service_available_date</tt> as the SA metric value in Unix epoch seconds (UTC).</li>
+        </ul>
+        <t>A conformant CRIT producer <bcp14>SHOULD</bcp14>:</t>
+        <ul>
+          <li>Include at least one detection entry for records where <tt>vex_status</tt> is <tt>affected</tt> or <tt>fixed</tt>.</li>
+          <li>Populate <tt>provider_advisory</tt> when a provider security advisory exists.</li>
+          <li>Populate <tt>vulnerability_introduced_date</tt> when determinable; set <tt>vulnerability_introduced_date_estimated = true</tt> when the date is an estimate.</li>
+        </ul>
+      </section>
+
+      <section anchor="conformance-consumer">
+        <name>Consumer Conformance</name>
+        <t>A conformant CRIT consumer <bcp14>MUST</bcp14>:</t>
+        <ul>
+          <li>Treat <tt>provider_fix_date</tt> as closing the exposure window only when <tt>existing_deployments_remain_vulnerable</tt> is <tt>false</tt>.</li>
+          <li>Not substitute hardcoded slot values with alternative values.</li>
+          <li>Not use wildcard templates as live provider API identifiers.</li>
+          <li>Track per-resource remediation events separately from record-level <tt>vex_status</tt>.</li>
+          <li>Treat a <tt>misconfiguration</tt>-phase detection match as a window-reopening event.</li>
+          <li>Keep <tt>misconfiguration</tt>-phase detections active indefinitely once deployed.</li>
+          <li>Use channel-specific fix dates for <tt>channel_and_gte</tt> version types when per-resource channel enrollment is known.</li>
+          <li>Prefer <tt>image_digest</tt> over <tt>image_tag</tt> for <tt>container_image</tt> version comparison when both are present.</li>
+          <li>Ignore unknown metric keys in a <tt>vectorString</tt> without error (forward compatibility per <xref target="vs-computation"/>).</li>
+          <li>Reject a <tt>vectorString</tt> missing any registered metric.</li>
+          <li>Not treat a <tt>vectorString</tt> as a complete record representation. Use the full JSON record for operational decisions requiring fields not carried in the vector (see <xref target="vs-information-scope"/>).</li>
+        </ul>
+        <t>A conformant CRIT consumer <bcp14>SHOULD</bcp14>:</t>
+        <ul>
+          <li>Present <tt>remediation_actions</tt> in declared sequence order.</li>
+          <li>Substitute consumer-specific named variable values into detection query slots before deploying queries.</li>
+          <li>Apply <tt>customer_deadline_date</tt> when computing remediation SLAs.</li>
+          <li>Surface <tt>vulnerability_introduced_date_estimated = true</tt> in operator-facing exposure window reporting.</li>
+        </ul>
+      </section>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <section anchor="upstream-integration">
+      <name>Upstream Schema Integration</name>
+
+      <section anchor="ui-strategy">
+        <name>Integration Strategy and Phasing</name>
+        <t>
+          CRIT data is published via two upstream vulnerability schema ecosystems: the
+          CVE List v5 ADP container and the OSV schema. Each integration follows a
+          two-phase strategy.
+        </t>
+        <t>
+          <strong>Phase 1 -- Extension (current):</strong> CRIT records are embedded as
+          custom <tt>x_</tt> properties within conformant records of the target schema.
+          This is immediately deployable without requiring changes to either upstream
+          schema. Phase 1 records are fully schema-valid because both CVEListv5 and OSV
+          permit additional properties with the <tt>x_</tt> prefix.
+        </t>
+        <t>
+          <strong>Phase 2 -- Native integration (proposed):</strong> CRIT fields are
+          expressed using native objects defined by the upstream schema wherever a
+          semantic mapping exists. Fields without a native mapping continue to use
+          <tt>x_crit_*</tt> prefixed properties within the appropriate extension points.
+          Phase 2 requires coordination with CVEProject and OpenSSF but does not require
+          either upstream schema to define new first-class fields for all CRIT concepts.
+        </t>
+        <t>
+          A producer <bcp14>MUST NOT</bcp14> remove Phase 1 fields until: Phase 2 native
+          fields have been published for at least one full release cycle of the target
+          schema; the <tt>cloud:*</tt> ecosystem namespace has been formally registered
+          with OSV schema maintainers or the ADP native field mapping accepted by the
+          CVEProject schema working group; downstream consumers have confirmed migration
+          to Phase 2; and a 90-day deprecation notice has been in the relevant records.
+        </t>
+      </section>
+
+      <section anchor="ui-cvelistv5">
+        <name>CVE List v5 ADP Container Integration</name>
+        <t>
+          Vulnetix publishes CRIT data as an Authorized Data Publisher (ADP) in
+          CVEListv5 records. The Vulnetix ADP container is identified by
+          <tt>providerMetadata.shortName = "VVD"</tt> or by Vulnetix's
+          <tt>orgId</tt> in the <tt>containers.adp[]</tt> array.
+        </t>
+
+        <section anchor="ui-cv5-phase1">
+          <name>Phase 1 -- x_crit Extension (Current)</name>
+          <t>
+            In Phase 1 a single top-level <tt>x_crit</tt> field in the Vulnetix ADP
+            container carries an array of CRIT records. The <tt>x_crit</tt> array
+            <bcp14>MUST</bcp14> contain one entry per natural key tuple applicable to
+            the CVE. The <tt>vuln_id</tt> within each entry <bcp14>MUST</bcp14> match
+            the <tt>cveMetadata.cveId</tt> of the enclosing CVEListv5 record.
+          </t>
+        </section>
+
+        <section anchor="ui-cv5-phase2">
+          <name>Phase 2 -- Native ADP Container (Proposed)</name>
+          <t>
+            In Phase 2, each CRIT record contributes one entry to the ADP
+            <tt>affected[]</tt> array. Provider-native CVEListv5 fields carry data
+            wherever a mapping exists; fields without a native mapping use
+            <tt>x_crit_*</tt> extension properties on the <tt>affected[]</tt> item
+            or at the ADP container level.
+          </t>
+        </section>
+
+        <section anchor="ui-cv5-mapping">
+          <name>CVEListv5 Field Mapping</name>
+          <dl newline="true" spacing="normal">
+            <dt><tt>provider</tt>:</dt>
+            <dd><tt>affected[].vendor</tt> -- Provider key.</dd>
+            <dt><tt>service</tt>:</dt>
+            <dd><tt>affected[].product</tt> -- Service key.</dd>
+            <dt><tt>resource_type</tt>:</dt>
+            <dd><tt>affected[].modules[]</tt> -- Array of resource type strings.</dd>
+            <dt><tt>template</tt>:</dt>
+            <dd><tt>affected[].platforms[]</tt> -- CRIT template strings as
+            platform descriptors.</dd>
+            <dt><tt>provider_fix_version</tt> (range bound):</dt>
+            <dd><tt>affected[].versions[].lessThan</tt> and
+            <tt>changes[].at</tt> -- Range [0, fix_version) expressed
+            natively; full subschema in residual field
+            <tt>x_crit_fix_version</tt>.</dd>
+            <dt><tt>temporal.*_date</tt> fields:</dt>
+            <dd>ADP container <tt>timeline[]</tt> array -- Each date as a timeline
+            entry with a descriptive value string.</dd>
+            <dt><tt>provider_advisory</tt> CVSS fields:</dt>
+            <dd>ADP container <tt>metrics[]</tt> array -- <tt>cvssV3_1</tt> or
+            <tt>cvssV4_0</tt> per the vector string prefix.</dd>
+            <dt><tt>provider_advisory.advisory_url</tt>:</dt>
+            <dd>ADP container <tt>references[]</tt> array with
+            <tt>tags: ["vendor-advisory"]</tt>.</dd>
+            <dt><tt>remediation_actions</tt> (non-compensating):</dt>
+            <dd>ADP container <tt>solutions[]</tt> array -- One entry per action.</dd>
+            <dt><tt>remediation_actions</tt> (compensating_control: true):</dt>
+            <dd>ADP container <tt>workarounds[]</tt> array.</dd>
+            <dt>Residual fields (no native CVEListv5 mapping):</dt>
+            <dd><tt>vex_status</tt> -> <tt>x_crit_vex_status</tt>;
+            <tt>fix_propagation</tt> -> <tt>x_crit_fix_propagation</tt>;
+            <tt>existing_deployments_remain_vulnerable</tt> ->
+            <tt>x_crit_existing_deployments_remain_vulnerable</tt>;
+            <tt>shared_responsibility</tt> ->
+            <tt>x_crit_shared_responsibility</tt>;
+            <tt>resource_lifecycle</tt> -> <tt>x_crit_resource_lifecycle</tt>;
+            <tt>provider_fix_version</tt> (full subschema) ->
+            <tt>x_crit_fix_version</tt>;
+            <tt>template</tt> with slot syntax ->
+            <tt>x_crit_template</tt> + <tt>x_crit_template_format</tt>;
+            <tt>detections[]</tt> -> <tt>x_crit_detections</tt>.</dd>
+          </dl>
+        </section>
+
+      </section>
+
+      <section anchor="ui-osv">
+        <name>OSV Schema Integration</name>
+        <t>
+          Publishers may produce CRIT data in OSV schema format for consumption by OSV.dev
+          and compatible tooling.
+        </t>
+
+        <section anchor="ui-osv-conventions">
+          <name>Naming Conventions</name>
+          <t>
+            Cloud provider ecosystems are expressed as <tt>cloud:&lt;provider&gt;</tt>
+            (e.g., <tt>cloud:aws</tt>, <tt>cloud:azure</tt>, <tt>cloud:gcp</tt>). This
+            namespace is proposed for registration with the OSV schema ecosystem list.
+            Until registered, tooling that does not recognise a <tt>cloud:*</tt>
+            ecosystem <bcp14>MUST NOT</bcp14> reject records using it.
+          </t>
+          <t>
+            Package names use the convention <tt>&lt;service&gt;:&lt;resource_type&gt;</tt>
+            (e.g., <tt>rds:db</tt>, <tt>aks:cluster</tt>, <tt>lambda:function</tt>).
+          </t>
+          <t>
+            PURLs follow the form
+            <tt>pkg:cloud/&lt;provider&gt;/&lt;service&gt;/&lt;resource_type&gt;</tt>
+            (e.g., <tt>pkg:cloud/aws/rds/db</tt>). The <tt>cloud</tt> type is
+            observed in the OSV ecosystem but is not a registered type in the
+            <xref target="PURL">PURL specification</xref>. This specification
+            acknowledges its use for OSV integration but does not define or
+            govern the <tt>pkg:cloud/</tt> type itself.
+          </t>
+          <t>
+            OSV record IDs follow the convention:
+            <tt>OSV-&lt;year&gt;-&lt;ID&gt;</tt>.
+          </t>
+        </section>
+
+        <section anchor="ui-osv-phase1">
+          <name>Phase 1 -- database_specific Extension (Current)</name>
+          <t>
+            Each OSV record carries one <tt>affected[]</tt> entry per CRIT natural key
+            tuple. The full CRIT record is embedded in
+            <tt>affected[].database_specific.x_crit</tt>. Multiple CRIT records for the
+            same vulnerability are published as separate OSV records, each with a distinct ID and
+            a single <tt>affected[]</tt> entry. The <tt>aliases</tt> array on all records
+            includes the shared <tt>vuln_id</tt>.
+          </t>
+        </section>
+
+        <section anchor="ui-osv-mapping">
+          <name>OSV Field Mapping</name>
+          <dl newline="true" spacing="normal">
+            <dt><tt>provider</tt>:</dt>
+            <dd><tt>affected[].package.ecosystem</tt> --
+            <tt>"cloud:&lt;provider&gt;"</tt>
+            (e.g., <tt>"cloud:aws"</tt>).</dd>
+            <dt><tt>service</tt> + <tt>resource_type</tt>:</dt>
+            <dd><tt>affected[].package.name</tt> --
+            <tt>"&lt;service&gt;:&lt;resource_type&gt;"</tt>
+            (e.g., <tt>"rds:db"</tt>).</dd>
+            <dt><tt>provider</tt> + <tt>service</tt> + <tt>resource_type</tt>:</dt>
+            <dd><tt>affected[].package.purl</tt> --
+            <tt>"pkg:cloud/&lt;provider&gt;/&lt;service&gt;/&lt;resource_type&gt;"</tt>.</dd>
+            <dt><tt>provider_fix_version</tt> (range bound):</dt>
+            <dd><tt>affected[].ranges[].events</tt> -- <tt>introduced</tt>
+            and <tt>fixed</tt> events.</dd>
+            <dt><tt>temporal.vuln_published_date</tt>:</dt>
+            <dd><tt>published</tt> -- RFC3339 format.</dd>
+            <dt><tt>provider_fix_date</tt>:</dt>
+            <dd><tt>modified</tt> -- Set to the most recent significant
+            update date.</dd>
+            <dt><tt>provider_advisory.provider_cvss_vector</tt>:</dt>
+            <dd><tt>severity[]</tt> with <tt>type: "CVSS_V3"</tt> or
+            <tt>"CVSS_V4"</tt>.</dd>
+            <dt><tt>provider_advisory.advisory_url</tt>:</dt>
+            <dd><tt>references[]</tt> with <tt>type: "ADVISORY"</tt>.</dd>
+            <dt><tt>vuln_id</tt>:</dt>
+            <dd><tt>aliases[]</tt>.</dd>
+            <dt>Residual fields in <tt>ecosystem_specific</tt>:</dt>
+            <dd><tt>fix_propagation</tt> ->
+            <tt>x_crit_fix_propagation</tt>;
+            <tt>existing_deployments_remain_vulnerable</tt> ->
+            <tt>x_crit_existing_deployments_remain_vulnerable</tt>;
+            all <tt>temporal</tt> fields ->
+            <tt>x_crit_temporal</tt>;
+            <tt>detections[]</tt> -> <tt>x_crit_detections</tt>;
+            <tt>remediation_actions[]</tt> ->
+            <tt>x_crit_remediation_actions</tt>;
+            <tt>vex_status</tt> -> <tt>x_crit_vex_status</tt>.</dd>
+            <dt>Residual fields in <tt>database_specific</tt>:</dt>
+            <dd><tt>provider_advisory.advisory_id</tt> ->
+            <tt>x_crit_provider_advisory_id</tt>.</dd>
+          </dl>
+        </section>
+
+      </section>
+
+    </section>
+
+    <!-- ============================================================ -->
+    <section anchor="IANA">
+      <name>IANA Considerations</name>
+      <t>
+        This document has no IANA actions. Future revisions targeting standards track
+        may request registration of the <tt>cloud</tt> PURL type with the PURL
+        specification maintainers, and registration of the <tt>cloud:*</tt> ecosystem
+        namespace with the OSV schema maintainers.
+      </t>
+    </section>
+
+    <!-- ============================================================ -->
+    <section anchor="Security">
+      <name>Security Considerations</name>
+
+      <section anchor="sec-detection">
+        <name>Detection Query Sensitivity</name>
+        <t>
+          Detection strings specify exact log filter patterns for identifying vulnerable
+          configurations and exploitation. A corpus of CRIT detection entries reveals
+          what a consumer is and is not monitoring for. CRIT records
+          <bcp14>SHOULD</bcp14> be treated as security-sensitive and access-controlled
+          in consumer systems.
+        </t>
+      </section>
+
+      <section anchor="sec-window">
+        <name>Exposure Window Date Sensitivity</name>
+        <t>
+          The combination of <tt>vulnerability_introduced_date</tt>,
+          <tt>provider_fix_date</tt>, and <tt>existing_deployments_remain_vulnerable</tt>
+          can allow an adversary to infer whether specific consumer resources remain
+          vulnerable. Consumers <bcp14>SHOULD NOT</bcp14> expose exposure window details
+          in public-facing interfaces.
+        </t>
+      </section>
+
+      <section anchor="sec-compensating">
+        <name>Compensating Control Disclosure</name>
+        <t>
+          Remediation actions with <tt>compensating_control = true</tt> reveal which
+          mitigating controls are in place. Consumers <bcp14>SHOULD NOT</bcp14> expose
+          active compensating control details in contexts where that information assists
+          an adversary in targeting unmitigated surface.
+        </t>
+      </section>
+
+      <section anchor="sec-wildcard">
+        <name>Template Wildcard Enumeration</name>
+        <t>
+          Wildcard templates reveal the structural scope of a consumer's cloud footprint.
+          A consumer <bcp14>MUST NOT</bcp14> expose unresolved wildcard templates in
+          contexts where asset enumeration is harmful.
+        </t>
+      </section>
+
+      <section anchor="sec-version-trust">
+        <name>Provider Fix Version Trust</name>
+        <t>
+          <tt>provider_fix_version</tt> values are advisory in nature. A consumer
+          <bcp14>MUST</bcp14> independently verify that a deployed resource meets the
+          version threshold. Container image tags are mutable; digest comparison
+          <bcp14>MUST</bcp14> be preferred. A consumer <bcp14>MUST NOT</bcp14> assume
+          remediation solely on the basis of a version string match.
+        </t>
+      </section>
+
+      <section anchor="sec-collision">
+        <name>Natural Key Collision</name>
+        <t>
+          A producer accepting CRIT records from multiple upstream sources
+          <bcp14>MUST</bcp14> enforce natural key uniqueness before serving records.
+          Duplicate natural keys with conflicting field values can cause consumers to
+          make incorrect remediation decisions. Producers <bcp14>SHOULD</bcp14> define
+          and expose a conflict resolution policy.
+        </t>
+      </section>
+
+    </section>
+
+
+    <!-- ============================================================ -->
+    <!-- Section 12: CRIT Dictionary                                  -->
+    <!-- ============================================================ -->
+    <section anchor="dictionary">
+      <name>CRIT Dictionary</name>
+
+      <section anchor="dictionary-definition">
+        <name>Definition</name>
+        <t>
+          A CRIT Dictionary is a machine-readable catalogue of entries that
+          enumerate the valid combinations of <tt>provider</tt>,
+          <tt>service</tt>, and <tt>resource_type</tt> values recognised by
+          this specification, together with the provider-native identifier
+          template and supporting metadata for each combination.  A dictionary
+          entry is the atomic unit of service coverage: it asserts that a given
+          cloud provider service and resource type is within CRIT scope and
+          provides the template and slot semantics required to locate instances
+          of that resource type in a consumer&#8217;s inventory.
+        </t>
+        <t>
+          A CRIT Dictionary is not a vulnerability database and does not
+          contain vulnerability-specific data.  It is a stable reference layer
+          that producers and consumers use to validate and resolve CRIT records.
+          A CRIT record&#8217;s <tt>(provider, service, resource_type)</tt>
+          tuple <bcp14>MUST</bcp14> resolve to an entry in a conformant
+          dictionary before the record is considered valid.
+        </t>
+        <t>Two categories of dictionary exist:</t>
+        <dl newline="true" spacing="normal">
+          <dt>Spec Default Dictionary:</dt>
+          <dd>
+            The normative dictionary published alongside this specification
+            in the specification repository.  It covers the providers
+            described in <xref target="dictionary-providers"/> and
+            representative service and resource type combinations for each.
+            Producers and consumers <bcp14>MUST</bcp14> support the Spec
+            Default Dictionary as a baseline.
+          </dd>
+          <dt>Extended Dictionary:</dt>
+          <dd>
+            A superset of the Spec Default Dictionary produced by a Vulnetix
+            deployment or third party.  Extended dictionaries
+            <bcp14>MAY</bcp14> add entries for services or resource types not
+            present in the Spec Default Dictionary, and <bcp14>MAY</bcp14> add
+            entries for additional providers.  Extended dictionaries
+            <bcp14>MUST NOT</bcp14> remove or alter the semantics of entries
+            present in the Spec Default Dictionary.
+          </dd>
+        </dl>
+      </section>
+
+      <section anchor="dictionary-entry">
+        <name>Dictionary Entry Schema</name>
+        <t>
+          Each dictionary entry is a JSON object.  All fields except
+          <tt>notes</tt> are <bcp14>REQUIRED</bcp14>.
+        </t>
+        <figure>
+          <name>Dictionary Entry Structure</name>
+          <sourcecode type="json"><![CDATA[
+{
+  "provider":        "<enum: aws | azure | gcp | cloudflare | oracle
+                            | salesforce | sap | servicenow>",
+  "service":         "<string: normalised service key>",
+  "resource_type":   "<string: resource type within service>",
+  "template":        "<CRIT template string>",
+  "template_format": "<enum: aws_arn | azure_resource_id | gcp_resource_name
+                             | cloudflare_locator | oracle_ocid
+                             | salesforce_url | sap_btp_url | sap_odata_url
+                             | sap_sf_url | servicenow_table_url>",
+  "region_behavior": "<enum: regional | global-only>",
+  "notes":           "<string: optional annotation>"
+}
+          ]]></sourcecode>
+        </figure>
+        <dl newline="true" spacing="normal">
+          <dt><tt>provider</tt>:</dt>
+          <dd>
+            The canonical provider key as defined in
+            <xref target="schema-envelope"/>.
+          </dd>
+          <dt><tt>service</tt>:</dt>
+          <dd>
+            The normalised service key (lowercase, underscores).  This is the
+            value used in the CRIT record <tt>service</tt> field and the second
+            component of the natural key tuple.  Where a provider uses multiple
+            common names for the same service, the dictionary carries the
+            canonical key; synonyms are resolved to it by the producer prior to
+            record emission.
+          </dd>
+          <dt><tt>resource_type</tt>:</dt>
+          <dd>
+            The resource type within the service.  This is the value used in
+            the CRIT record <tt>resource_type</tt> field.  For services with
+            multiple resource types, each type has its own dictionary entry
+            with a distinct <tt>(provider, service, resource_type)</tt> natural
+            key.
+          </dd>
+          <dt><tt>template</tt>:</dt>
+          <dd>
+            The CRIT template string for this entry, expressed using the slot
+            syntax defined in <xref target="variable-system"/>.  After variable
+            resolution, the string <bcp14>MUST</bcp14> be a valid provider
+            identifier of the declared <tt>template_format</tt>.
+          </dd>
+          <dt><tt>template_format</tt>:</dt>
+          <dd>
+            One of: <tt>aws_arn</tt>, <tt>azure_resource_id</tt>,
+            <tt>gcp_resource_name</tt>, <tt>cloudflare_locator</tt>,
+            <tt>oracle_ocid</tt>, <tt>salesforce_url</tt>,
+            <tt>sap_btp_url</tt>, <tt>sap_odata_url</tt>,
+            <tt>sap_sf_url</tt>, <tt>servicenow_table_url</tt>.
+            The applicable value for each provider is defined in
+            <xref target="dictionary-providers"/>.
+          </dd>
+          <dt><tt>region_behavior</tt>:</dt>
+          <dd>
+            One of: <tt>regional</tt> (the <tt>{region}</tt> slot is a named
+            variable, consumer-supplied) or <tt>global-only</tt> (the region
+            slot is hardcoded in the template; the resource type is not
+            regional).
+          </dd>
+          <dt><tt>notes</tt>:</dt>
+          <dd>
+            Optional human-readable annotation.  Used to document aliasing,
+            deprecation, or provider-specific constraints not expressible in
+            other fields.
+          </dd>
+        </dl>
+      </section>
+
+      <section anchor="dictionary-conformance">
+        <name>Dictionary Conformance</name>
+        <t>A conformant CRIT producer <bcp14>MUST</bcp14>:</t>
+        <ul>
+          <li>
+            Validate each record&#8217;s <tt>(provider, service,
+            resource_type)</tt> tuple against a conformant dictionary before
+            emitting the record.
+          </li>
+          <li>
+            Use the <tt>template</tt> and <tt>template_format</tt> values from
+            the matching dictionary entry as the basis for the record&#8217;s
+            template fields.
+          </li>
+          <li>
+            Support the Spec Default Dictionary as a minimum baseline.  An
+            extended dictionary <bcp14>MAY</bcp14> be used in addition but not
+            in place of the Spec Default Dictionary.
+          </li>
+        </ul>
+        <t>A conformant CRIT consumer <bcp14>MUST</bcp14>:</t>
+        <ul>
+          <li>
+            Reject records whose <tt>(provider, service, resource_type)</tt>
+            tuple does not resolve to an entry in any dictionary the consumer
+            supports, rather than silently ignoring them.
+          </li>
+          <li>
+            Use the dictionary entry&#8217;s <tt>region_behavior</tt> field
+            when constructing inventory queries from wildcard templates, to
+            avoid submitting region-qualified identifiers for global-only
+            resource types.
+          </li>
+        </ul>
+      </section>
+
+      <section anchor="dictionary-versioning">
+        <name>Dictionary Versioning</name>
+        <t>
+          The Spec Default Dictionary is versioned alongside the CRIT
+          specification.  The dictionary version is the same as the
+          semver string carried in the <tt>vectorString</tt> prefix of CRIT records.
+          Additions of new entries within a minor version are backwards
+          compatible.  Removal or semantic modification of existing entries
+          requires a major version increment.
+        </t>
+        <t>
+          Producers <bcp14>SHOULD</bcp14> include a
+          <tt>dictionary_version</tt> field in their extended dictionaries to
+          allow consumers to detect stale dictionary coverage.
+        </t>
+      </section>
+
+      <section anchor="dictionary-governance">
+        <name>Dictionary Governance</name>
+        <t>
+          The Spec Default Dictionary is maintained alongside this
+          specification and represents the minimum baseline catalogue.
+          It is not an exhaustive enumeration of all cloud resource
+          types. Additions to the Spec Default Dictionary within a
+          minor version are backwards compatible; removal or semantic
+          modification of existing entries requires a major version
+          increment.
+        </t>
+        <t>
+          Extended Dictionaries are independently maintained by
+          implementers and are subject to the conformance requirements
+          of <xref target="dictionary-conformance"/>.
+        </t>
+        <t>
+          A conformant consumer <bcp14>MUST</bcp14> validate CRIT
+          records against a dictionary before accepting them. Validation
+          requires a known, trusted dictionary as the source of truth
+          for the <tt>(provider, service, resource_type)</tt> tuple
+          space. A consumer that does not maintain a dictionary cannot
+          distinguish a valid tuple from an arbitrary one; therefore,
+          dictionary availability is a prerequisite for conformant
+          consumption.
+        </t>
+        <t>
+          A conformant producer <bcp14>MAY</bcp14> emit CRIT records
+          without consulting a dictionary, but the resulting records are
+          non-conformant until validated by a consumer that holds a
+          dictionary containing matching entries. Producers
+          <bcp14>SHOULD</bcp14> validate records against a dictionary
+          before emission to avoid producing records that no conformant
+          consumer will accept.
+        </t>
+        <t>
+          Cloud providers are encouraged to contribute dictionary entries
+          for their services. Community contributions are accepted via
+          the specification repository. No IANA registry is proposed for
+          dictionary entries. The dictionary is a template catalogue
+          scoped by provider, not a shared identifier namespace;
+          provider-scoped entries do not compete for a global name and
+          therefore do not require a central allocation authority.
+        </t>
+      </section>
+
+      <section anchor="dictionary-providers">
+        <name>Provider Identification Systems</name>
+        <t>
+          Each provider covered by this specification maintains a published,
+          authoritative identification scheme for its resources.  CRIT
+          dictionary entries do not define these schemes; they encode them as
+          CRIT templates so that producers can emit identifiers that conform
+          to the provider&#8217;s own published format.  Implementers adding
+          dictionary entries for services not listed here <bcp14>MUST</bcp14>
+          derive templates from the provider&#8217;s current documentation;
+          those entries <bcp14>MAY</bcp14> be contributed to the Spec Default
+          Dictionary via the specification repository.
+        </t>
+
+        <section anchor="dictionary-aws">
+          <name>Amazon Web Services (aws)</name>
+          <t>
+            AWS resources are identified by Amazon Resource Names (ARNs)
+            <xref target="AWS-ARN"/>, a hierarchical URN-like format with
+            the structure
+            <tt>arn:partition:service:region:account-id:resource-type/resource-id</tt>.
+            The ARN format is defined and maintained by Amazon Web Services;
+            this specification does not alter or extend it.  The
+            <tt>template_format</tt> value for all AWS entries is
+            <tt>aws_arn</tt>.
+          </t>
+          <figure>
+            <name>AWS CRIT template examples</name>
+            <sourcecode type="text"><![CDATA[
+arn:aws:ec2:{region}:{account}:instance/{resource-id}
+arn:aws:iam:{region=us-east-1}:{account}:role/{resource-id}
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The ARN service prefix matches the AWS service namespace
+            documented in the IAM User Guide.  Globally-scoped services
+            either hardcode the region component (e.g., <tt>us-east-1</tt>)
+            or structurally omit it (e.g., S3 buckets), following the AWS
+            ARN specification for that service.
+          </t>
+        </section>
+
+        <section anchor="dictionary-azure">
+          <name>Microsoft Azure (azure)</name>
+          <t>
+            Azure resources are identified by Azure Resource IDs
+            <xref target="Azure-ResourceID"/>, hierarchical paths within
+            the Azure Resource Manager (ARM) namespace.  The path structure
+            follows the pattern
+            <tt>/subscriptions/{id}/resourceGroups/{rg}/providers/{Namespace}/{type}/{name}</tt>.
+            The ARM provider namespace and resource type hierarchy are defined
+            and maintained by Microsoft; this specification does not alter or
+            extend them.  The <tt>template_format</tt> value for all Azure
+            entries is <tt>azure_resource_id</tt>.
+          </t>
+          <figure>
+            <name>Azure CRIT template example</name>
+            <sourcecode type="text"><![CDATA[
+/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachines/{name}
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The namespace segment follows the <tt>Microsoft.{ServiceArea}</tt>
+            convention documented in the ARM provider list.  Resource path
+            depth varies by resource type and is authoritative in the ARM
+            REST API reference.
+          </t>
+        </section>
+
+        <section anchor="dictionary-gcp">
+          <name>Google Cloud (gcp)</name>
+          <t>
+            GCP resources are identified by canonical resource names
+            <xref target="GCP-ResourceName"/>, the full-resource-name form
+            used by Cloud Asset Inventory.  The format prefixes the API
+            service hostname with <tt>//</tt> followed by the resource path:
+            <tt>//serviceName.googleapis.com/projects/{project}/...</tt>.
+            The resource name structure is defined and maintained by Google;
+            this specification does not alter or extend it.  The
+            <tt>template_format</tt> value for all GCP entries is
+            <tt>gcp_resource_name</tt>.
+          </t>
+          <figure>
+            <name>GCP CRIT template examples</name>
+            <sourcecode type="text"><![CDATA[
+//compute.googleapis.com/projects/{project}/zones/{location}/instances/{resource-id}
+//storage.googleapis.com/projects/{project}/buckets/{resource-id}
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The API hostname prefix and resource path structure are published
+            per-service in Google&#8217;s API documentation.  For inventory
+            queries, <tt>{location}</tt> may be set to the wildcard value
+            <tt>-</tt> to span all regions, as described in the Cloud Asset
+            Inventory documentation.
+          </t>
+        </section>
+
+        <section anchor="dictionary-cloudflare">
+          <name>Cloudflare (cloudflare)</name>
+          <t>
+            Cloudflare resources are identified using Cloudflare API locators
+            <xref target="CF-API"/>, a structured dotted-string form scoped
+            to a Cloudflare account.  All Cloudflare resources are globally
+            scoped; the <tt>region_behavior</tt> for every Cloudflare entry
+            is <tt>global-only</tt>.  The <tt>template_format</tt> value for
+            all Cloudflare entries is <tt>cloudflare_locator</tt>.
+          </t>
+          <figure>
+            <name>Cloudflare CRIT template example</name>
+            <sourcecode type="text"><![CDATA[
+com.cloudflare.api.account.{account_id}.zone.{id}
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The resource type segment corresponds to the Cloudflare API
+            object category as documented in the Cloudflare API reference.
+            Zone-scoped resources share the same account-rooted prefix.
+          </t>
+        </section>
+
+        <section anchor="dictionary-oracle">
+          <name>Oracle Cloud Infrastructure (oracle)</name>
+          <t>
+            OCI resources are identified by Oracle Cloud IDs (OCIDs)
+            <xref target="OCI-OCID"/>, structured opaque identifiers with
+            realm and region components.  Regional resources include the
+            region segment; globally-scoped resources structurally omit both
+            the region and availability domain segments, resulting in
+            consecutive dots in the OCID.  The OCID format is defined and
+            maintained by Oracle; this specification does not alter or extend
+            it.  The <tt>template_format</tt> value for all OCI entries is
+            <tt>oracle_ocid</tt>.
+          </t>
+          <figure>
+            <name>OCI CRIT template examples</name>
+            <sourcecode type="text"><![CDATA[
+ocid1.instance.{realm=oc1}.{region}..{unique-id}
+ocid1.compartment.{realm=oc1}...{unique-id}
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The <tt>realm</tt> component identifies the OCI infrastructure
+            partition; <tt>oc1</tt> is the commercial realm.  The
+            dot-separated positional structure is authoritative in the OCI
+            Resource Identifiers documentation.
+          </t>
+        </section>
+
+        <section anchor="dictionary-salesforce">
+          <name>Salesforce Platform (salesforce)</name>
+          <t>
+            Salesforce resources are addressed by REST API resource URLs
+            <xref target="SF-REST-API"/>, the canonical programmatic address
+            for every sObject record in a Salesforce org.  Resources are
+            org-scoped rather than region-scoped; the
+            <tt>region_behavior</tt> for every Salesforce entry is
+            <tt>global-only</tt>.  The <tt>template_format</tt> value for
+            all Salesforce entries is <tt>salesforce_url</tt>.
+          </t>
+          <figure>
+            <name>Salesforce CRIT template example</name>
+            <sourcecode type="text"><![CDATA[
+https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/{object-type}/{record-id}
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The instance subdomain identifies the Salesforce org.  The
+            <tt>api-version</tt> slot follows the Salesforce seasonal release
+            cadence (e.g., <tt>v61.0</tt>).  The sObject name in the path
+            identifies the resource type and corresponds to the
+            <tt>resource_type</tt> field in the dictionary entry.
+          </t>
+        </section>
+
+        <section anchor="dictionary-sap">
+          <name>SAP Business Technology Platform (sap)</name>
+          <t>
+            SAP BTP resource URL conventions vary by product tier
+            <xref target="SAP-BTP"/>: BTP core services use the BTP API
+            endpoint form; ABAP Cloud systems use OData service paths; SAP
+            SuccessFactors uses a dedicated API host pattern.  The
+            authoritative URL form for each service is published by SAP in
+            its API Hub and product documentation.  SAP does not publish a
+            single unified resource identifier scheme; this specification
+            encodes the per-tier URL patterns as CRIT templates without
+            altering or extending the URL structures SAP defines.
+          </t>
+          <figure>
+            <name>SAP CRIT template examples (one per product tier)</name>
+            <sourcecode type="text"><![CDATA[
+https://api.{region}.hana.ondemand.com/resourcemanager/v1/instances/{resource-id}
+https://{host}/sap/opu/odata/sap/{service-path}/{object-id}
+https://api{api-server}.sapsf.com/odata/v2/{entity-set}('{resource-id}')
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The product tier determines both the URL structure and the
+            <tt>template_format</tt> value: <tt>sap_btp_url</tt> for BTP
+            core services, <tt>sap_odata_url</tt> for ABAP Cloud and OData
+            services, and <tt>sap_sf_url</tt> for SAP SuccessFactors.
+            Implementers <bcp14>SHOULD</bcp14> consult the SAP API Hub entry
+            for the specific SAP product to identify the canonical resource
+            URL form before constructing dictionary entries.
+          </t>
+        </section>
+
+        <section anchor="dictionary-servicenow">
+          <name>ServiceNow (servicenow)</name>
+          <t>
+            ServiceNow resources are addressed by Table API URLs
+            <xref target="SN-TABLE-API"/>, the REST-addressable form of
+            every Now Platform record.  Resources are instance-scoped with
+            no regional sub-division; the <tt>region_behavior</tt> for every
+            ServiceNow entry is <tt>global-only</tt>.  The
+            <tt>template_format</tt> value for all ServiceNow entries is
+            <tt>servicenow_table_url</tt>.
+          </t>
+          <figure>
+            <name>ServiceNow CRIT template example</name>
+            <sourcecode type="text"><![CDATA[
+https://{instance}.service-now.com/api/now/table/{table-name}/{sys-id}
+            ]]></sourcecode>
+          </figure>
+          <t>
+            The <tt>table-name</tt> slot is the ServiceNow database table
+            name (e.g., <tt>incident</tt>, <tt>sys_script_include</tt>).
+            The <tt>sys-id</tt> slot is the 32-character hex unique
+            identifier assigned to every Now Platform record, as documented
+            in the ServiceNow Table API reference.
+          </t>
+        </section>
+
+      </section>
+
+
+    </section>
+
+  </middle>
+
+  <back>
+
+    <references>
+      <name>References</name>
+
+      <references anchor="normative-refs">
+        <name>Normative References</name>
+
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+
+        <reference anchor="ISO8601">
+          <front>
+            <title>Date and time -- Representations for information interchange</title>
+            <author>
+              <organization>International Organization for Standardization</organization>
+            </author>
+            <date year="2019"/>
+          </front>
+          <seriesInfo name="ISO" value="8601"/>
+        </reference>
+
+        <reference anchor="AWS-ARN" target="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference-arns.html">
+          <front>
+            <title>Amazon Resource Names (ARNs)</title>
+            <author>
+              <organization>Amazon Web Services</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+        <reference anchor="Azure-ResourceID" target="https://learn.microsoft.com/en-us/rest/api/resources/resources">
+          <front>
+            <title>Azure Resource Manager REST API Reference</title>
+            <author>
+              <organization>Microsoft</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+        <reference anchor="GCP-ResourceName" target="https://cloud.google.com/asset-inventory/docs/resource-name-format">
+          <front>
+            <title>Resource Name Format -- Cloud Asset Inventory</title>
+            <author>
+              <organization>Google Cloud</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+        <reference anchor="CF-API" target="https://developers.cloudflare.com/api/">
+          <front>
+            <title>Cloudflare API Reference</title>
+            <author>
+              <organization>Cloudflare</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+        <reference anchor="OCI-OCID" target="https://docs.oracle.com/en-us/iaas/Content/General/Concepts/identifiers.htm">
+          <front>
+            <title>Resource Identifiers</title>
+            <author>
+              <organization>Oracle Cloud Infrastructure</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+        <reference anchor="SF-REST-API" target="https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/">
+          <front>
+            <title>Salesforce REST API Developer Guide</title>
+            <author>
+              <organization>Salesforce</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+        <reference anchor="SAP-BTP" target="https://help.sap.com/docs/btp/sap-business-technology-platform/btp-api-overview">
+          <front>
+            <title>SAP Business Technology Platform Documentation</title>
+            <author>
+              <organization>SAP SE</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+        <reference anchor="SN-TABLE-API" target="https://developer.servicenow.com/dev.do#!/reference/api/latest/rest/c_TableAPI">
+          <front>
+            <title>ServiceNow Table API Reference</title>
+            <author>
+              <organization>ServiceNow</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+      </references>
+
+      <references anchor="informative-refs">
+        <name>Informative References</name>
+
+        <reference anchor="CVEListv5" target="https://github.com/CVEProject/cvelistV5">
+          <front>
+            <title>CVE List v5 -- CVE JSON 5.0 Schema</title>
+            <author>
+              <organization>MITRE Corporation</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+        <reference anchor="OSV-Schema" target="https://ossf.github.io/osv-schema/">
+          <front>
+            <title>Open Source Vulnerability (OSV) Schema</title>
+            <author>
+              <organization>OpenSSF Vulnerability Disclosures Working Group</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+        <reference anchor="OpenVEX" target="https://github.com/openvex/spec">
+          <front>
+            <title>OpenVEX Specification</title>
+            <author>
+              <organization>OpenVEX</organization>
+            </author>
+            <date year="2023"/>
+          </front>
+        </reference>
+
+        <reference anchor="CSAF-VEX" target="https://docs.oasis-open.org/csaf/csaf/v2.0/csaf-v2.0.html">
+          <front>
+            <title>Common Security Advisory Framework (CSAF) Version 2.0</title>
+            <author>
+              <organization>OASIS Open</organization>
+            </author>
+            <date year="2022"/>
+          </front>
+        </reference>
+
+        <reference anchor="EPSS" target="https://www.first.org/epss/">
+          <front>
+            <title>Exploit Prediction Scoring System (EPSS)</title>
+            <author>
+              <organization>Forum of Incident Response and Security Teams (FIRST)</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+        <reference anchor="RFC6570">
+          <front>
+            <title>URI Template</title>
+            <author initials="J." surname="Gregorio" fullname="J. Gregorio"/>
+            <author initials="R." surname="Fielding" fullname="R. Fielding"/>
+            <author initials="M." surname="Hadley" fullname="M. Hadley"/>
+            <author initials="M." surname="Nottingham" fullname="M. Nottingham"/>
+            <author initials="D." surname="Orchard" fullname="D. Orchard"/>
+            <date year="2012" month="March"/>
+          </front>
+          <seriesInfo name="RFC" value="6570"/>
+        </reference>
+
+        <reference anchor="PURL" target="https://github.com/package-url/purl-spec">
+          <front>
+            <title>Package URL (PURL) Specification</title>
+            <author>
+              <organization>package-url</organization>
+            </author>
+            <date year="2024"/>
+          </front>
+        </reference>
+
+        <reference anchor="CPE23" target="https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir7695.pdf">
+          <front>
+            <title>Common Platform Enumeration: Naming Specification Version 2.3</title>
+            <author initials="B." surname="Cheikes">
+              <organization>NIST</organization>
+            </author>
+            <author initials="D." surname="Waltermire">
+              <organization>NIST</organization>
+            </author>
+            <author initials="K." surname="Scarfone">
+              <organization>NIST</organization>
+            </author>
+            <date year="2011" month="August"/>
+          </front>
+          <seriesInfo name="NISTIR" value="7695"/>
+        </reference>
+
+        <reference anchor="RFC5234">
+          <front>
+            <title>Augmented BNF for Syntax Specifications: ABNF</title>
+            <author initials="D." surname="Crocker" fullname="D. Crocker"/>
+            <author initials="P." surname="Overell" fullname="P. Overell"/>
+            <date year="2008" month="January"/>
+          </front>
+          <seriesInfo name="RFC" value="5234"/>
+          <seriesInfo name="STD" value="68"/>
+        </reference>
+
+      </references>
+
+    </references>
+
+    <!-- ============================================================ -->
+    <section anchor="appendix-example">
+      <name>Complete CRIT Record Example -- AWS RDS MySQL (Informative)</name>
+      <t>
+        The following is a complete CRIT record for a MySQL vulnerability affecting
+        AWS RDS, illustrating the engine_version subschema with opt-in auto-upgrade and
+        the deployed-before-fix problem.
+      </t>
+      <figure>
+        <name>AWS RDS MySQL CRIT Record</name>
+        <sourcecode type="json"><![CDATA[
+{
+  "vectorString": "CRITv0.3.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance",
+  "vuln_id": "CVE-2024-20967",
+  "provider": "aws",
+  "service": "rds",
+  "resource_type": "db",
+  "resource_lifecycle": "stateful_managed",
+  "shared_responsibility": "customer_action_required",
+  "vex_status": "fixed",
+  "template": "arn:aws:rds:{region}:{account}:db:{resource-id}",
+  "template_format": "aws_arn",
+  "temporal": {
+    "service_available_date": "2013-09-18",
+    "vulnerability_introduced_date": "2023-01-01",
+    "vulnerability_introduced_date_estimated":
+      true,
+    "vuln_published_date": "2024-01-16",
+    "provider_acknowledged_date": "2024-01-20",
+    "provider_fix_date": "2024-02-15",
+    "customer_deadline_date": "2024-04-15",
+    "customer_deadline_source": "internal_policy"
+  },
+  "fix_propagation": "version_update",
+  "existing_deployments_remain_vulnerable":
+    true,
+  "provider_fix_version": {
+    "version_type": "engine_version",
+    "comparison": "gte",
+    "engine": "mysql",
+    "version": "8.0.36",
+    "auto_upgrade": false,
+    "note": "auto_minor_version_upgrade must be enabled
+      for automatic application."
+  },
+  "remediation_actions": [
+    {
+      "sequence": 1,
+      "type": "version_update",
+      "title": "Upgrade RDS MySQL engine to 8.0.36
+        or later",
+      "description": "aws rds modify-db-instance \
+  --db-instance-identifier {resource-id} \
+  --engine-version 8.0.36 --apply-immediately",
+      "provider_guidance_url":
+        "https://docs.aws.amazon.com/AmazonRDS/
+        latest/UserGuide/USER_UpgradeDBInstance.MySQL.html",
+      "auto_remediable": true,
+      "requires_downtime": true,
+      "stateful_impact": "backup_recommended",
+      "estimated_downtime_range_seconds": { "min": 60, "max": 600 },
+      "compensating_control": false
+    }
+  ],
+  "detections": [
+    {
+      "provider": "aws",
+      "service": "config_rule",
+      "query_language": "cloudwatch_filter",
+      "query": "{ ($.eventName = ModifyDBInstance) &&
+        ($.requestParameters.engineVersion < \"8.0.36\") }",
+      "detection_phase": "misconfiguration",
+      "description": "Detects when an RDS instance is modified to
+        a MySQL version below the fix threshold."
+    }
+  ],
+  "provider_advisory": {
+    "advisory_id": "ALAS2-2024-2489",
+    "advisory_url": "https://alas.aws.amazon.com/AL2/ALAS-2024.html"
+  }
+}
+        ]]></sourcecode>
+      </figure>
+    </section>
+
+    <section anchor="appendix-issues">
+      <name>Open Issues (Informative)</name>
+      <t>
+        The following issues require design decisions prior to a stable v1.0 release:
+      </t>
+      <ol>
+        <li><strong>vulnerability_introduced_date sourcing:</strong> What is the authoritative source? NVD, provider advisory, Git commit history, or producer-derived analysis? A structured date_provenance field may be warranted.</li>
+        <li><strong>Detection query versioning:</strong> Cloud provider query languages and log schemas evolve. A query_language_version field on detection entries would allow consumers to detect stale queries.</li>
+        <li><strong>rolling_replace fleet progress tracking:</strong> A structured fleet_remediation_event object may be needed for cross-consumer interoperability.</li>
+        <li><strong>Oracle realm handling:</strong> Government OCI realms (oc2, oc3) may have different fix availability timelines. Confirm whether realm_overrides array within a single record is preferable to separate records.</li>
+        <li><strong>CVSS version discrimination:</strong> A cvss_version discriminator on provider_advisory would allow consumers to apply version-appropriate scoring logic.</li>
+      </ol>
+    </section>
+
+    <section anchor="Acknowledgements" numbered="false">
+      <name>Acknowledgements</name>
+      <t>
+        The author thanks the Wiz security research team for open-sourcing their cloud
+        vulnerability database work, the Anchore team for open-sourcing their CVE
+        enrichment work, the CVEProject and OpenSSF communities for the ADP container
+        and OSV schema mechanisms that make upstream integration possible, and the OWASP
+        community for providing a home for applied security standards work.
+      </t>
+    </section>
+
+  </back>
+
+</rfc>
+        

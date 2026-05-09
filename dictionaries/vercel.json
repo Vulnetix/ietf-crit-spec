@@ -1,0 +1,41 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "vercel",
+  "entries": [
+    {
+      "service": "vercel_platform",
+      "resource_type": "project",
+      "template": "https://vercel.com/{team}/{project}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "nextjs",
+      "resource_type": "application",
+      "template": "https://vercel.com/{team}/{project}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "vercel_edge",
+      "resource_type": "function",
+      "template": "https://vercel.com/{team}/{project}/edge",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "vercel_kv",
+      "resource_type": "database",
+      "template": "vercel-kv:{project}:{store}",
+      "template_format": "vercel_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "vercel_postgres",
+      "resource_type": "database",
+      "template": "vercel-postgres:{project}:{database}",
+      "template_format": "vercel_locator",
+      "region_behavior": "global-only"
+    }
+  ]
+}
