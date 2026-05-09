@@ -505,6 +505,22 @@
       },
     },
     'vector': 'CRITv0.3.0/CP:AW/VS:FX/FP:RL/SR:SH/RL:SM/EV:T/PP:1706659200/SA:1528243200#CVE-2024-21626:eks:cluster',
+    // Example dictionary illustrating the file shape — paste or
+    // upload your own to layer custom (provider, service,
+    // resource_type) entries on top of the spec dicts.
+    'dict-example': {
+      dictionary_version: '0.3.0',
+      provider: 'myprovider',
+      entries: [
+        {
+          service: 'compute',
+          resource_type: 'instance',
+          template: 'https://api.myprovider.example/v1/compute/{instance-id}',
+          template_format: 'cloudflare_locator',
+          region_behavior: 'regional',
+        },
+      ],
+    },
   };
   // Inline the AWS sample into the CVE-with-xcrit fixture so the demo works.
   SAMPLES['cve-with-xcrit'].containers.adp[0].x_crit[0] = SAMPLES['record-aws-eks'];
@@ -514,6 +530,127 @@
   // ---------------------------------------------------------------------
 
   function el(id) { return document.getElementById(id); }
+
+  // ---------------------------------------------------------------------
+  // Editor — CodeMirror 5 wrapper with textarea fallback
+  // ---------------------------------------------------------------------
+
+  let cmEditor = null;
+  function initEditor() {
+    const ta = el('crit-validator-input');
+    if (!ta) return;
+    if (typeof CodeMirror === 'undefined') {
+      console.warn('CodeMirror not loaded; falling back to plain textarea');
+      return;
+    }
+    const dark = matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
+    cmEditor = CodeMirror.fromTextArea(ta, {
+      mode: { name: 'javascript', json: true },
+      lineNumbers: true,
+      lineWrapping: false,
+      matchBrackets: true,
+      autoCloseBrackets: true,
+      indentUnit: 2,
+      tabSize: 2,
+      foldGutter: true,
+      gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+      theme: dark ? 'material-darker' : 'default',
+      viewportMargin: Infinity,
+    });
+  }
+
+  function editorValue() {
+    return cmEditor ? cmEditor.getValue() : (el('crit-validator-input')?.value || '');
+  }
+
+  function setEditorValue(s) {
+    if (cmEditor) cmEditor.setValue(s);
+    else if (el('crit-validator-input')) el('crit-validator-input').value = s;
+  }
+
+  function setEditorMode(mode) {
+    // Mode "vector" is plain text; everything else is JSON.
+    if (!cmEditor) return;
+    if (mode === 'vector') {
+      cmEditor.setOption('mode', 'null');
+    } else {
+      cmEditor.setOption('mode', { name: 'javascript', json: true });
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // Custom dictionary — loaded into dictRegistry as a third "custom" layer
+  // ---------------------------------------------------------------------
+
+  // Holds the most-recently-loaded user dictionary so its entries
+  // survive across validate runs in the same session.
+  let userDict = null; // { provider, entries[] }
+
+  function applyUserDict() {
+    if (!userDict || !dictRegistry) return 0;
+    let n = 0;
+    for (const e of userDict.entries || []) {
+      const key = `${userDict.provider}/${e.service}/${e.resource_type}`;
+      dictRegistry[key] = { ...e, provider: userDict.provider, source: 'custom' };
+      n++;
+    }
+    return n;
+  }
+
+  function setDictStatus(msg, cls) {
+    const node = el('crit-validator-dict-status');
+    if (!node) return;
+    node.textContent = msg || '';
+    node.classList.remove('ok', 'fail');
+    if (cls) node.classList.add(cls);
+  }
+
+  async function loadCustomDict() {
+    const txt = editorValue().trim();
+    if (!txt) {
+      setDictStatus('Paste or upload a dictionary first.', 'fail');
+      return;
+    }
+    let parsed;
+    try { parsed = JSON.parse(txt); } catch (e) {
+      setDictStatus(`Not valid JSON: ${e.message || e}`, 'fail');
+      return;
+    }
+    if (!parsed || typeof parsed !== 'object' || !parsed.provider || !Array.isArray(parsed.entries)) {
+      setDictStatus('Dictionary must be an object with `provider` and `entries[]` per the v0.3.0 schema.', 'fail');
+      return;
+    }
+    // Lazy-load schemas + dicts so we can validate and merge.
+    try {
+      await loadResources(window.location.origin + '/');
+    } catch (e) {
+      setDictStatus(`Loader failed: ${e.message || e}`, 'fail');
+      return;
+    }
+    userDict = parsed;
+    const n = applyUserDict();
+    setDictStatus(
+      `Loaded ${n} entr${n === 1 ? 'y' : 'ies'} for provider "${parsed.provider}". Records you validate next will resolve against this dictionary.`,
+      'ok',
+    );
+  }
+
+  function attachDictFileHandler() {
+    const input = el('crit-validator-dict-file');
+    if (!input) return;
+    input.addEventListener('change', async () => {
+      const file = input.files && input.files[0];
+      if (!file) return;
+      try {
+        const txt = await file.text();
+        setEditorValue(txt);
+        setMode('dict');
+        setDictStatus(`Loaded ${file.name} (${file.size} bytes). Click "Load & layer dictionary" to apply.`, null);
+      } catch (e) {
+        setDictStatus(`Read failed: ${e.message || e}`, 'fail');
+      }
+    });
+  }
 
   function renderSchemaStatus(target, ok, count) {
     const cls = ok ? 'ok' : 'fail';
@@ -540,7 +677,7 @@
   }
 
   async function run() {
-    const input = el('crit-validator-input').value.trim();
+    const input = editorValue().trim();
     const results = el('crit-validator-results');
     const hint = el('crit-validator-hint');
     results.innerHTML = '';
@@ -556,9 +693,17 @@
     try {
       hint.textContent = 'loading schemas + dictionaries…';
       await loadResources(window.location.origin + '/');
+      // Re-apply the user's custom dict in case dictRegistry was just
+      // (re)built from a fresh load.
+      if (userDict) applyUserDict();
       hint.textContent = '';
     } catch (e) {
       results.innerHTML = `<div class="row fail">FAIL — could not load schemas/dictionaries: ${escapeHtml(String(e.message || e))}</div>`;
+      return;
+    }
+
+    if (mode === 'dict') {
+      await loadCustomDict();
       return;
     }
 
@@ -638,42 +783,64 @@
     document.querySelectorAll('.crit-validator__tabs button').forEach((b) => {
       b.setAttribute('aria-selected', b.dataset.mode === mode ? 'true' : 'false');
     });
+    const root = el('crit-validator');
+    if (root) root.setAttribute('data-mode', mode);
     const placeholders = {
       record: 'Paste a CRIT record JSON (single envelope) and click Validate.',
       cve: 'Paste a CVE 5.x JSON record carrying x_crit in containers.adp[].x_crit[].',
       vector: 'Paste a vector string, e.g. CRITv0.3.0/CP:AW/VS:FX/...',
+      dict: 'Paste a custom dictionary JSON (provider + entries[]) or upload a file below. Click "Load & layer dictionary" to apply, then switch back to record / CVE mode and Validate.',
     };
-    el('crit-validator-input').placeholder = placeholders[mode] || '';
+    const ta = el('crit-validator-input');
+    if (ta) ta.placeholder = placeholders[mode] || '';
+    setEditorMode(mode);
+    // Run button label hints at what each tab does.
+    const runBtn = el('crit-validator-run');
+    if (runBtn) runBtn.textContent = mode === 'dict' ? 'Load dictionary' : 'Validate';
   }
 
-  function loadSample(name) {
+  function loadSample(name, btn) {
     const sample = SAMPLES[name];
     if (!sample) return;
+    // The sample's data-mode attribute (when present) overrides the
+    // shape detection — used by the example dictionary button.
+    const explicitMode = btn && btn.dataset && btn.dataset.mode;
+    if (explicitMode) {
+      setMode(explicitMode);
+      setEditorValue(typeof sample === 'string' ? sample : JSON.stringify(sample, null, 2));
+      return;
+    }
     if (typeof sample === 'string') {
       setMode('vector');
-      el('crit-validator-input').value = sample;
+      setEditorValue(sample);
     } else if (sample.dataType === 'CVE_RECORD') {
       setMode('cve');
-      el('crit-validator-input').value = JSON.stringify(sample, null, 2);
+      setEditorValue(JSON.stringify(sample, null, 2));
     } else {
       setMode('record');
-      el('crit-validator-input').value = JSON.stringify(sample, null, 2);
+      setEditorValue(JSON.stringify(sample, null, 2));
     }
   }
 
   document.addEventListener('DOMContentLoaded', function () {
     if (!el('crit-validator')) return;
+    initEditor();
+    setMode('record');
     document.querySelectorAll('.crit-validator__tabs button').forEach((b) => {
       b.addEventListener('click', () => setMode(b.dataset.mode));
     });
     document.querySelectorAll('.crit-validator__samples button').forEach((b) => {
-      b.addEventListener('click', () => loadSample(b.dataset.sample));
+      b.addEventListener('click', () => loadSample(b.dataset.sample, b));
     });
+    attachDictFileHandler();
+    const dictLoad = el('crit-validator-dict-load');
+    if (dictLoad) dictLoad.addEventListener('click', loadCustomDict);
     el('crit-validator-run').addEventListener('click', run);
     el('crit-validator-clear').addEventListener('click', () => {
-      el('crit-validator-input').value = '';
+      setEditorValue('');
       el('crit-validator-results').innerHTML = '';
       el('crit-validator-hint').textContent = '';
+      setDictStatus('', null);
     });
   });
 })();

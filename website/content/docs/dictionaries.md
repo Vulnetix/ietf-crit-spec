@@ -3,8 +3,6 @@ title: Provider Dictionaries
 weight: 3
 ---
 
-# Provider Dictionaries
-
 A dictionary binds a `(provider, service, resource_type)` tuple to:
 
 - a `template` URL/ARN/locator with `{slot}` placeholders

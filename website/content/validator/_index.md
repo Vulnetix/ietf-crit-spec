@@ -4,8 +4,6 @@ toc: false
 weight: 1
 ---
 
-# CRIT Validator
-
 Paste a CRIT record, a CVE 5.x record carrying `x_crit`, or a vector
 string. Get instant validation against the v0.3.0 schemas, vector
 round-trip checks, and dictionary resolution.
