@@ -1,0 +1,625 @@
+{
+  "$schema": "../schemas/crit-dictionary-v0.2.0.schema.json",
+  "dictionary_version": "0.3.0",
+  "provider": "azure",
+  "entries": [
+    {
+      "service": "active_directory",
+      "resource_type": "domainServices",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AAD/domainServices/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "analysis_services",
+      "resource_type": "servers",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AnalysisServices/servers/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "api_management",
+      "resource_type": "service",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ApiManagement/service/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "app_configuration",
+      "resource_type": "configurationStores",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AppConfiguration/configurationStores/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "app_service",
+      "resource_type": "sites",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Web/sites/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "application_gateway",
+      "resource_type": "applicationGateways",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/applicationGateways/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "application_insights",
+      "resource_type": "components",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Insights/components/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "automation",
+      "resource_type": "automationAccounts",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Automation/automationAccounts/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "azure_vmware_solution",
+      "resource_type": "privateClouds",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AVS/privateClouds/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "bastion",
+      "resource_type": "bastionHosts",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/bastionHosts/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "batch",
+      "resource_type": "batchAccounts",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Batch/batchAccounts/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "bot_service",
+      "resource_type": "botServices",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.BotService/botServices/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cdn",
+      "resource_type": "profiles",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Cdn/profiles/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cognitive_services",
+      "resource_type": "accounts",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CognitiveServices/accounts/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "communication_services",
+      "resource_type": "communicationServices",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Communication/communicationServices/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "container_apps",
+      "resource_type": "containerApps",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.App/containerApps/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "container_apps",
+      "resource_type": "managedEnvironments",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.App/managedEnvironments/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "container_instances",
+      "resource_type": "containerGroups",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ContainerInstance/containerGroups/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "container_registry",
+      "resource_type": "registries",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ContainerRegistry/registries/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cosmos_db",
+      "resource_type": "databaseAccounts",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DocumentDB/databaseAccounts/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "data_explorer",
+      "resource_type": "clusters",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Kusto/clusters/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "data_factory",
+      "resource_type": "factories",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DataFactory/factories/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "data_lake_store",
+      "resource_type": "accounts",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DataLakeStore/accounts/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "databricks",
+      "resource_type": "workspaces",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Databricks/workspaces/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ddos_protection",
+      "resource_type": "ddosProtectionPlans",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/ddosProtectionPlans/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "defender",
+      "resource_type": "pricings",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Security/pricings/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "devops",
+      "resource_type": "pipelines",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DevOps/pipelines/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "digital_twins",
+      "resource_type": "digitalTwinsInstances",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DigitalTwins/digitalTwinsInstances/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "disk",
+      "resource_type": "disks",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/disks/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "dns",
+      "resource_type": "dnsZones",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/dnsZones/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "event_grid",
+      "resource_type": "domains",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.EventGrid/domains/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "event_grid",
+      "resource_type": "topics",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.EventGrid/topics/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "event_hubs",
+      "resource_type": "namespaces",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.EventHub/namespaces/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "express_route",
+      "resource_type": "expressRouteCircuits",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/expressRouteCircuits/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "firewall",
+      "resource_type": "azureFirewalls",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/azureFirewalls/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "firewall",
+      "resource_type": "firewallPolicies",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/firewallPolicies/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "front_door",
+      "resource_type": "frontDoors",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/frontDoors/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "function_app",
+      "resource_type": "sites",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Web/sites/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional",
+      "notes": "Function Apps share the Microsoft.Web/sites namespace with App Service. Distinguish by kind property."
+    },
+    {
+      "service": "image_gallery",
+      "resource_type": "galleries",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/galleries/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "iot_hub",
+      "resource_type": "IotHubs",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Devices/IotHubs/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "key_vault",
+      "resource_type": "vaults",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.KeyVault/vaults/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "kubernetes_service",
+      "resource_type": "managedClusters",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ContainerService/managedClusters/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "load_balancer",
+      "resource_type": "loadBalancers",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/loadBalancers/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "log_analytics",
+      "resource_type": "workspaces",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.OperationalInsights/workspaces/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "logic_apps",
+      "resource_type": "workflows",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Logic/workflows/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "machine_learning",
+      "resource_type": "workspaces",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.MachineLearningServices/workspaces/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "managed_identity",
+      "resource_type": "userAssignedIdentities",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "maps",
+      "resource_type": "accounts",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Maps/accounts/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "mariadb",
+      "resource_type": "servers",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DBforMariaDB/servers/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "media_services",
+      "resource_type": "mediaservices",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Media/mediaservices/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "monitor",
+      "resource_type": "accounts",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Monitor/accounts/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "monitor",
+      "resource_type": "actionGroups",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Insights/actionGroups/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "monitor",
+      "resource_type": "metricAlerts",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Insights/metricAlerts/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "mysql",
+      "resource_type": "flexibleServers",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DBforMySQL/flexibleServers/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "nat_gateway",
+      "resource_type": "natGateways",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/natGateways/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "network_security_group",
+      "resource_type": "networkSecurityGroups",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/networkSecurityGroups/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "notification_hubs",
+      "resource_type": "namespaces",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.NotificationHubs/namespaces/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "openai",
+      "resource_type": "accounts",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CognitiveServices/accounts/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional",
+      "notes": "Azure OpenAI shares the Microsoft.CognitiveServices namespace. Distinguish by kind property."
+    },
+    {
+      "service": "postgresql",
+      "resource_type": "flexibleServers",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "private_dns",
+      "resource_type": "privateDnsZones",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/privateDnsZones/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "private_endpoint",
+      "resource_type": "privateEndpoints",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/privateEndpoints/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "public_ip",
+      "resource_type": "publicIPAddresses",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/publicIPAddresses/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "purview",
+      "resource_type": "accounts",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Purview/accounts/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "redis_cache",
+      "resource_type": "Redis",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Cache/Redis/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "search",
+      "resource_type": "searchServices",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Search/searchServices/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "sentinel",
+      "resource_type": "alertRules",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.SecurityInsights/alertRules/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "service_bus",
+      "resource_type": "namespaces",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ServiceBus/namespaces/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "service_fabric",
+      "resource_type": "clusters",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.ServiceFabric/clusters/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "signalr",
+      "resource_type": "SignalR",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.SignalRService/SignalR/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "spring_apps",
+      "resource_type": "Spring",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.AppPlatform/Spring/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "sql_database",
+      "resource_type": "servers/databases",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Sql/servers/databases/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "sql_managed_instance",
+      "resource_type": "managedInstances",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Sql/managedInstances/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "sql_server",
+      "resource_type": "servers",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Sql/servers/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "static_web_apps",
+      "resource_type": "staticSites",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Web/staticSites/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "storage",
+      "resource_type": "storageAccounts",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Storage/storageAccounts/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "stream_analytics",
+      "resource_type": "streamingjobs",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.StreamAnalytics/streamingjobs/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "synapse",
+      "resource_type": "workspaces",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Synapse/workspaces/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "traffic_manager",
+      "resource_type": "trafficManagerProfiles",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/trafficManagerProfiles/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "virtual_desktop",
+      "resource_type": "hostPools",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DesktopVirtualization/hostPools/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "virtual_desktop",
+      "resource_type": "workspaces",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.DesktopVirtualization/workspaces/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "virtual_machines",
+      "resource_type": "availabilitySets",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/availabilitySets/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "virtual_machines",
+      "resource_type": "virtualMachineScaleSets",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachineScaleSets/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "virtual_machines",
+      "resource_type": "virtualMachines",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/virtualMachines/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "virtual_network",
+      "resource_type": "networkInterfaces",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/networkInterfaces/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "virtual_network",
+      "resource_type": "routeTables",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/routeTables/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "virtual_network",
+      "resource_type": "virtualNetworks",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/virtualNetworks/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "vpn_gateway",
+      "resource_type": "virtualNetworkGateways",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/virtualNetworkGateways/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "vpn_gateway",
+      "resource_type": "vpnGateways",
+      "template": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Network/vpnGateways/{name}",
+      "template_format": "azure_resource_id",
+      "region_behavior": "regional"
+    }
+  ]
+}

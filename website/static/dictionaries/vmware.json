@@ -1,0 +1,100 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "vmware",
+  "entries": [
+    {
+      "service": "vsphere",
+      "resource_type": "install",
+      "template": "https://www.broadcom.com/products/vmware/vsphere/{install-id}",
+      "template_format": "vmware_url",
+      "region_behavior": "global-only",
+      "notes": "vSphere installation footprint — vCenter + ESXi + Tools collapsed under vsphere when an advisory cross-cuts the suite."
+    },
+    {
+      "service": "vcenter",
+      "resource_type": "install",
+      "template": "https://www.broadcom.com/products/vmware/vsphere/vcenter/{install-id}",
+      "template_format": "vmware_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "esxi",
+      "resource_type": "host",
+      "template": "https://www.broadcom.com/products/vmware/vsphere/esxi/{host-id}",
+      "template_format": "vmware_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "nsx",
+      "resource_type": "install",
+      "template": "https://www.broadcom.com/products/vmware/nsx/{install-id}",
+      "template_format": "vmware_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "vsan",
+      "resource_type": "cluster",
+      "template": "https://www.broadcom.com/products/vmware/vsan/{cluster-id}",
+      "template_format": "vmware_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cloud_foundation",
+      "resource_type": "install",
+      "template": "https://www.broadcom.com/products/vmware/cloud-foundation/{install-id}",
+      "template_format": "vmware_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "aria_automation",
+      "resource_type": "install",
+      "template": "https://www.broadcom.com/products/vmware/aria/{install-id}",
+      "template_format": "vmware_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "tkg",
+      "resource_type": "cluster",
+      "template": "https://www.broadcom.com/products/tanzu/kubernetes-grid/{cluster-id}",
+      "template_format": "vmware_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "tas",
+      "resource_type": "foundation",
+      "template": "https://www.broadcom.com/products/tanzu/application-service/{foundation-id}",
+      "template_format": "vmware_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "ops_manager",
+      "resource_type": "install",
+      "template": "https://www.broadcom.com/products/tanzu/ops-manager/{install-id}",
+      "template_format": "vmware_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "harbor",
+      "resource_type": "registry",
+      "template": "https://www.broadcom.com/products/tanzu/harbor/{registry-id}",
+      "template_format": "vmware_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cf_buildpack",
+      "resource_type": "install",
+      "template": "https://www.broadcom.com/products/tanzu/buildpacks/{buildpack}/{version}",
+      "template_format": "vmware_url",
+      "region_behavior": "global-only",
+      "notes": "Cloud Foundry buildpacks: app must restage to pick up new version (rolling_replace)."
+    },
+    {
+      "service": "bosh_stemcell",
+      "resource_type": "vm",
+      "template": "https://www.broadcom.com/products/tanzu/stemcells/{distro}/{version}",
+      "template_format": "vmware_url",
+      "region_behavior": "global-only",
+      "notes": "BOSH stemcells: VMs must rebuild_and_redeploy to inherit the patched OS layer."
+    }
+  ]
+}

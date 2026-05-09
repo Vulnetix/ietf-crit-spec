@@ -1,0 +1,48 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "atlassian",
+  "entries": [
+    {
+      "service": "jira",
+      "resource_type": "instance",
+      "template": "https://{site}.atlassian.net/jira/{project}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "confluence",
+      "resource_type": "instance",
+      "template": "https://{site}.atlassian.net/wiki/spaces/{space}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "bitbucket",
+      "resource_type": "repository",
+      "template": "https://bitbucket.org/{workspace}/{repo}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "bamboo",
+      "resource_type": "server",
+      "template": "atlassian-bamboo:{deployment}:{server}",
+      "template_format": "atlassian_locator",
+      "region_behavior": "self-hosted"
+    },
+    {
+      "service": "crowd",
+      "resource_type": "directory",
+      "template": "atlassian-crowd:{deployment}:{directory}",
+      "template_format": "atlassian_locator",
+      "region_behavior": "self-hosted"
+    },
+    {
+      "service": "fisheye",
+      "resource_type": "instance",
+      "template": "atlassian-fisheye:{deployment}:{instance}",
+      "template_format": "atlassian_locator",
+      "region_behavior": "self-hosted"
+    }
+  ]
+}

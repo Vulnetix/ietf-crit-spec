@@ -1,0 +1,41 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "mongodb",
+  "entries": [
+    {
+      "service": "atlas",
+      "resource_type": "cluster",
+      "template": "https://cloud.mongodb.com/v2/{org}#/clusters/detail/{cluster}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "server",
+      "resource_type": "instance",
+      "template": "mongodb-server:{deployment}:{host}",
+      "template_format": "mongodb_locator",
+      "region_behavior": "self-hosted"
+    },
+    {
+      "service": "compass",
+      "resource_type": "application",
+      "template": "mongodb-compass:{install}:{version}",
+      "template_format": "mongodb_locator",
+      "region_behavior": "endpoint-only"
+    },
+    {
+      "service": "driver",
+      "resource_type": "library",
+      "template": "mongodb-driver:{language}:{package}",
+      "template_format": "mongodb_locator",
+      "region_behavior": "endpoint-only"
+    },
+    {
+      "service": "ops_manager",
+      "resource_type": "instance",
+      "template": "https://opsmanager.mongodb.com/{deployment}/admin/projects/{project}",
+      "template_format": "uri",
+      "region_behavior": "self-hosted"
+    }
+  ]
+}

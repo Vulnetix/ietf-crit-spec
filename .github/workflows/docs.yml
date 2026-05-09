@@ -1,0 +1,70 @@
+name: Deploy Docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "website/**"
+      - "schemas/**"
+      - "dictionaries/**"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      # Refresh website/static/{schemas,dictionaries} from the spec
+      # repo's canonical sources so the validator always serves the
+      # checked-in v0.3.0 files (not a stale copy).
+      - name: Sync schemas + dictionaries to website/static
+        run: |
+          mkdir -p website/static/schemas website/static/dictionaries
+          cp schemas/crit-record-v0.3.0.schema.json     website/static/schemas/
+          cp schemas/crit-dictionary-v0.3.0.schema.json website/static/schemas/
+          cp dictionaries/*.json                        website/static/dictionaries/
+
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: "latest"
+          extended: true
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.21"
+
+      - name: Build Hugo site
+        working-directory: website
+        run: |
+          hugo mod get
+          hugo --minify
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: website/public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

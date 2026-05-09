@@ -1,0 +1,55 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "zoom",
+  "entries": [
+    {
+      "service": "meetings",
+      "resource_type": "session",
+      "template": "https://zoom.us/j/{meeting-id}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "phone",
+      "resource_type": "line",
+      "template": "https://zoom.us/account/phone/numbers/{line}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "webinar",
+      "resource_type": "event",
+      "template": "https://zoom.us/webinar/{webinar-id}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "rooms",
+      "resource_type": "device",
+      "template": "https://zoom.us/account/rooms/{room-id}",
+      "template_format": "uri",
+      "region_behavior": "endpoint-only"
+    },
+    {
+      "service": "workplace",
+      "resource_type": "application",
+      "template": "zoom-workplace:{install}:{version}",
+      "template_format": "zoom_locator",
+      "region_behavior": "endpoint-only"
+    },
+    {
+      "service": "marketplace",
+      "resource_type": "application",
+      "template": "https://marketplace.zoom.us/apps/{app-id}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "contact_center",
+      "resource_type": "tenant",
+      "template": "https://zoom.us/account/contact-center/{tenant}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    }
+  ]
+}

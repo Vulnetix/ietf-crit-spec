@@ -1,0 +1,48 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "fastly",
+  "entries": [
+    {
+      "service": "cdn",
+      "resource_type": "service",
+      "template": "https://manage.fastly.com/configure/services/{service-id}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "compute_edge",
+      "resource_type": "function",
+      "template": "https://manage.fastly.com/compute/services/{service-id}/versions/{version}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "ngwaf",
+      "resource_type": "instance",
+      "template": "https://dashboard.signalsciences.net/corps/{corp}/sites/{site}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "image_optimizer",
+      "resource_type": "service",
+      "template": "https://manage.fastly.com/configure/services/{service-id}/image-optimizer",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "fanout",
+      "resource_type": "channel",
+      "template": "https://manage.fastly.com/configure/services/{service-id}/fanout/{channel}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "glitch",
+      "resource_type": "project",
+      "template": "https://glitch.com/edit/#!/{project}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    }
+  ]
+}

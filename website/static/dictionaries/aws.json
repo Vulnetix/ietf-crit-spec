@@ -1,0 +1,1757 @@
+{
+  "$schema": "../schemas/crit-dictionary-v0.2.0.schema.json",
+  "dictionary_version": "0.3.0",
+  "provider": "aws",
+  "entries": [
+    {
+      "service": "acm",
+      "resource_type": "certificate",
+      "template": "arn:aws:acm:{region}:{account}:certificate/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "acm_pca",
+      "resource_type": "certificate-authority",
+      "template": "arn:aws:acm-pca:{region}:{account}:certificate-authority/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "amplify",
+      "resource_type": "app",
+      "template": "arn:aws:amplify:{region}:{account}:app/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "amplify",
+      "resource_type": "branch",
+      "template": "arn:aws:amplify:{region}:{account}:branch/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "api_gateway",
+      "resource_type": "httpapi",
+      "template": "arn:aws:apigateway:{region}:{account}:httpapi/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "api_gateway",
+      "resource_type": "restapi",
+      "template": "arn:aws:apigateway:{region}:{account}:restapi/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "app_mesh",
+      "resource_type": "mesh",
+      "template": "arn:aws:appmesh:{region}:{account}:mesh/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "app_mesh",
+      "resource_type": "virtual-node",
+      "template": "arn:aws:appmesh:{region}:{account}:virtual-node/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "app_mesh",
+      "resource_type": "virtual-router",
+      "template": "arn:aws:appmesh:{region}:{account}:virtual-router/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "app_mesh",
+      "resource_type": "virtual-service",
+      "template": "arn:aws:appmesh:{region}:{account}:virtual-service/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "appconfig",
+      "resource_type": "application",
+      "template": "arn:aws:appconfig:{region}:{account}:application/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "apprunner",
+      "resource_type": "service",
+      "template": "arn:aws:apprunner:{region}:{account}:service/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "appstream",
+      "resource_type": "fleet",
+      "template": "arn:aws:appstream:{region}:{account}:fleet/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "appstream",
+      "resource_type": "image-builder",
+      "template": "arn:aws:appstream:{region}:{account}:image-builder/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "appstream",
+      "resource_type": "stack",
+      "template": "arn:aws:appstream:{region}:{account}:stack/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "appsync",
+      "resource_type": "graphqlapi",
+      "template": "arn:aws:appsync:{region}:{account}:graphqlapi/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "athena",
+      "resource_type": "workgroup",
+      "template": "arn:aws:athena:{region}:{account}:workgroup/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "autoscaling",
+      "resource_type": "auto-scaling-group",
+      "template": "arn:aws:autoscaling:{region}:{account}:auto-scaling-group/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "backup",
+      "resource_type": "backup-plan",
+      "template": "arn:aws:backup:{region}:{account}:backup-plan/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "backup",
+      "resource_type": "backup-vault",
+      "template": "arn:aws:backup:{region}:{account}:backup-vault/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "batch",
+      "resource_type": "compute-environment",
+      "template": "arn:aws:batch:{region}:{account}:compute-environment/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "batch",
+      "resource_type": "job-definition",
+      "template": "arn:aws:batch:{region}:{account}:job-definition/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "batch",
+      "resource_type": "job-queue",
+      "template": "arn:aws:batch:{region}:{account}:job-queue/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "bedrock",
+      "resource_type": "agent",
+      "template": "arn:aws:bedrock:{region}:{account}:agent/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "bedrock",
+      "resource_type": "custom-model",
+      "template": "arn:aws:bedrock:{region}:{account}:custom-model/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "bedrock",
+      "resource_type": "model",
+      "template": "arn:aws:bedrock:{region}:{account}:model/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "clean_rooms",
+      "resource_type": "collaboration",
+      "template": "arn:aws:cleanrooms:{region}:{account}:collaboration/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud9",
+      "resource_type": "environment",
+      "template": "arn:aws:cloud9:{region}:{account}:environment/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_cam",
+      "resource_type": "device",
+      "template": "arn:aws:cloudcam:{region}:{account}:device/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_map",
+      "resource_type": "namespace",
+      "template": "arn:aws:servicediscovery:{region}:{account}:namespace/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_map",
+      "resource_type": "service",
+      "template": "arn:aws:servicediscovery:{region}:{account}:service/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloudformation",
+      "resource_type": "changeset",
+      "template": "arn:aws:cloudformation:{region}:{account}:changeset/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloudformation",
+      "resource_type": "stack",
+      "template": "arn:aws:cloudformation:{region}:{account}:stack/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloudfront",
+      "resource_type": "distribution",
+      "template": "arn:aws:cloudfront:{region=us-east-1}:{account}:distribution/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cloudfront",
+      "resource_type": "function",
+      "template": "arn:aws:cloudfront:{region=us-east-1}:{account}:function/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cloudtrail",
+      "resource_type": "trail",
+      "template": "arn:aws:cloudtrail:{region}:{account}:trail/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloudwatch",
+      "resource_type": "alarm",
+      "template": "arn:aws:cloudwatch:{region}:{account}:alarm/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloudwatch",
+      "resource_type": "dashboard",
+      "template": "arn:aws:cloudwatch:{region}:{account}:dashboard/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "codeartifact",
+      "resource_type": "domain",
+      "template": "arn:aws:codeartifact:{region}:{account}:domain/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "codeartifact",
+      "resource_type": "repository",
+      "template": "arn:aws:codeartifact:{region}:{account}:repository/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "codebuild",
+      "resource_type": "build",
+      "template": "arn:aws:codebuild:{region}:{account}:build/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "codebuild",
+      "resource_type": "project",
+      "template": "arn:aws:codebuild:{region}:{account}:project/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "codecommit",
+      "resource_type": "repository",
+      "template": "arn:aws:codecommit:{region}:{account}:repository/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "codedeploy",
+      "resource_type": "application",
+      "template": "arn:aws:codedeploy:{region}:{account}:application/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "codedeploy",
+      "resource_type": "deployment-group",
+      "template": "arn:aws:codedeploy:{region}:{account}:deployment-group/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "codepipeline",
+      "resource_type": "pipeline",
+      "template": "arn:aws:codepipeline:{region}:{account}:pipeline/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "codestar_connections",
+      "resource_type": "connection",
+      "template": "arn:aws:codestar-connections:{region}:{account}:connection/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cognito",
+      "resource_type": "userpool",
+      "template": "arn:aws:cognito-idp:{region}:{account}:userpool/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "comprehend",
+      "resource_type": "document-classifier",
+      "template": "arn:aws:comprehend:{region}:{account}:document-classifier/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "comprehend",
+      "resource_type": "entity-recognizer",
+      "template": "arn:aws:comprehend:{region}:{account}:entity-recognizer/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "config",
+      "resource_type": "config-rule",
+      "template": "arn:aws:config:{region}:{account}:config-rule/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "config",
+      "resource_type": "configuration-recorder",
+      "template": "arn:aws:config:{region}:{account}:configuration-recorder/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "connect",
+      "resource_type": "contact-flow",
+      "template": "arn:aws:connect:{region}:{account}:contact-flow/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "connect",
+      "resource_type": "instance",
+      "template": "arn:aws:connect:{region}:{account}:instance/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "data_all",
+      "resource_type": "tenant",
+      "template": "arn:aws:dataall:{region}:{account}:tenant/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "datasync",
+      "resource_type": "agent",
+      "template": "arn:aws:datasync:{region}:{account}:agent/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "datasync",
+      "resource_type": "task",
+      "template": "arn:aws:datasync:{region}:{account}:task/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "detective",
+      "resource_type": "graph",
+      "template": "arn:aws:detective:{region}:{account}:graph/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "direct_connect",
+      "resource_type": "connection",
+      "template": "arn:aws:directconnect:{region}:{account}:connection/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "direct_connect",
+      "resource_type": "virtual-interface",
+      "template": "arn:aws:directconnect:{region}:{account}:virtual-interface/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "directory_service",
+      "resource_type": "directory",
+      "template": "arn:aws:ds:{region}:{account}:directory/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "dms",
+      "resource_type": "endpoint",
+      "template": "arn:aws:dms:{region}:{account}:endpoint/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "dms",
+      "resource_type": "replication-instance",
+      "template": "arn:aws:dms:{region}:{account}:replication-instance/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "dms",
+      "resource_type": "replication-task",
+      "template": "arn:aws:dms:{region}:{account}:replication-task/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "dynamodb",
+      "resource_type": "backup",
+      "template": "arn:aws:dynamodb:{region}:{account}:backup/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "dynamodb",
+      "resource_type": "global-table",
+      "template": "arn:aws:dynamodb:{region}:{account}:global-table/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "dynamodb",
+      "resource_type": "table",
+      "template": "arn:aws:dynamodb:{region}:{account}:table/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "dynamodb_local",
+      "resource_type": "instance",
+      "template": "arn:aws:dynamodb-local:{region}:{account}:instance/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "capacity-reservation",
+      "template": "arn:aws:ec2:{region}:{account}:capacity-reservation/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "dedicated-host",
+      "template": "arn:aws:ec2:{region}:{account}:dedicated-host/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "elastic-ip",
+      "template": "arn:aws:ec2:{region}:{account}:elastic-ip/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "image",
+      "template": "arn:aws:ec2:{region}:{account}:image/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "instance",
+      "template": "arn:aws:ec2:{region}:{account}:instance/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "internet-gateway",
+      "template": "arn:aws:ec2:{region}:{account}:internet-gateway/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "key-pair",
+      "template": "arn:aws:ec2:{region}:{account}:key-pair/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "launch-template",
+      "template": "arn:aws:ec2:{region}:{account}:launch-template/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "nat-gateway",
+      "template": "arn:aws:ec2:{region}:{account}:nat-gateway/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "network-acl",
+      "template": "arn:aws:ec2:{region}:{account}:network-acl/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "network-interface",
+      "template": "arn:aws:ec2:{region}:{account}:network-interface/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "placement-group",
+      "template": "arn:aws:ec2:{region}:{account}:placement-group/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "prefix-list",
+      "template": "arn:aws:ec2:{region}:{account}:prefix-list/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "route-table",
+      "template": "arn:aws:ec2:{region}:{account}:route-table/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "security-group",
+      "template": "arn:aws:ec2:{region}:{account}:security-group/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "snapshot",
+      "template": "arn:aws:ec2:{region}:{account}:snapshot/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "subnet",
+      "template": "arn:aws:ec2:{region}:{account}:subnet/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "transit-gateway",
+      "template": "arn:aws:ec2:{region}:{account}:transit-gateway/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "transit-gateway-attachment",
+      "template": "arn:aws:ec2:{region}:{account}:transit-gateway-attachment/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "volume",
+      "template": "arn:aws:ec2:{region}:{account}:volume/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "vpc",
+      "template": "arn:aws:ec2:{region}:{account}:vpc/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "vpc-endpoint",
+      "template": "arn:aws:ec2:{region}:{account}:vpc-endpoint/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "vpc-flow-log",
+      "template": "arn:aws:ec2:{region}:{account}:vpc-flow-log/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "vpc-peering-connection",
+      "template": "arn:aws:ec2:{region}:{account}:vpc-peering-connection/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "vpn-connection",
+      "template": "arn:aws:ec2:{region}:{account}:vpn-connection/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ec2",
+      "resource_type": "vpn-gateway",
+      "template": "arn:aws:ec2:{region}:{account}:vpn-gateway/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ecr",
+      "resource_type": "repository",
+      "template": "arn:aws:ecr:{region}:{account}:repository/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ecs",
+      "resource_type": "cluster",
+      "template": "arn:aws:ecs:{region}:{account}:cluster/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ecs",
+      "resource_type": "service",
+      "template": "arn:aws:ecs:{region}:{account}:service/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ecs",
+      "resource_type": "task",
+      "template": "arn:aws:ecs:{region}:{account}:task/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ecs",
+      "resource_type": "task-definition",
+      "template": "arn:aws:ecs:{region}:{account}:task-definition/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "efs",
+      "resource_type": "access-point",
+      "template": "arn:aws:elasticfilesystem:{region}:{account}:access-point/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "efs",
+      "resource_type": "file-system",
+      "template": "arn:aws:elasticfilesystem:{region}:{account}:file-system/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "eks",
+      "resource_type": "cluster",
+      "template": "arn:aws:eks:{region}:{account}:cluster/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "eks",
+      "resource_type": "nodegroup",
+      "template": "arn:aws:eks:{region}:{account}:nodegroup/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "elasticache",
+      "resource_type": "cluster",
+      "template": "arn:aws:elasticache:{region}:{account}:cluster/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "elasticache",
+      "resource_type": "replicationgroup",
+      "template": "arn:aws:elasticache:{region}:{account}:replicationgroup/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "elasticbeanstalk",
+      "resource_type": "application",
+      "template": "arn:aws:elasticbeanstalk:{region}:{account}:application/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "elasticbeanstalk",
+      "resource_type": "environment",
+      "template": "arn:aws:elasticbeanstalk:{region}:{account}:environment/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "elb",
+      "resource_type": "listener",
+      "template": "arn:aws:elasticloadbalancing:{region}:{account}:listener/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "elb",
+      "resource_type": "loadbalancer",
+      "template": "arn:aws:elasticloadbalancing:{region}:{account}:loadbalancer/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "elb",
+      "resource_type": "targetgroup",
+      "template": "arn:aws:elasticloadbalancing:{region}:{account}:targetgroup/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "emr",
+      "resource_type": "cluster",
+      "template": "arn:aws:elasticmapreduce:{region}:{account}:cluster/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "emr",
+      "resource_type": "studio",
+      "template": "arn:aws:elasticmapreduce:{region}:{account}:studio/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "emr_serverless",
+      "resource_type": "application",
+      "template": "arn:aws:emr-serverless:{region}:{account}:application/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "eventbridge",
+      "resource_type": "event-bus",
+      "template": "arn:aws:events:{region}:{account}:event-bus/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "eventbridge",
+      "resource_type": "rule",
+      "template": "arn:aws:events:{region}:{account}:rule/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "firehose",
+      "resource_type": "deliverystream",
+      "template": "arn:aws:firehose:{region}:{account}:deliverystream/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "freertos",
+      "resource_type": "device",
+      "template": "arn:aws:iot:{region}:{account}:thing/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "fsx",
+      "resource_type": "backup",
+      "template": "arn:aws:fsx:{region}:{account}:backup/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "fsx",
+      "resource_type": "file-system",
+      "template": "arn:aws:fsx:{region}:{account}:file-system/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "fsx",
+      "resource_type": "volume",
+      "template": "arn:aws:fsx:{region}:{account}:volume/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "gamelift",
+      "resource_type": "build",
+      "template": "arn:aws:gamelift:{region}:{account}:build/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "gamelift",
+      "resource_type": "fleet",
+      "template": "arn:aws:gamelift:{region}:{account}:fleet/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "global_accelerator",
+      "resource_type": "accelerator",
+      "template": "arn:aws:globalaccelerator:{region=us-east-1}:{account}:accelerator/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "glue",
+      "resource_type": "crawler",
+      "template": "arn:aws:glue:{region}:{account}:crawler/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "glue",
+      "resource_type": "database",
+      "template": "arn:aws:glue:{region}:{account}:database/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "glue",
+      "resource_type": "job",
+      "template": "arn:aws:glue:{region}:{account}:job/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "glue",
+      "resource_type": "registry",
+      "template": "arn:aws:glue:{region}:{account}:registry/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "glue",
+      "resource_type": "table",
+      "template": "arn:aws:glue:{region}:{account}:table/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "grafana",
+      "resource_type": "workspace",
+      "template": "arn:aws:grafana:{region}:{account}:workspace/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "guardduty",
+      "resource_type": "detector",
+      "template": "arn:aws:guardduty:{region}:{account}:detector/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "iam",
+      "resource_type": "group",
+      "template": "arn:aws:iam:{region=us-east-1}:{account}:group/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "iam",
+      "resource_type": "instance-profile",
+      "template": "arn:aws:iam:{region=us-east-1}:{account}:instance-profile/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "iam",
+      "resource_type": "policy",
+      "template": "arn:aws:iam:{region=us-east-1}:{account}:policy/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "iam",
+      "resource_type": "role",
+      "template": "arn:aws:iam:{region=us-east-1}:{account}:role/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "iam",
+      "resource_type": "user",
+      "template": "arn:aws:iam:{region=us-east-1}:{account}:user/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "imagebuilder",
+      "resource_type": "component",
+      "template": "arn:aws:imagebuilder:{region}:{account}:component/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "imagebuilder",
+      "resource_type": "image-pipeline",
+      "template": "arn:aws:imagebuilder:{region}:{account}:image-pipeline/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "imagebuilder",
+      "resource_type": "image-recipe",
+      "template": "arn:aws:imagebuilder:{region}:{account}:image-recipe/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "inspector",
+      "resource_type": "finding",
+      "template": "arn:aws:inspector2:{region}:{account}:finding/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "iot_core",
+      "resource_type": "certificate",
+      "template": "arn:aws:iot:{region}:{account}:certificate/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "iot_core",
+      "resource_type": "policy",
+      "template": "arn:aws:iot:{region}:{account}:policy/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "iot_core",
+      "resource_type": "thing",
+      "template": "arn:aws:iot:{region}:{account}:thing/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "iot_device_defender",
+      "resource_type": "audit",
+      "template": "arn:aws:iot:{region}:{account}:audit/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ivs",
+      "resource_type": "channel",
+      "template": "arn:aws:ivs:{region}:{account}:channel/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "kendra",
+      "resource_type": "index",
+      "template": "arn:aws:kendra:{region}:{account}:index/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "keyspaces",
+      "resource_type": "keyspace",
+      "template": "arn:aws:cassandra:{region}:{account}:keyspace/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "keyspaces",
+      "resource_type": "table",
+      "template": "arn:aws:cassandra:{region}:{account}:table/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "kinesis",
+      "resource_type": "stream",
+      "template": "arn:aws:kinesis:{region}:{account}:stream/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "kinesis_analytics",
+      "resource_type": "application",
+      "template": "arn:aws:kinesisanalyticsv2:{region}:{account}:application/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "kinesis_video",
+      "resource_type": "stream",
+      "template": "arn:aws:kinesisvideo:{region}:{account}:stream/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "kms",
+      "resource_type": "alias",
+      "template": "arn:aws:kms:{region}:{account}:alias/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "kms",
+      "resource_type": "key",
+      "template": "arn:aws:kms:{region}:{account}:key/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "lake_formation",
+      "resource_type": "data-lake",
+      "template": "arn:aws:lakeformation:{region}:{account}:data-lake/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "lambda",
+      "resource_type": "function",
+      "template": "arn:aws:lambda:{region}:{account}:function/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "lambda",
+      "resource_type": "layer",
+      "template": "arn:aws:lambda:{region}:{account}:layer/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "lex",
+      "resource_type": "bot",
+      "template": "arn:aws:lex:{region}:{account}:bot/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "lightsail",
+      "resource_type": "container-service",
+      "template": "arn:aws:lightsail:{region}:{account}:container-service/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "lightsail",
+      "resource_type": "database",
+      "template": "arn:aws:lightsail:{region}:{account}:database/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "lightsail",
+      "resource_type": "instance",
+      "template": "arn:aws:lightsail:{region}:{account}:instance/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "lightsail",
+      "resource_type": "load-balancer",
+      "template": "arn:aws:lightsail:{region}:{account}:load-balancer/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "location",
+      "resource_type": "geofence-collection",
+      "template": "arn:aws:geo:{region}:{account}:geofence-collection/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "location",
+      "resource_type": "map",
+      "template": "arn:aws:geo:{region}:{account}:map/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "location",
+      "resource_type": "place-index",
+      "template": "arn:aws:geo:{region}:{account}:place-index/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "location",
+      "resource_type": "route-calculator",
+      "template": "arn:aws:geo:{region}:{account}:route-calculator/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "location",
+      "resource_type": "tracker",
+      "template": "arn:aws:geo:{region}:{account}:tracker/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "logs",
+      "resource_type": "log-group",
+      "template": "arn:aws:logs:{region}:{account}:log-group/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "macie",
+      "resource_type": "classification-job",
+      "template": "arn:aws:macie2:{region}:{account}:classification-job/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "mediaconvert",
+      "resource_type": "job-template",
+      "template": "arn:aws:mediaconvert:{region}:{account}:job-template/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "mediaconvert",
+      "resource_type": "queue",
+      "template": "arn:aws:mediaconvert:{region}:{account}:queue/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "memorydb",
+      "resource_type": "cluster",
+      "template": "arn:aws:memorydb:{region}:{account}:cluster/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "mq",
+      "resource_type": "broker",
+      "template": "arn:aws:mq:{region}:{account}:broker/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "msk",
+      "resource_type": "cluster",
+      "template": "arn:aws:kafka:{region}:{account}:cluster/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "mwaa",
+      "resource_type": "environment",
+      "template": "arn:aws:airflow:{region}:{account}:environment/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "network_firewall",
+      "resource_type": "firewall",
+      "template": "arn:aws:network-firewall:{region}:{account}:firewall/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "network_firewall",
+      "resource_type": "firewall-policy",
+      "template": "arn:aws:network-firewall:{region}:{account}:firewall-policy/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "network_manager",
+      "resource_type": "global-network",
+      "template": "arn:aws:networkmanager:{region=us-east-1}:{account}:global-network/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "opensearch",
+      "resource_type": "domain",
+      "template": "arn:aws:es:{region}:{account}:domain/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "opensearch_serverless",
+      "resource_type": "collection",
+      "template": "arn:aws:aoss:{region}:{account}:collection/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "organizations",
+      "resource_type": "account",
+      "template": "arn:aws:organizations:{region=us-east-1}:{account}:account/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "personalize",
+      "resource_type": "campaign",
+      "template": "arn:aws:personalize:{region}:{account}:campaign/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "personalize",
+      "resource_type": "dataset-group",
+      "template": "arn:aws:personalize:{region}:{account}:dataset-group/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "pinpoint",
+      "resource_type": "app",
+      "template": "arn:aws:mobiletargeting:{region}:{account}:app/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "pipes",
+      "resource_type": "pipe",
+      "template": "arn:aws:pipes:{region}:{account}:pipe/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "prometheus",
+      "resource_type": "workspace",
+      "template": "arn:aws:aps:{region}:{account}:workspace/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "q",
+      "resource_type": "application",
+      "template": "arn:aws:qbusiness:{region}:{account}:application/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "qldb",
+      "resource_type": "ledger",
+      "template": "arn:aws:qldb:{region}:{account}:ledger/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "quicksight",
+      "resource_type": "dashboard",
+      "template": "arn:aws:quicksight:{region}:{account}:dashboard/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "quicksight",
+      "resource_type": "dataset",
+      "template": "arn:aws:quicksight:{region}:{account}:dataset/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "quicksight",
+      "resource_type": "datasource",
+      "template": "arn:aws:quicksight:{region}:{account}:datasource/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ram",
+      "resource_type": "resource-share",
+      "template": "arn:aws:ram:{region}:{account}:resource-share/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "rds",
+      "resource_type": "cluster",
+      "template": "arn:aws:rds:{region}:{account}:cluster/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "rds",
+      "resource_type": "db",
+      "template": "arn:aws:rds:{region}:{account}:db/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "rds",
+      "resource_type": "db-proxy",
+      "template": "arn:aws:rds:{region}:{account}:db-proxy/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "rds",
+      "resource_type": "snapshot",
+      "template": "arn:aws:rds:{region}:{account}:snapshot/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "redshift",
+      "resource_type": "cluster",
+      "template": "arn:aws:redshift:{region}:{account}:cluster/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "redshift",
+      "resource_type": "snapshot",
+      "template": "arn:aws:redshift:{region}:{account}:snapshot/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "redshift_serverless",
+      "resource_type": "namespace",
+      "template": "arn:aws:redshift-serverless:{region}:{account}:namespace/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "redshift_serverless",
+      "resource_type": "workgroup",
+      "template": "arn:aws:redshift-serverless:{region}:{account}:workgroup/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "rekognition",
+      "resource_type": "collection",
+      "template": "arn:aws:rekognition:{region}:{account}:collection/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "rekognition",
+      "resource_type": "project",
+      "template": "arn:aws:rekognition:{region}:{account}:project/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "route53",
+      "resource_type": "healthcheck",
+      "template": "arn:aws:route53:{region=us-east-1}:{account}:healthcheck/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "route53",
+      "resource_type": "hostedzone",
+      "template": "arn:aws:route53:{region=us-east-1}:{account}:hostedzone/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "route53resolver",
+      "resource_type": "resolver-endpoint",
+      "template": "arn:aws:route53resolver:{region}:{account}:resolver-endpoint/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "route53resolver",
+      "resource_type": "resolver-rule",
+      "template": "arn:aws:route53resolver:{region}:{account}:resolver-rule/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "s3",
+      "resource_type": "access-point",
+      "template": "arn:aws:s3:{region}:{account}:accesspoint/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "s3",
+      "resource_type": "bucket",
+      "template": "arn:aws:s3:{region=}:{account=}:{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "s3",
+      "resource_type": "object",
+      "template": "arn:aws:s3:{region=}:{account=}:{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "sagemaker",
+      "resource_type": "endpoint",
+      "template": "arn:aws:sagemaker:{region}:{account}:endpoint/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "sagemaker",
+      "resource_type": "model",
+      "template": "arn:aws:sagemaker:{region}:{account}:model/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "sagemaker",
+      "resource_type": "notebook-instance",
+      "template": "arn:aws:sagemaker:{region}:{account}:notebook-instance/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "sagemaker",
+      "resource_type": "training-job",
+      "template": "arn:aws:sagemaker:{region}:{account}:training-job/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "scheduler",
+      "resource_type": "schedule",
+      "template": "arn:aws:scheduler:{region}:{account}:schedule/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "scheduler",
+      "resource_type": "schedule-group",
+      "template": "arn:aws:scheduler:{region}:{account}:schedule-group/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "secrets_manager",
+      "resource_type": "secret",
+      "template": "arn:aws:secretsmanager:{region}:{account}:secret/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "security_hub",
+      "resource_type": "hub",
+      "template": "arn:aws:securityhub:{region}:{account}:hub/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ses",
+      "resource_type": "configuration-set",
+      "template": "arn:aws:ses:{region}:{account}:configuration-set/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ses",
+      "resource_type": "identity",
+      "template": "arn:aws:ses:{region}:{account}:identity/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "shield",
+      "resource_type": "protection",
+      "template": "arn:aws:shield:{region=us-east-1}:{account}:protection/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "signer",
+      "resource_type": "signing-profile",
+      "template": "arn:aws:signer:{region}:{account}:signing-profile/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "sns",
+      "resource_type": "platform-application",
+      "template": "arn:aws:sns:{region}:{account}:platform-application/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "sns",
+      "resource_type": "subscription",
+      "template": "arn:aws:sns:{region}:{account}:subscription/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "sns",
+      "resource_type": "topic",
+      "template": "arn:aws:sns:{region}:{account}:topic/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "sqs",
+      "resource_type": "queue",
+      "template": "arn:aws:sqs:{region}:{account}:queue/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ssm",
+      "resource_type": "automation-execution",
+      "template": "arn:aws:ssm:{region}:{account}:automation-execution/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ssm",
+      "resource_type": "document",
+      "template": "arn:aws:ssm:{region}:{account}:document/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ssm",
+      "resource_type": "maintenance-window",
+      "template": "arn:aws:ssm:{region}:{account}:maintenance-window/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ssm",
+      "resource_type": "managed-instance",
+      "template": "arn:aws:ssm:{region}:{account}:managed-instance/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ssm",
+      "resource_type": "parameter",
+      "template": "arn:aws:ssm:{region}:{account}:parameter/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ssm",
+      "resource_type": "patch-baseline",
+      "template": "arn:aws:ssm:{region}:{account}:patch-baseline/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "sso",
+      "resource_type": "instance",
+      "template": "arn:aws:sso:{region}:{account}:instance/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "sso",
+      "resource_type": "permissionSet",
+      "template": "arn:aws:sso:{region}:{account}:permissionSet/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "step_functions",
+      "resource_type": "execution",
+      "template": "arn:aws:states:{region}:{account}:execution/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "step_functions",
+      "resource_type": "stateMachine",
+      "template": "arn:aws:states:{region}:{account}:stateMachine/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "supply_chain",
+      "resource_type": "instance",
+      "template": "arn:aws:scn:{region}:{account}:instance/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "synthetics",
+      "resource_type": "canary",
+      "template": "arn:aws:synthetics:{region}:{account}:canary/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "timestream",
+      "resource_type": "database",
+      "template": "arn:aws:timestream:{region}:{account}:database/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "timestream",
+      "resource_type": "table",
+      "template": "arn:aws:timestream:{region}:{account}:table/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "transfer_family",
+      "resource_type": "server",
+      "template": "arn:aws:transfer:{region}:{account}:server/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "verified_access",
+      "resource_type": "endpoint",
+      "template": "arn:aws:ec2:{region}:{account}:verified-access-endpoint/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "vpc_lattice",
+      "resource_type": "service",
+      "template": "arn:aws:vpc-lattice:{region}:{account}:service/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "vpc_lattice",
+      "resource_type": "service-network",
+      "template": "arn:aws:vpc-lattice:{region}:{account}:service-network/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "vpc_lattice",
+      "resource_type": "target-group",
+      "template": "arn:aws:vpc-lattice:{region}:{account}:target-group/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "wafv2",
+      "resource_type": "ipset",
+      "template": "arn:aws:wafv2:{region}:{account}:ipset/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "wafv2",
+      "resource_type": "rule-group",
+      "template": "arn:aws:wafv2:{region}:{account}:rule-group/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "wafv2",
+      "resource_type": "web-acl",
+      "template": "arn:aws:wafv2:{region}:{account}:web-acl/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "workspaces",
+      "resource_type": "bundle",
+      "template": "arn:aws:workspaces:{region}:{account}:bundle/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "workspaces",
+      "resource_type": "directory",
+      "template": "arn:aws:workspaces:{region}:{account}:directory/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "workspaces",
+      "resource_type": "workspace",
+      "template": "arn:aws:workspaces:{region}:{account}:workspace/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "xray",
+      "resource_type": "group",
+      "template": "arn:aws:xray:{region}:{account}:group/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "xray",
+      "resource_type": "sampling-rule",
+      "template": "arn:aws:xray:{region}:{account}:sampling-rule/{resource-id}",
+      "template_format": "aws_arn",
+      "region_behavior": "regional"
+    }
+  ]
+}

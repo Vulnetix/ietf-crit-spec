@@ -1,0 +1,80 @@
+baseURL = "https://crit.vulnetix.com/"
+languageCode = "en-us"
+title = "CRIT — Cloud Resource Identifier Templates"
+
+[module]
+  [[module.imports]]
+    path = "github.com/imfing/hextra"
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[markup.highlight]
+  noClasses = false
+
+[[menu.main]]
+  name = "Validator"
+  pageRef = "/validator"
+  weight = 1
+  [menu.main.params]
+    icon = "check-circle"
+
+[[menu.main]]
+  name = "Docs"
+  pageRef = "/docs"
+  weight = 2
+
+[[menu.main]]
+  name = "Spec"
+  pageRef = "/docs/spec"
+  weight = 3
+
+[[menu.main]]
+  name = "Vector"
+  pageRef = "/docs/vector-string"
+  weight = 4
+
+[[menu.main]]
+  name = "Dictionaries"
+  pageRef = "/docs/dictionaries"
+  weight = 5
+
+[[menu.main]]
+  name = "ADP / x_crit"
+  pageRef = "/docs/adp-integration"
+  weight = 6
+
+[[menu.main]]
+  name = "IETF Draft"
+  url = "https://datatracker.ietf.org/doc/draft-vulnetix-crit/"
+  weight = 7
+  [menu.main.params]
+    icon = "external-link"
+
+[[menu.main]]
+  name = "GitHub"
+  url = "https://github.com/Vulnetix/ietf-crit-spec"
+  weight = 8
+  [menu.main.params]
+    icon = "github"
+
+[params]
+  description = "Cloud Resource Identifier Templates — a machine-readable format for identifying cloud resources affected by known vulnerabilities."
+  images = ["https://www.vulnetix.com/images/og.png"]
+
+  [params.navbar]
+    displayTitle = true
+    displayLogo = true
+
+    [params.navbar.logo]
+      path = "favicon-32x32.png"
+      dark = "favicon-32x32.png"
+      width = "24"
+      height = "24"
+
+  [params.footer]
+    displayPoweredBy = false
+
+  [params.editURL]
+    enable = true
+    base = "https://github.com/Vulnetix/ietf-crit-spec/edit/main/website/content"

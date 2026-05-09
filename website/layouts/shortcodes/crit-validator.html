@@ -1,0 +1,165 @@
+{{/*
+  CRIT in-browser validator. Pure HTML/CSS/JS — no framework.
+  Loads schemas + dictionaries from /schemas and /dictionaries via
+  fetch, parses with AJV (loaded from CDN), and surfaces errors in
+  a structured panel. All work happens client-side.
+*/}}
+<div id="crit-validator" class="crit-validator">
+  <div class="crit-validator__tabs" role="tablist">
+    <button type="button" role="tab" aria-selected="true"  data-mode="record">CRIT record</button>
+    <button type="button" role="tab" aria-selected="false" data-mode="cve">CVE 5.x with x_crit</button>
+    <button type="button" role="tab" aria-selected="false" data-mode="vector">Vector string</button>
+  </div>
+
+  <div class="crit-validator__samples">
+    <span>Load sample:</span>
+    <button type="button" data-sample="record-aws-eks">aws/eks runc</button>
+    <button type="button" data-sample="record-azure-aks">azure/aks runc</button>
+    <button type="button" data-sample="cve-with-xcrit">CVE+x_crit (Log4Shell)</button>
+    <button type="button" data-sample="vector">vector</button>
+  </div>
+
+  <div class="crit-validator__pane">
+    <textarea id="crit-validator-input"
+      spellcheck="false"
+      placeholder='Paste a CRIT record JSON, a CVE 5.x record with x_crit, or a CRITv0.3.0/... vector string and click Validate.'></textarea>
+  </div>
+
+  <div class="crit-validator__actions">
+    <button type="button" id="crit-validator-run" class="crit-validator__run">Validate</button>
+    <button type="button" id="crit-validator-clear">Clear</button>
+    <span class="crit-validator__hint" id="crit-validator-hint"></span>
+  </div>
+
+  <div class="crit-validator__results" id="crit-validator-results" aria-live="polite"></div>
+</div>
+
+<style>
+  .crit-validator {
+    border: 1px solid rgba(127,127,127,0.25);
+    border-radius: 10px;
+    padding: 1rem 1rem 1.25rem;
+    margin: 1.25rem 0 2rem;
+    background: rgba(127,127,127,0.04);
+  }
+  .crit-validator__tabs {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .crit-validator__tabs button {
+    appearance: none;
+    border: 1px solid rgba(127,127,127,0.3);
+    background: transparent;
+    color: inherit;
+    padding: 0.4rem 0.85rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .crit-validator__tabs button[aria-selected="true"] {
+    background: rgba(99,102,241,0.18);
+    border-color: rgba(99,102,241,0.5);
+    font-weight: 600;
+  }
+  .crit-validator__samples {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: rgba(127,127,127,0.95);
+    margin-bottom: 0.6rem;
+  }
+  .crit-validator__samples span { margin-right: 0.2rem; }
+  .crit-validator__samples button {
+    appearance: none;
+    background: rgba(127,127,127,0.08);
+    border: 1px dashed rgba(127,127,127,0.3);
+    color: inherit;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    cursor: pointer;
+  }
+  .crit-validator__samples button:hover { background: rgba(127,127,127,0.18); }
+  .crit-validator__pane {
+    margin-bottom: 0.65rem;
+  }
+  #crit-validator-input {
+    width: 100%;
+    min-height: 220px;
+    padding: 0.75rem;
+    font-family: ui-monospace, SFMono-Regular, "Menlo", "Cascadia Code", monospace;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    border: 1px solid rgba(127,127,127,0.3);
+    border-radius: 6px;
+    background: var(--hextra-content-bg, #fff);
+    color: inherit;
+    resize: vertical;
+    box-sizing: border-box;
+  }
+  .dark #crit-validator-input { background: #181b21; }
+  .crit-validator__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .crit-validator__run {
+    appearance: none;
+    background: #4f46e5;
+    color: #fff;
+    border: none;
+    padding: 0.55rem 1.1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .crit-validator__run:hover { background: #4338ca; }
+  #crit-validator-clear {
+    appearance: none;
+    background: transparent;
+    border: 1px solid rgba(127,127,127,0.3);
+    color: inherit;
+    padding: 0.5rem 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .crit-validator__hint {
+    font-size: 0.78rem;
+    color: rgba(127,127,127,0.95);
+  }
+  .crit-validator__results {
+    font-family: ui-monospace, SFMono-Regular, "Menlo", monospace;
+    font-size: 0.82rem;
+  }
+  .crit-validator__results .ok    { color: #16a34a; }
+  .crit-validator__results .warn  { color: #d97706; }
+  .crit-validator__results .fail  { color: #dc2626; }
+  .crit-validator__results .info  { color: rgba(127,127,127,0.95); }
+  .crit-validator__results pre {
+    background: rgba(127,127,127,0.08);
+    padding: 0.75rem;
+    border-radius: 6px;
+    overflow: auto;
+    margin: 0.4rem 0 0.85rem;
+  }
+  .crit-validator__results details {
+    margin: 0.25rem 0;
+  }
+  .crit-validator__results details > summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .crit-validator__results .row {
+    padding: 0.25rem 0;
+    border-bottom: 1px dashed rgba(127,127,127,0.18);
+  }
+  .crit-validator__results .row:last-child { border-bottom: 0; }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/8.17.1/ajv2020.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{{ "js/validator.js" | relURL }}" defer></script>

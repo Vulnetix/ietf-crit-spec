@@ -1,0 +1,34 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "akamai",
+  "entries": [
+    {
+      "service": "edge",
+      "resource_type": "property",
+      "template": "https://api.akamai.com/papi/v1/properties/{property-id}",
+      "template_format": "akamai_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "edge_dns",
+      "resource_type": "zone",
+      "template": "https://api.akamai.com/config-dns/v2/zones/{zone-name}",
+      "template_format": "akamai_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "app_security",
+      "resource_type": "configuration",
+      "template": "https://api.akamai.com/appsec/v1/configs/{config-id}",
+      "template_format": "akamai_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "guardicore",
+      "resource_type": "asset",
+      "template": "https://api.akamai.com/cloudsec/v1/assets/{asset-id}",
+      "template_format": "akamai_url",
+      "region_behavior": "global-only"
+    }
+  ]
+}

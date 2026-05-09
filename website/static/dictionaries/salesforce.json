@@ -1,0 +1,490 @@
+{
+  "$schema": "../schemas/crit-dictionary-v0.2.0.schema.json",
+  "dictionary_version": "0.3.0",
+  "provider": "salesforce",
+  "entries": [
+    {
+      "service": "agentforce",
+      "resource_type": "agent",
+      "template": "https://{instance}.my.salesforce.com/services/agentforce/agents/{agent-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "clicksoftware",
+      "resource_type": "instance",
+      "template": "https://{instance}.clicksoftware.com/api/{api-version}/{tenant-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "commerce_cloud",
+      "resource_type": "store",
+      "template": "https://{instance}.commercecloud.salesforce.com/s/{store-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "crm",
+      "resource_type": "account",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Account/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Standard Account object. {instance} is the pod identifier (e.g. na1, eu12). {record-id} is the 18-character base-62 record ID with entity prefix 001."
+    },
+    {
+      "service": "crm",
+      "resource_type": "asset",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Asset/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Customer asset (installed product). Entity key prefix 02i."
+    },
+    {
+      "service": "crm",
+      "resource_type": "campaign",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Campaign/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Standard Campaign object. Entity key prefix 701."
+    },
+    {
+      "service": "crm",
+      "resource_type": "campaign_member",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/CampaignMember/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "crm",
+      "resource_type": "case",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Case/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Standard Case object shared by Sales and Service Cloud. Entity key prefix 500."
+    },
+    {
+      "service": "crm",
+      "resource_type": "case_comment",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/CaseComment/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "crm",
+      "resource_type": "contact",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Contact/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Standard Contact object. Entity key prefix 003."
+    },
+    {
+      "service": "crm",
+      "resource_type": "contract",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Contract/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Standard Contract object. Entity key prefix 800."
+    },
+    {
+      "service": "crm",
+      "resource_type": "email_message",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/EmailMessage/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "crm",
+      "resource_type": "event",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Event/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Standard Event (activity) object. Entity key prefix 00U."
+    },
+    {
+      "service": "crm",
+      "resource_type": "lead",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Lead/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Standard Lead object. Entity key prefix 00Q."
+    },
+    {
+      "service": "crm",
+      "resource_type": "note",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Note/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "crm",
+      "resource_type": "opportunity",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Opportunity/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Standard Opportunity object. Entity key prefix 006."
+    },
+    {
+      "service": "crm",
+      "resource_type": "opportunity_line_item",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/OpportunityLineItem/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Opportunity product line item. Entity key prefix 00k."
+    },
+    {
+      "service": "crm",
+      "resource_type": "order",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Order/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Standard Order object. Entity key prefix 801."
+    },
+    {
+      "service": "crm",
+      "resource_type": "order_item",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/OrderItem/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "crm",
+      "resource_type": "price_book",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Pricebook2/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Price book (API name Pricebook2). Entity key prefix 01s."
+    },
+    {
+      "service": "crm",
+      "resource_type": "price_book_entry",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/PricebookEntry/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "crm",
+      "resource_type": "product",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Product2/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Product catalog entry (API name Product2). Entity key prefix 01t."
+    },
+    {
+      "service": "crm",
+      "resource_type": "quote",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Quote/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Standard Quote object (requires Quotes feature). Entity key prefix 0Q0."
+    },
+    {
+      "service": "crm",
+      "resource_type": "quote_line_item",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/QuoteLineItem/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "crm",
+      "resource_type": "task",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Task/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Standard Task (activity) object. Entity key prefix 00T."
+    },
+    {
+      "service": "einstein",
+      "resource_type": "copilot",
+      "template": "https://{instance}.my.salesforce.com/services/einstein/copilots/{copilot-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "experience_cloud",
+      "resource_type": "site",
+      "template": "https://{instance}.my.site.com/{site-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "heroku",
+      "resource_type": "app",
+      "template": "https://api.heroku.com/apps/{app-name}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "hyperforce",
+      "resource_type": "instance",
+      "template": "https://{instance}.my.salesforce.com",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "marketing_cloud",
+      "resource_type": "account",
+      "template": "https://mc.{instance}.exacttarget.com/cloud/{account-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "mulesoft",
+      "resource_type": "environment",
+      "template": "https://anypoint.mulesoft.com/accounts/api/organizations/{org-id}/environments/{env-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "pardot",
+      "resource_type": "account",
+      "template": "https://pi.pardot.com/api/account/{account-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "platform",
+      "resource_type": "content_document",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/ContentDocument/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Salesforce Files document. Entity key prefix 069."
+    },
+    {
+      "service": "platform",
+      "resource_type": "content_version",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/ContentVersion/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "A version of a Salesforce File. Entity key prefix 068."
+    },
+    {
+      "service": "platform",
+      "resource_type": "dashboard",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Dashboard/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Classic Salesforce Dashboard. Entity key prefix 01Z."
+    },
+    {
+      "service": "platform",
+      "resource_type": "group",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Group/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Public group or queue used for record sharing. Entity key prefix 00G."
+    },
+    {
+      "service": "platform",
+      "resource_type": "org",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Organization/{org-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Organization (Org) record. {org-id} is the 18-char Org ID starting with entity prefix 00D. Each Salesforce org has exactly one Organization record."
+    },
+    {
+      "service": "platform",
+      "resource_type": "permission_set",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/PermissionSet/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Permission set. Entity key prefix 0PS."
+    },
+    {
+      "service": "platform",
+      "resource_type": "permission_set_group",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/PermissionSetGroup/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "platform",
+      "resource_type": "profile",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Profile/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "User profile. Entity key prefix 00e."
+    },
+    {
+      "service": "platform",
+      "resource_type": "report",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Report/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Classic Salesforce Report. Entity key prefix 00O."
+    },
+    {
+      "service": "platform",
+      "resource_type": "user",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/User/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Salesforce user. Entity key prefix 005."
+    },
+    {
+      "service": "quip",
+      "resource_type": "site",
+      "template": "https://platform.quip.com/sites/{site-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "sales_cloud",
+      "resource_type": "org",
+      "template": "https://{instance}.my.salesforce.com/{org-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "salesforce_platform",
+      "resource_type": "org",
+      "template": "https://{instance}.my.salesforce.com/{org-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "service_cloud",
+      "resource_type": "entitlement",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/Entitlement/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Service entitlement record. Entity key prefix 500 (shared with Case namespace)."
+    },
+    {
+      "service": "service_cloud",
+      "resource_type": "org",
+      "template": "https://{instance}.my.salesforce.com/{org-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "service_cloud",
+      "resource_type": "service_appointment",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/ServiceAppointment/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Field Service appointment. Entity key prefix 08p."
+    },
+    {
+      "service": "service_cloud",
+      "resource_type": "service_contract",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/ServiceContract/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "service_cloud",
+      "resource_type": "service_resource",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/ServiceResource/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "service_cloud",
+      "resource_type": "service_territory",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/ServiceTerritory/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "service_cloud",
+      "resource_type": "work_order",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/WorkOrder/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Field Service work order. Entity key prefix 0WO."
+    },
+    {
+      "service": "service_cloud",
+      "resource_type": "work_order_line_item",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/sobjects/WorkOrderLineItem/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "slack",
+      "resource_type": "workspace",
+      "template": "https://api.slack.com/workspaces/{workspace-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "tableau",
+      "resource_type": "cloud-site",
+      "template": "https://{tableau-host}.online.tableau.com/sites/{site-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "tableau",
+      "resource_type": "server",
+      "template": "https://{tableau-host}/api/{api-version}/sites/{site-id}/servers/{server-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "tooling",
+      "resource_type": "apex_class",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/tooling/sobjects/ApexClass/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Apex class metadata. Accessed via the Tooling API (/tooling/sobjects/ path). Entity key prefix 01p."
+    },
+    {
+      "service": "tooling",
+      "resource_type": "apex_trigger",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/tooling/sobjects/ApexTrigger/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Apex trigger metadata. Accessed via Tooling API. Entity key prefix 01q."
+    },
+    {
+      "service": "tooling",
+      "resource_type": "connected_app",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/tooling/sobjects/ConnectedApplication/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Connected App (OAuth 2.0 consumer key/secret holder). Accessed via Tooling API."
+    },
+    {
+      "service": "tooling",
+      "resource_type": "custom_field",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/tooling/sobjects/CustomField/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Custom field metadata definition. Accessed via Tooling API. Entity key prefix 00N."
+    },
+    {
+      "service": "tooling",
+      "resource_type": "custom_object",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/tooling/sobjects/CustomObject/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Custom object metadata definition. Accessed via Tooling API. Entity key prefix 01I."
+    },
+    {
+      "service": "tooling",
+      "resource_type": "flow",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/tooling/sobjects/FlowDefinition/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Flow (Process Builder/Flow Builder) definition metadata. Accessed via Tooling API."
+    },
+    {
+      "service": "tooling",
+      "resource_type": "named_credential",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/tooling/sobjects/NamedCredential/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Named credential (secure endpoint configuration). Accessed via Tooling API. Referenced in callouts as callout:{name}/..."
+    },
+    {
+      "service": "tooling",
+      "resource_type": "validation_rule",
+      "template": "https://{instance}.salesforce.com/services/data/v{api-version}/tooling/sobjects/ValidationRule/{record-id}",
+      "template_format": "salesforce_url",
+      "region_behavior": "regional",
+      "notes": "Validation rule metadata. Accessed via Tooling API. Entity key prefix 03d."
+    }
+  ]
+}

@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vulnetix.com/schemas/crit-dictionary-v0.3.0.schema.json",
+  "title": "CRIT Dictionary",
+  "description": "Schema for a CRIT Spec Default Dictionary file (v0.3.0). Each file contains entries for a single cloud provider. The (service, resource_type) tuple MUST be unique within a file.",
+  "type": "object",
+  "required": ["dictionary_version", "provider", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Self-reference for IDE-level validation."
+    },
+    "_doc": {
+      "type": "string",
+      "description": "Optional free-form documentation note (informational)."
+    },
+    "dictionary_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version tracking the CRIT specification version."
+    },
+    "provider": {
+      "enum": [
+        "aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow",
+        "ibm", "vmware",
+        "adobe", "akamai", "alibaba", "atlassian", "digitalocean", "elastic", "fastly",
+        "gitlab", "hashicorp", "hetzner", "linode", "mongodb", "ovh", "snowflake", "tailscale",
+        "tencent", "twilio", "vercel", "vultr", "zoom"
+      ],
+      "description": "Canonical provider key."
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/entry" },
+      "description": "Array of dictionary entries for this provider."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "provider": { "const": "aws" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "aws_arn" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "azure" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "azure_resource_id" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "gcp" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "gcp_resource_name" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "cloudflare" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "cloudflare_locator" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "oracle" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "oracle_ocid" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "salesforce" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "salesforce_url" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "sap" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "enum": ["sap_btp_url", "sap_odata_url", "sap_sf_url"] } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "servicenow" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "servicenow_table_url" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "ibm" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "ibm_url" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "vmware" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "vmware_url" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "adobe" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "uri" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "akamai" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "akamai_url" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "alibaba" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "alibaba_arn" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "atlassian" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "enum": ["atlassian_locator", "uri"] } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "digitalocean" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "digitalocean_url" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "elastic" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "enum": ["elastic_locator", "uri"] } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "fastly" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "uri" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "gitlab" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "enum": ["gitlab_locator", "uri"] } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "hashicorp" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "uri" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "hetzner" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "hetzner_locator" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "linode" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "linode_locator" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "mongodb" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "enum": ["mongodb_locator", "uri"] } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "ovh" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "ovh_locator" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "snowflake" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "enum": ["snowflake_locator", "uri"] } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "tailscale" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "uri" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "tencent" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "tencent_arn" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "twilio" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "twilio_resource_id" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "vercel" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "enum": ["vercel_locator", "uri"] } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "vultr" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "vultr_locator" } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "zoom" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "enum": ["zoom_locator", "uri"] } } } } } }
+    }
+  ],
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "required": ["service", "resource_type", "template", "template_format", "region_behavior"],
+      "additionalProperties": false,
+      "properties": {
+        "service": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "description": "Normalised service key (lowercase, underscores)."
+        },
+        "resource_type": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_/-]*$",
+          "description": "Resource type within the service. Azure uses camelCase; others use lowercase with hyphens/underscores."
+        },
+        "template": {
+          "type": "string",
+          "minLength": 1,
+          "description": "CRIT template string using slot syntax."
+        },
+        "template_format": {
+          "enum": [
+            "aws_arn", "azure_resource_id", "gcp_resource_name", "cloudflare_locator",
+            "oracle_ocid", "salesforce_url", "sap_btp_url", "sap_odata_url", "sap_sf_url",
+            "servicenow_table_url", "ibm_url", "vmware_url",
+            "akamai_url", "alibaba_arn", "atlassian_locator", "digitalocean_url",
+            "elastic_locator", "gitlab_locator", "hetzner_locator", "linode_locator",
+            "mongodb_locator", "ovh_locator", "snowflake_locator", "tencent_arn",
+            "twilio_resource_id", "vercel_locator", "vultr_locator", "zoom_locator",
+            "uri"
+          ],
+          "description": "Format of the resolved template."
+        },
+        "region_behavior": {
+          "enum": ["regional", "global-only", "multi-region", "endpoint-only", "self-hosted"],
+          "description": "Deployment scoping. regional = per-region resource; global-only = single global control plane; multi-region = SaaS replicated across regions; endpoint-only = vendor URL with no deployment topology; self-hosted = customer-operated install."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional human-readable annotation."
+        }
+      }
+    }
+  }
+}

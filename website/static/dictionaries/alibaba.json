@@ -1,0 +1,41 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "alibaba",
+  "entries": [
+    {
+      "service": "ecs",
+      "resource_type": "instance",
+      "template": "acs:ecs:{region}:{account}:instance/{instance-id}",
+      "template_format": "alibaba_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "oss",
+      "resource_type": "bucket",
+      "template": "acs:oss:{region}:{account}:{bucket-name}",
+      "template_format": "alibaba_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "ack",
+      "resource_type": "cluster",
+      "template": "acs:cs:{region}:{account}:cluster/{cluster-id}",
+      "template_format": "alibaba_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "rds",
+      "resource_type": "db_instance",
+      "template": "acs:rds:{region}:{account}:dbinstance/{instance-id}",
+      "template_format": "alibaba_arn",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "polardb",
+      "resource_type": "cluster",
+      "template": "acs:polardb:{region}:{account}:dbcluster/{cluster-id}",
+      "template_format": "alibaba_arn",
+      "region_behavior": "regional"
+    }
+  ]
+}
