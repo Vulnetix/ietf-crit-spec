@@ -446,6 +446,8 @@
       }],
       detections: [{
         provider: 'aws', service: 'eks',
+        query_language: '',
+        query: '',
         detection_phase: 'pre_fix',
         description: 'List EKS node groups whose AMI release version predates 2024-02-05.',
         pending_reason: 'query_in_development',
@@ -476,6 +478,8 @@
       }],
       detections: [{
         provider: 'azure', service: 'aks',
+        query_language: '',
+        query: '',
         detection_phase: 'pre_fix',
         description: 'List AKS clusters whose node-image version predates 2024-02-05.',
         pending_reason: 'query_in_development',
