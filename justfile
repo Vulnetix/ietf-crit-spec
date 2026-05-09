@@ -1,5 +1,5 @@
 # Draft revision (override with: just rev=01 <recipe>)
-rev := "03"
+rev := "02"
 outdir := "build"
 schema := "schemas/crit-dictionary-v0.3.0.schema.json"
 
