@@ -31,7 +31,7 @@
       </address>
     </author>
 
-    <date year="2026" month="March" day="27"/>
+    <date year="2026" month="May" day="09"/>
 
     <area>Security</area>
     <workgroup>Independent Submission</workgroup>
@@ -853,7 +853,7 @@ qual-value      = 1*(ALPHA / DIGIT / "-" / "_" / ".")
 
           <t>Example:</t>
           <sourcecode type="text"><![CDATA[
-CRITv0.2.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance
+CRITv0.3.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance
           ]]></sourcecode>
 
           <section anchor="vs-metrics">
@@ -877,8 +877,42 @@ CRITv0.2.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-20
                 <tr><td>gcp</td><td>GC</td><td>Google Cloud Platform</td></tr>
                 <tr><td>cloudflare</td><td>CF</td><td>Cloudflare</td></tr>
                 <tr><td>oracle</td><td>OC</td><td>Oracle Cloud Infrastructure</td></tr>
+                <tr><td>salesforce</td><td>SF</td><td>Salesforce</td></tr>
+                <tr><td>sap</td><td>SP</td><td>SAP</td></tr>
+                <tr><td>servicenow</td><td>SN</td><td>ServiceNow</td></tr>
+                <tr><td>ibm</td><td>IB</td><td>IBM Cloud</td></tr>
+                <tr><td>vmware</td><td>VM</td><td>VMware (Broadcom)</td></tr>
+                <tr><td>adobe</td><td>AD</td><td>Adobe</td></tr>
+                <tr><td>akamai</td><td>AK</td><td>Akamai</td></tr>
+                <tr><td>alibaba</td><td>AL</td><td>Alibaba Cloud</td></tr>
+                <tr><td>atlassian</td><td>AT</td><td>Atlassian</td></tr>
+                <tr><td>digitalocean</td><td>DO</td><td>DigitalOcean</td></tr>
+                <tr><td>elastic</td><td>EL</td><td>Elastic</td></tr>
+                <tr><td>fastly</td><td>FA</td><td>Fastly</td></tr>
+                <tr><td>gitlab</td><td>GL</td><td>GitLab</td></tr>
+                <tr><td>hashicorp</td><td>HC</td><td>HashiCorp</td></tr>
+                <tr><td>hetzner</td><td>HE</td><td>Hetzner Cloud</td></tr>
+                <tr><td>linode</td><td>LI</td><td>Linode (Akamai Connected Cloud)</td></tr>
+                <tr><td>mongodb</td><td>MO</td><td>MongoDB Atlas</td></tr>
+                <tr><td>ovh</td><td>OV</td><td>OVHcloud</td></tr>
+                <tr><td>snowflake</td><td>SO</td><td>Snowflake</td></tr>
+                <tr><td>tailscale</td><td>TS</td><td>Tailscale</td></tr>
+                <tr><td>tencent</td><td>TC</td><td>Tencent Cloud</td></tr>
+                <tr><td>twilio</td><td>TW</td><td>Twilio</td></tr>
+                <tr><td>vercel</td><td>VC</td><td>Vercel</td></tr>
+                <tr><td>vultr</td><td>VL</td><td>Vultr</td></tr>
+                <tr><td>zoom</td><td>ZM</td><td>Zoom</td></tr>
               </tbody>
             </table>
+            <t>
+              Note: the codes <tt>CF</tt> and <tt>GC</tt> appear in both
+              Table 1 (Cloud Provider) and Table 5 (Resource Lifecycle).
+              The grammar disambiguates by metric key prefix: <tt>CP:CF</tt>
+              identifies Cloudflare while <tt>RL:CF</tt> identifies a
+              configuration-only resource lifecycle. Producers and consumers
+              <bcp14>MUST NOT</bcp14> rely on raw two-letter codes outside of
+              their <tt>metric-key</tt> context.
+            </t>
 
             <t><strong>Table 2: VEX Status (VS)</strong></t>
             <table>
@@ -2901,7 +2935,7 @@ https://{instance}.service-now.com/api/now/table/{table-name}/{sys-id}
         <name>AWS RDS MySQL CRIT Record</name>
         <sourcecode type="json"><![CDATA[
 {
-  "vectorString": "CRITv0.2.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance",
+  "vectorString": "CRITv0.3.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance",
   "vuln_id": "CVE-2024-20967",
   "provider": "aws",
   "service": "rds",

@@ -25,36 +25,31 @@ title = "CRIT — Cloud Resource Identifier Templates"
   weight = 2
 
 [[menu.main]]
-  name = "Spec"
-  pageRef = "/docs/spec"
+  name = "Conformance"
+  pageRef = "/docs/conformance"
   weight = 3
 
 [[menu.main]]
-  name = "Vector"
-  pageRef = "/docs/vector-string"
+  name = "Integrations"
+  pageRef = "/docs/integrations"
   weight = 4
 
 [[menu.main]]
-  name = "Dictionaries"
-  pageRef = "/docs/dictionaries"
+  name = "Security"
+  pageRef = "/docs/security-considerations"
   weight = 5
-
-[[menu.main]]
-  name = "ADP / x_crit"
-  pageRef = "/docs/adp-integration"
-  weight = 6
 
 [[menu.main]]
   name = "IETF Draft"
   url = "https://datatracker.ietf.org/doc/draft-vulnetix-crit/"
-  weight = 7
+  weight = 6
   [menu.main.params]
     icon = "external-link"
 
 [[menu.main]]
   name = "GitHub"
   url = "https://github.com/Vulnetix/ietf-crit-spec"
-  weight = 8
+  weight = 7
   [menu.main.params]
     icon = "github"
 
