@@ -23,7 +23,7 @@ layout: hextra-home
 <div class="hx-mb-6 hx-flex hx-flex-wrap hx-gap-3">
   <a href="validator/" class="hx-inline-flex hx-items-center hx-justify-center hx-rounded-md hx-bg-primary-600 hx-text-white hx-px-5 hx-py-2.5 hx-text-sm hx-font-semibold hover:hx-bg-primary-700">Try the Validator</a>
   <a href="docs/" class="hx-inline-flex hx-items-center hx-justify-center hx-rounded-md hx-border hx-border-gray-300 dark:hx-border-neutral-700 hx-px-5 hx-py-2.5 hx-text-sm hx-font-semibold hover:hx-bg-gray-50 dark:hover:hx-bg-neutral-800">Read the Docs</a>
-  <a href="https://www.vulnetix.com/crit" class="hx-inline-flex hx-items-center hx-justify-center hx-rounded-md hx-border hx-border-gray-300 dark:hx-border-neutral-700 hx-px-5 hx-py-2.5 hx-text-sm hx-font-semibold hover:hx-bg-gray-50 dark:hover:hx-bg-neutral-800" target="_blank" rel="noopener">Why CRIT — Stats &amp; Adoption →</a>
+  <a href="https://www.vulnetix.com/articles/matching-cloud-vulns" class="hx-inline-flex hx-items-center hx-justify-center hx-rounded-md hx-border hx-border-gray-300 dark:hx-border-neutral-700 hx-px-5 hx-py-2.5 hx-text-sm hx-font-semibold hover:hx-bg-gray-50 dark:hover:hx-bg-neutral-800" target="_blank" rel="noopener">Why CRIT — Stats &amp; Adoption →</a>
 </div>
 
 {{< hextra/feature-grid >}}
