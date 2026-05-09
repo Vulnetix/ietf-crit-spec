@@ -33,3 +33,13 @@ parser all run client-side.
 - **Vector string** — paste a `CRITv0.3.0/...` string. Decodes to
   structured fields, recomputes, and reports any unknown metric
   warnings.
+
+## Spec versions supported
+
+The validator detects the spec version from each record's
+`vectorString` prefix (`CRITv0.2.0/`, `CRITv0.3.0/`, …) and validates
+against the matching schema. Vector round-trip preserves the stored
+version so an older record can be validated byte-equal without forcing
+a re-encode. Currently bundled: **v0.2.0** and **v0.3.0**. Records
+with an unknown version fall back to the highest supported schema and
+get a `schema_version` warning.
