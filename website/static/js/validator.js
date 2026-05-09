@@ -14,8 +14,11 @@
 (function () {
   'use strict';
 
-  const SPEC_VERSION = '0.3.0';
-  const VECTOR_PREFIX = `CRITv${SPEC_VERSION}/`;
+  const DEFAULT_SPEC_VERSION = '0.3.0';
+  // Spec versions whose schemas + vector codec are bundled. Order matters
+  // for "best effort" fallback — newest first.
+  const SUPPORTED_SPEC_VERSIONS = ['0.3.0', '0.2.0'];
+  const VECTOR_PREFIX_RE = /^CRITv(\d+\.\d+\.\d+)\//;
 
   // ---------------------------------------------------------------------
   // Vector codec — port of critvector.go
@@ -60,8 +63,23 @@
 
   const REGISTERED_KEYS = ['CP', 'VS', 'FP', 'SR', 'RL', 'EV', 'PP', 'SA'];
 
-  /** Encode a structured CRIT record's classification fields to a vector string. */
-  function computeVector(rec) {
+  /** Extract the CRITv<x.y.z> version from a stored vectorString.
+   *  Returns null when the prefix is missing or malformed.
+   */
+  function detectVectorVersion(s) {
+    if (typeof s !== 'string') return null;
+    const m = VECTOR_PREFIX_RE.exec(s);
+    return m ? m[1] : null;
+  }
+
+  /** Encode a structured CRIT record's classification fields to a vector
+   *  string. Round-trip semantics: when called from validation we pass
+   *  the stored vector's version so the recompute produces a byte-equal
+   *  string for any supported spec version. New records default to the
+   *  highest supported version.
+   */
+  function computeVector(rec, version) {
+    const v = version || DEFAULT_SPEC_VERSION;
     const cp = providerToCode[rec.provider];
     if (!cp) throw new Error(`unknown provider "${rec.provider}"`);
     const vs = vexStatusToCode[rec.vex_status];
@@ -80,7 +98,7 @@
     const pp = dateToEpoch(rec?.temporal?.vuln_published_date);
     const sa = dateToEpoch(rec?.temporal?.service_available_date);
 
-    return `CRITv${SPEC_VERSION}/CP:${cp}/VS:${vs}/FP:${fp}/SR:${sr}/RL:${rl}/EV:${ev}/PP:${pp}/SA:${sa}#${rec.vuln_id}:${rec.service}:${rec.resource_type}`;
+    return `CRITv${v}/CP:${cp}/VS:${vs}/FP:${fp}/SR:${sr}/RL:${rl}/EV:${ev}/PP:${pp}/SA:${sa}#${rec.vuln_id}:${rec.service}:${rec.resource_type}`;
   }
 
   function dateToEpoch(d) {
@@ -192,19 +210,14 @@
   // Providers whose dictionary we ship under /dictionaries/.
   const KNOWN_PROVIDERS = Object.keys(providerToCode).concat(['gcp']);
 
-  let recordSchema = null;
   let dictRegistry = null; // { "provider/service/resource_type": entry }
   let ajvInstance = null;
-  let recordValidator = null;
+  // Per-version compiled record validators. Keys are spec versions
+  // (e.g. "0.3.0", "0.2.0"). Values: { validate, schema }.
+  const recordValidators = {};
 
   async function loadResources(baseURL) {
-    if (recordValidator && dictRegistry) return;
-
-    const [recSchema, dictSchema] = await Promise.all([
-      fetch(baseURL + 'schemas/crit-record-v0.3.0.schema.json').then((r) => r.json()),
-      fetch(baseURL + 'schemas/crit-dictionary-v0.3.0.schema.json').then((r) => r.json()),
-    ]);
-    recordSchema = recSchema;
+    if (Object.keys(recordValidators).length > 0 && dictRegistry) return;
 
     // The cdnjs UMD bundle exposes `window.ajv2020` as a module
     // namespace; the constructor lives on `.default` (or `.Ajv2020`).
@@ -213,7 +226,30 @@
     const Ajv = (ns && (ns.default || ns.Ajv2020 || ns.Ajv)) || ns;
     if (typeof Ajv !== 'function') throw new Error('Ajv2020 not loaded; CDN blocked or wrong export shape');
     ajvInstance = new Ajv({ strict: false, allErrors: true });
-    recordValidator = ajvInstance.compile(recSchema);
+
+    // Load every supported version's record schema in parallel.
+    // Missing schemas (older versions removed from the repo) are
+    // silently dropped — the validator falls back to "highest
+    // supported" with a warning when an unknown version is encountered.
+    const schemaResults = await Promise.allSettled(
+      SUPPORTED_SPEC_VERSIONS.map((v) =>
+        fetch(baseURL + 'schemas/crit-record-v' + v + '.schema.json').then((r) =>
+          r.ok ? r.json().then((j) => ({ v, schema: j })) : null,
+        ),
+      ),
+    );
+    for (const res of schemaResults) {
+      if (res.status !== 'fulfilled' || !res.value) continue;
+      const { v, schema } = res.value;
+      try {
+        recordValidators[v] = { validate: ajvInstance.compile(schema), schema };
+      } catch (e) {
+        console.warn('failed to compile schema v' + v, e);
+      }
+    }
+    if (Object.keys(recordValidators).length === 0) {
+      throw new Error('no record schema versions loaded; check /schemas/ availability');
+    }
 
     // Load dictionaries in parallel; missing ones are silently dropped.
     const dictResults = await Promise.allSettled(
@@ -234,6 +270,20 @@
     }
   }
 
+  /** Pick the right schema validator for a record. Prefer the version
+   *  detected from the record's vectorString; fall back to the highest
+   *  supported version with a warning attached.
+   */
+  function pickValidator(rec) {
+    const detected = detectVectorVersion(rec && rec.vectorString);
+    if (detected && recordValidators[detected]) {
+      return { validate: recordValidators[detected].validate, version: detected, fallback: false };
+    }
+    const fallback = SUPPORTED_SPEC_VERSIONS.find((v) => recordValidators[v]);
+    if (!fallback) throw new Error('no schema versions available');
+    return { validate: recordValidators[fallback].validate, version: fallback, fallback: true, detected };
+  }
+
   // ---------------------------------------------------------------------
   // Record validator
   // ---------------------------------------------------------------------
@@ -242,18 +292,33 @@
     const errors = [];
     const warnings = [];
 
-    // 1. JSON Schema
-    const schemaOK = recordValidator(rec);
+    // 0. Pick the right schema version for this record.
+    const picked = pickValidator(rec);
+    if (picked.fallback) {
+      const detected = picked.detected
+        ? `vectorString version "${picked.detected}" is not bundled`
+        : 'record has no vectorString to detect a version from';
+      warnings.push({
+        rule: 'schema_version',
+        detail: `${detected}; validating against fallback v${picked.version} (supported: ${SUPPORTED_SPEC_VERSIONS.filter((v) => recordValidators[v]).join(', ')})`,
+      });
+    }
+
+    // 1. JSON Schema (per detected version)
+    const schemaOK = picked.validate(rec);
     if (!schemaOK) {
-      for (const e of recordValidator.errors || []) {
-        errors.push({ rule: 'schema', detail: `${e.instancePath || '/'} ${e.message}` });
+      for (const e of picked.validate.errors || []) {
+        errors.push({ rule: `schema_v${picked.version}`, detail: `${e.instancePath || '/'} ${e.message}` });
       }
     }
 
-    // 2. Vector recompute
+    // 2. Vector recompute — preserve the stored vector's version so a
+    // v0.2.0 record round-trips byte-equal even though the validator
+    // ships v0.3.0 as the default. New records with no vectorString
+    // skip this check and emit a warning.
     if (rec && typeof rec === 'object' && rec.vectorString) {
       try {
-        const computed = computeVector(rec);
+        const computed = computeVector(rec, picked.version);
         if (computed !== rec.vectorString) {
           errors.push({
             rule: 'vector_round_trip',
