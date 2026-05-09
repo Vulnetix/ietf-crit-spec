@@ -3,8 +3,6 @@ title: Spec Overview
 weight: 1
 ---
 
-# Spec Overview — CRIT v0.3.0
-
 A CRIT record is a JSON object that ties a single CVE to a single
 **cloud resource template**, with the lifecycle and remediation
 metadata an operator needs to act on it.

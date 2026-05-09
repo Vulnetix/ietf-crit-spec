@@ -1,28 +1,45 @@
 {{/*
   CRIT in-browser validator. Pure HTML/CSS/JS — no framework.
-  Loads schemas + dictionaries from /schemas and /dictionaries via
-  fetch, parses with AJV (loaded from CDN), and surfaces errors in
-  a structured panel. All work happens client-side.
+  CodeMirror 5 from cdnjs supplies the JSON-syntax editor;
+  AJV 2020 from cdnjs supplies JSON Schema validation. Schemas
+  + dictionaries fetched from /schemas and /dictionaries; a
+  user-supplied dictionary can be pasted or uploaded via the
+  Dictionary tab and is layered on top of the spec dicts before
+  resolution. All work happens client-side.
 */}}
 <div id="crit-validator" class="crit-validator">
   <div class="crit-validator__tabs" role="tablist">
     <button type="button" role="tab" aria-selected="true"  data-mode="record">CRIT record</button>
     <button type="button" role="tab" aria-selected="false" data-mode="cve">CVE 5.x with x_crit</button>
     <button type="button" role="tab" aria-selected="false" data-mode="vector">Vector string</button>
+    <button type="button" role="tab" aria-selected="false" data-mode="dict">Custom dictionary</button>
   </div>
 
-  <div class="crit-validator__samples">
+  <div class="crit-validator__samples" id="crit-validator-samples">
     <span>Load sample:</span>
     <button type="button" data-sample="record-aws-eks">aws/eks runc</button>
     <button type="button" data-sample="record-azure-aks">azure/aks runc</button>
     <button type="button" data-sample="cve-with-xcrit">CVE+x_crit (runc)</button>
     <button type="button" data-sample="vector">vector</button>
+    <button type="button" data-sample="dict-example" data-mode="dict">example dictionary</button>
   </div>
 
   <div class="crit-validator__pane">
+    {{/* CodeMirror replaces this textarea on DOMContentLoaded; the
+         <textarea> remains as the no-JS fallback and as the
+         data-binding source until CodeMirror takes over. */}}
     <textarea id="crit-validator-input"
       spellcheck="false"
       placeholder='Paste a CRIT record JSON, a CVE 5.x record with x_crit, or a CRITv0.3.0/... vector string and click Validate.'></textarea>
+
+    <div class="crit-validator__dict-controls" id="crit-validator-dict-controls">
+      <label class="crit-validator__file">
+        <input type="file" id="crit-validator-dict-file" accept=".json,application/json">
+        Upload dictionary file
+      </label>
+      <button type="button" id="crit-validator-dict-load">Load &amp; layer dictionary</button>
+      <span class="crit-validator__dict-status" id="crit-validator-dict-status"></span>
+    </div>
   </div>
 
   <div class="crit-validator__actions">
@@ -87,9 +104,10 @@
   .crit-validator__pane {
     margin-bottom: 0.65rem;
   }
+  /* Hidden textarea — replaced by CodeMirror at runtime. */
   #crit-validator-input {
     width: 100%;
-    min-height: 220px;
+    min-height: 480px;
     padding: 0.75rem;
     font-family: ui-monospace, SFMono-Regular, "Menlo", "Cascadia Code", monospace;
     font-size: 0.85rem;
@@ -102,6 +120,56 @@
     box-sizing: border-box;
   }
   .dark #crit-validator-input { background: #181b21; }
+  /* CodeMirror sizing — keep consistent with the textarea fallback. */
+  .crit-validator .CodeMirror {
+    height: 480px;
+    border: 1px solid rgba(127,127,127,0.3);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-family: ui-monospace, SFMono-Regular, "Menlo", "Cascadia Code", monospace;
+  }
+  .crit-validator .CodeMirror-scroll { min-height: 480px; }
+  .crit-validator__dict-controls {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .crit-validator[data-mode="dict"] .crit-validator__dict-controls {
+    display: flex;
+  }
+  .crit-validator__file {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border: 1px dashed rgba(127,127,127,0.4);
+    border-radius: 4px;
+    padding: 0.3rem 0.55rem;
+    background: rgba(127,127,127,0.05);
+  }
+  .crit-validator__file input[type="file"] {
+    font-size: 0.75rem;
+  }
+  #crit-validator-dict-load {
+    appearance: none;
+    background: rgba(99,102,241,0.18);
+    border: 1px solid rgba(99,102,241,0.5);
+    color: inherit;
+    padding: 0.35rem 0.85rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    cursor: pointer;
+  }
+  #crit-validator-dict-load:hover { background: rgba(99,102,241,0.28); }
+  .crit-validator__dict-status {
+    font-size: 0.78rem;
+    color: rgba(127,127,127,0.95);
+  }
+  .crit-validator__dict-status.ok { color: #16a34a; }
+  .crit-validator__dict-status.fail { color: #dc2626; }
   .crit-validator__actions {
     display: flex;
     align-items: center;
@@ -161,5 +229,18 @@
   .crit-validator__results .row:last-child { border-bottom: 0; }
 </style>
 
+{{/* CodeMirror 5 — single editor with JSON mode. */}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/material-darker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldcode.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/brace-fold.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.css">
+
+{{/* AJV2020 — JSON Schema validation. */}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/8.17.1/ajv2020.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="{{ "js/validator.js" | relURL }}" defer></script>

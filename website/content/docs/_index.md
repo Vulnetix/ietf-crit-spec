@@ -3,8 +3,6 @@ title: Documentation
 weight: 1
 ---
 
-# CRIT Documentation
-
 CRIT — **Cloud Resource Identifier Templates** — is a machine-readable
 format for naming the specific cloud resources a CVE affects, alongside
 the lifecycle, fix-propagation, and shared-responsibility metadata that

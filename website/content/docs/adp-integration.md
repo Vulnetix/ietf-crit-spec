@@ -3,8 +3,6 @@ title: ADP / x_crit Integration
 weight: 4
 ---
 
-# CVE 5.x Integration via ADP / x_crit
-
 CRIT records are designed to be **embedded** in CVE 5.x records — not
 shipped as a parallel feed. The CVE.org record format reserves the
 **ADP** (Authorized Data Publisher) container for third-party
