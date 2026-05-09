@@ -4,7 +4,7 @@ layout: hextra-home
 ---
 
 {{< hextra/hero-badge link="https://github.com/Vulnetix/ietf-crit-spec" >}}
-  <span>v0.3.0 — draft-vulnetix-crit-03</span>
+  <span>v0.3.0 — draft-vulnetix-crit-02</span>
   {{< icon name="arrow-circle-right" attributes="height=14" >}}
 {{< /hextra/hero-badge >}}
 
@@ -62,7 +62,7 @@ layout: hextra-home
 
   {{< hextra/feature-card
     title="Open standard"
-    subtitle="Independent submission to the IETF — draft-vulnetix-crit-03. Published under the Trust Provisions. Apache 2.0 implementation reference."
+    subtitle="Independent submission to the IETF — draft-vulnetix-crit-02. Published under the Trust Provisions. Apache 2.0 implementation reference."
     link="https://datatracker.ietf.org/doc/draft-vulnetix-crit/"
   >}}
 {{< /hextra/feature-grid >}}
