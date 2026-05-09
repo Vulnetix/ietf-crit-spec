@@ -1,0 +1,34 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "tailscale",
+  "entries": [
+    {
+      "service": "tsnet",
+      "resource_type": "node",
+      "template": "https://login.tailscale.com/admin/machines/{node}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "coordination",
+      "resource_type": "tailnet",
+      "template": "https://login.tailscale.com/admin/{tailnet}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "ssh",
+      "resource_type": "session",
+      "template": "https://login.tailscale.com/admin/ssh/{session}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "acl",
+      "resource_type": "policy",
+      "template": "https://login.tailscale.com/admin/acls/{policy}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "elastic",
+  "entries": [
+    {
+      "service": "elastic_cloud",
+      "resource_type": "deployment",
+      "template": "https://cloud.elastic.co/deployments/{deployment-id}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "elasticsearch",
+      "resource_type": "cluster",
+      "template": "elasticsearch-cluster:{deployment}:{cluster}",
+      "template_format": "elastic_locator",
+      "region_behavior": "self-hosted"
+    },
+    {
+      "service": "kibana",
+      "resource_type": "instance",
+      "template": "kibana-instance:{deployment}:{host}",
+      "template_format": "elastic_locator",
+      "region_behavior": "self-hosted"
+    },
+    {
+      "service": "logstash",
+      "resource_type": "instance",
+      "template": "logstash-instance:{deployment}:{host}",
+      "template_format": "elastic_locator",
+      "region_behavior": "self-hosted"
+    },
+    {
+      "service": "beats",
+      "resource_type": "agent",
+      "template": "elastic-beats:{deployment}:{agent-id}",
+      "template_format": "elastic_locator",
+      "region_behavior": "endpoint-only"
+    },
+    {
+      "service": "fleet",
+      "resource_type": "agent",
+      "template": "elastic-fleet:{deployment}:{agent-id}",
+      "template_format": "elastic_locator",
+      "region_behavior": "endpoint-only"
+    },
+    {
+      "service": "package_registry",
+      "resource_type": "instance",
+      "template": "https://epr.elastic.co/{namespace}/{package}",
+      "template_format": "uri",
+      "region_behavior": "global-only"
+    }
+  ]
+}

@@ -1,0 +1,308 @@
+{
+  "$schema": "../schemas/crit-dictionary-v0.2.0.schema.json",
+  "dictionary_version": "0.3.0",
+  "provider": "cloudflare",
+  "entries": [
+    {
+      "service": "access",
+      "resource_type": "access_application",
+      "template": "com.cloudflare.api.account.{account_id}.access_application.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "access",
+      "resource_type": "access_group",
+      "template": "com.cloudflare.api.account.{account_id}.access_group.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "access",
+      "resource_type": "access_identity_provider",
+      "template": "com.cloudflare.api.account.{account_id}.access_identity_provider.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "access",
+      "resource_type": "access_service_token",
+      "template": "com.cloudflare.api.account.{account_id}.access_service_token.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "ai_gateway",
+      "resource_type": "ai_gateway",
+      "template": "com.cloudflare.api.account.{account_id}.ai_gateway.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "api_shield",
+      "resource_type": "api_shield",
+      "template": "com.cloudflare.api.account.{account_id}.api_shield.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "argo",
+      "resource_type": "argo_tunnel",
+      "template": "com.cloudflare.api.account.{account_id}.argo_tunnel.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "d1",
+      "resource_type": "d1_database",
+      "template": "com.cloudflare.api.account.{account_id}.d1_database.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "dns",
+      "resource_type": "dns_record",
+      "template": "com.cloudflare.api.account.{account_id}.dns_record.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "dns",
+      "resource_type": "zone",
+      "template": "com.cloudflare.api.account.{account_id}.zone.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "durable_objects",
+      "resource_type": "durable_object_namespace",
+      "template": "com.cloudflare.api.account.{account_id}.durable_object_namespace.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "email_routing",
+      "resource_type": "email_routing_rule",
+      "template": "com.cloudflare.api.account.{account_id}.email_routing_rule.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "hyperdrive",
+      "resource_type": "hyperdrive_config",
+      "template": "com.cloudflare.api.account.{account_id}.hyperdrive_config.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "images",
+      "resource_type": "image",
+      "template": "com.cloudflare.api.account.{account_id}.image.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "kv",
+      "resource_type": "kv_namespace",
+      "template": "com.cloudflare.api.account.{account_id}.kv_namespace.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "load_balancer",
+      "resource_type": "load_balancer",
+      "template": "com.cloudflare.api.account.{account_id}.load_balancer.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "load_balancer",
+      "resource_type": "load_balancer_pool",
+      "template": "com.cloudflare.api.account.{account_id}.load_balancer_pool.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "logpush",
+      "resource_type": "logpush_job",
+      "template": "com.cloudflare.api.account.{account_id}.logpush_job.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "magic_firewall",
+      "resource_type": "magic_firewall_ruleset",
+      "template": "com.cloudflare.api.account.{account_id}.magic_firewall_ruleset.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "magic_transit",
+      "resource_type": "magic_transit_tunnel",
+      "template": "com.cloudflare.api.account.{account_id}.magic_transit_tunnel.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "magic_wan",
+      "resource_type": "magic_wan_connector",
+      "template": "com.cloudflare.api.account.{account_id}.magic_wan_connector.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "pages",
+      "resource_type": "pages_project",
+      "template": "com.cloudflare.api.account.{account_id}.pages_project.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "queues",
+      "resource_type": "queue",
+      "template": "com.cloudflare.api.account.{account_id}.queue.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "r2",
+      "resource_type": "r2_bucket",
+      "template": "com.cloudflare.api.account.{account_id}.r2_bucket.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "registrar",
+      "resource_type": "registrar_domain",
+      "template": "com.cloudflare.api.account.{account_id}.registrar_domain.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "spectrum",
+      "resource_type": "spectrum_application",
+      "template": "com.cloudflare.api.account.{account_id}.spectrum_application.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "ssl",
+      "resource_type": "custom_certificate",
+      "template": "com.cloudflare.api.account.{account_id}.custom_certificate.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "ssl",
+      "resource_type": "origin_ca_certificate",
+      "template": "com.cloudflare.api.account.{account_id}.origin_ca_certificate.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "stream",
+      "resource_type": "stream_live_input",
+      "template": "com.cloudflare.api.account.{account_id}.stream_live_input.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "stream",
+      "resource_type": "stream_video",
+      "template": "com.cloudflare.api.account.{account_id}.stream_video.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "tunnel",
+      "resource_type": "tunnel",
+      "template": "com.cloudflare.api.account.{account_id}.tunnel.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "turnstile",
+      "resource_type": "turnstile_widget",
+      "template": "com.cloudflare.api.account.{account_id}.turnstile_widget.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "vectorize",
+      "resource_type": "vectorize_index",
+      "template": "com.cloudflare.api.account.{account_id}.vectorize_index.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "waf",
+      "resource_type": "waf",
+      "template": "com.cloudflare.api.account.{account_id}.waf.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "waf",
+      "resource_type": "waf_ruleset",
+      "template": "com.cloudflare.api.account.{account_id}.waf_ruleset.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "waiting_room",
+      "resource_type": "waiting_room",
+      "template": "com.cloudflare.api.account.{account_id}.waiting_room.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "workers",
+      "resource_type": "worker",
+      "template": "com.cloudflare.api.account.{account_id}.worker.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "workers",
+      "resource_type": "worker_cron_trigger",
+      "template": "com.cloudflare.api.account.{account_id}.worker_cron_trigger.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "workers",
+      "resource_type": "worker_route",
+      "template": "com.cloudflare.api.account.{account_id}.worker_route.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "workers_ai",
+      "resource_type": "workers_ai_model",
+      "template": "com.cloudflare.api.account.{account_id}.workers_ai_model.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "zero_trust",
+      "resource_type": "access_policy",
+      "template": "com.cloudflare.api.account.{account_id}.access_policy.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "zero_trust",
+      "resource_type": "dlp_profile",
+      "template": "com.cloudflare.api.account.{account_id}.dlp_profile.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "zero_trust",
+      "resource_type": "gateway_rule",
+      "template": "com.cloudflare.api.account.{account_id}.gateway_rule.{id}",
+      "template_format": "cloudflare_locator",
+      "region_behavior": "global-only"
+    }
+  ]
+}

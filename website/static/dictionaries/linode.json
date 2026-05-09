@@ -1,0 +1,34 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "linode",
+  "entries": [
+    {
+      "service": "linode",
+      "resource_type": "instance",
+      "template": "https://api.linode.com/v4/linode/instances/{linode-id}",
+      "template_format": "linode_locator",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "object_storage",
+      "resource_type": "bucket",
+      "template": "https://{cluster}.linodeobjects.com/{bucket-name}",
+      "template_format": "linode_locator",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "lke",
+      "resource_type": "cluster",
+      "template": "https://api.linode.com/v4/lke/clusters/{cluster-id}",
+      "template_format": "linode_locator",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "managed_database",
+      "resource_type": "db_instance",
+      "template": "https://api.linode.com/v4/databases/{engine}/instances/{database-id}",
+      "template_format": "linode_locator",
+      "region_behavior": "regional"
+    }
+  ]
+}

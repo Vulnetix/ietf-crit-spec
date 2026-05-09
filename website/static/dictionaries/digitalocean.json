@@ -1,0 +1,41 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "digitalocean",
+  "entries": [
+    {
+      "service": "droplet",
+      "resource_type": "instance",
+      "template": "https://api.digitalocean.com/v2/droplets/{droplet-id}",
+      "template_format": "digitalocean_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "spaces",
+      "resource_type": "bucket",
+      "template": "https://{region}.digitaloceanspaces.com/{bucket-name}",
+      "template_format": "digitalocean_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "kubernetes",
+      "resource_type": "cluster",
+      "template": "https://api.digitalocean.com/v2/kubernetes/clusters/{cluster-id}",
+      "template_format": "digitalocean_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "database",
+      "resource_type": "db_instance",
+      "template": "https://api.digitalocean.com/v2/databases/{database-id}",
+      "template_format": "digitalocean_url",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "app_platform",
+      "resource_type": "app",
+      "template": "https://api.digitalocean.com/v2/apps/{app-id}",
+      "template_format": "digitalocean_url",
+      "region_behavior": "regional"
+    }
+  ]
+}

@@ -1,0 +1,546 @@
+{
+  "$schema": "../schemas/crit-dictionary-v0.2.0.schema.json",
+  "dictionary_version": "0.3.0",
+  "provider": "gcp",
+  "entries": [
+    {
+      "service": "alloydb",
+      "resource_type": "cluster",
+      "template": "//alloydb.googleapis.com/projects/{project}/locations/{location}/clusters/{cluster}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "api_gateway",
+      "resource_type": "api",
+      "template": "//apigateway.googleapis.com/projects/{project}/locations/{location}/apis/{api}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "api_gateway",
+      "resource_type": "gateway",
+      "template": "//apigateway.googleapis.com/projects/{project}/locations/{location}/gateways/{gateway}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "artifact_registry",
+      "resource_type": "repository",
+      "template": "//artifactregistry.googleapis.com/projects/{project}/locations/{location}/repositories/{repository}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "bigquery",
+      "resource_type": "dataset",
+      "template": "//bigquery.googleapis.com/projects/{project}/datasets/{dataset}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "bigquery",
+      "resource_type": "table",
+      "template": "//bigquery.googleapis.com/projects/{project}/datasets/{dataset}/tables/{table}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "bigtable",
+      "resource_type": "cluster",
+      "template": "//bigtableadmin.googleapis.com/projects/{project}/instances/{instance}/clusters/{cluster}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "bigtable",
+      "resource_type": "instance",
+      "template": "//bigtableadmin.googleapis.com/projects/{project}/instances/{instance}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "certificate_authority",
+      "resource_type": "caPool",
+      "template": "//privateca.googleapis.com/projects/{project}/locations/{location}/caPools/{caPool}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_armor",
+      "resource_type": "securityPolicy",
+      "template": "//compute.googleapis.com/projects/{project}/global/securityPolicies/{policy}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cloud_build",
+      "resource_type": "build",
+      "template": "//cloudbuild.googleapis.com/projects/{project}/locations/{location}/builds/{build}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_build",
+      "resource_type": "trigger",
+      "template": "//cloudbuild.googleapis.com/projects/{project}/locations/{location}/triggers/{trigger}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_deploy",
+      "resource_type": "pipeline",
+      "template": "//clouddeploy.googleapis.com/projects/{project}/locations/{location}/deliveryPipelines/{pipeline}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_deploy",
+      "resource_type": "target",
+      "template": "//clouddeploy.googleapis.com/projects/{project}/locations/{location}/targets/{target}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_dns",
+      "resource_type": "zone",
+      "template": "//dns.googleapis.com/projects/{project}/managedZones/{zone}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cloud_functions",
+      "resource_type": "function",
+      "template": "//cloudfunctions.googleapis.com/projects/{project}/locations/{location}/functions/{function}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_iam",
+      "resource_type": "role",
+      "template": "//iam.googleapis.com/projects/{project}/roles/{role}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cloud_iam",
+      "resource_type": "serviceAccount",
+      "template": "//iam.googleapis.com/projects/{project}/serviceAccounts/{serviceAccount}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cloud_kms",
+      "resource_type": "cryptoKey",
+      "template": "//cloudkms.googleapis.com/projects/{project}/locations/{location}/keyRings/{keyRing}/cryptoKeys/{cryptoKey}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_kms",
+      "resource_type": "keyRing",
+      "template": "//cloudkms.googleapis.com/projects/{project}/locations/{location}/keyRings/{keyRing}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_logging",
+      "resource_type": "log",
+      "template": "//logging.googleapis.com/projects/{project}/logs/{log}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cloud_logging",
+      "resource_type": "logBucket",
+      "template": "//logging.googleapis.com/projects/{project}/locations/{location}/buckets/{bucket}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_logging",
+      "resource_type": "sink",
+      "template": "//logging.googleapis.com/projects/{project}/sinks/{sink}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cloud_monitoring",
+      "resource_type": "alertPolicy",
+      "template": "//monitoring.googleapis.com/projects/{project}/alertPolicies/{policy}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cloud_monitoring",
+      "resource_type": "notificationChannel",
+      "template": "//monitoring.googleapis.com/projects/{project}/notificationChannels/{channel}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cloud_monitoring",
+      "resource_type": "uptimeCheckConfig",
+      "template": "//monitoring.googleapis.com/projects/{project}/uptimeCheckConfigs/{config}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cloud_run",
+      "resource_type": "job",
+      "template": "//run.googleapis.com/projects/{project}/locations/{location}/jobs/{job}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_run",
+      "resource_type": "service",
+      "template": "//run.googleapis.com/projects/{project}/locations/{location}/services/{service}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_scheduler",
+      "resource_type": "job",
+      "template": "//cloudscheduler.googleapis.com/projects/{project}/locations/{location}/jobs/{job}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_sql",
+      "resource_type": "instance",
+      "template": "//sqladmin.googleapis.com/projects/{project}/instances/{instance}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_storage",
+      "resource_type": "bucket",
+      "template": "//storage.googleapis.com/projects/{project}/buckets/{bucket}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "cloud_tasks",
+      "resource_type": "queue",
+      "template": "//cloudtasks.googleapis.com/projects/{project}/locations/{location}/queues/{queue}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "composer",
+      "resource_type": "environment",
+      "template": "//composer.googleapis.com/projects/{project}/locations/{location}/environments/{environment}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "compute",
+      "resource_type": "address",
+      "template": "//compute.googleapis.com/projects/{project}/regions/{region}/addresses/{address}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "compute",
+      "resource_type": "backendService",
+      "template": "//compute.googleapis.com/projects/{project}/global/backendServices/{backendService}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "compute",
+      "resource_type": "disk",
+      "template": "//compute.googleapis.com/projects/{project}/zones/{zone}/disks/{disk}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "compute",
+      "resource_type": "firewall",
+      "template": "//compute.googleapis.com/projects/{project}/global/firewalls/{firewall}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "compute",
+      "resource_type": "forwardingRule",
+      "template": "//compute.googleapis.com/projects/{project}/regions/{region}/forwardingRules/{rule}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "compute",
+      "resource_type": "healthCheck",
+      "template": "//compute.googleapis.com/projects/{project}/global/healthChecks/{healthCheck}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "compute",
+      "resource_type": "image",
+      "template": "//compute.googleapis.com/projects/{project}/global/images/{image}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "compute",
+      "resource_type": "instance",
+      "template": "//compute.googleapis.com/projects/{project}/zones/{zone}/instances/{instance}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "compute",
+      "resource_type": "instanceGroup",
+      "template": "//compute.googleapis.com/projects/{project}/zones/{zone}/instanceGroups/{group}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "compute",
+      "resource_type": "instanceTemplate",
+      "template": "//compute.googleapis.com/projects/{project}/global/instanceTemplates/{template}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "compute",
+      "resource_type": "interconnect",
+      "template": "//compute.googleapis.com/projects/{project}/global/interconnects/{interconnect}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "compute",
+      "resource_type": "network",
+      "template": "//compute.googleapis.com/projects/{project}/global/networks/{network}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "compute",
+      "resource_type": "router",
+      "template": "//compute.googleapis.com/projects/{project}/regions/{region}/routers/{router}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "compute",
+      "resource_type": "snapshot",
+      "template": "//compute.googleapis.com/projects/{project}/global/snapshots/{snapshot}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "compute",
+      "resource_type": "sslCertificate",
+      "template": "//compute.googleapis.com/projects/{project}/global/sslCertificates/{certificate}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "compute",
+      "resource_type": "subnetwork",
+      "template": "//compute.googleapis.com/projects/{project}/regions/{region}/subnetworks/{subnetwork}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "compute",
+      "resource_type": "targetHttpProxy",
+      "template": "//compute.googleapis.com/projects/{project}/global/targetHttpProxies/{proxy}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "compute",
+      "resource_type": "urlMap",
+      "template": "//compute.googleapis.com/projects/{project}/global/urlMaps/{urlMap}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "compute",
+      "resource_type": "vpnGateway",
+      "template": "//compute.googleapis.com/projects/{project}/regions/{region}/vpnGateways/{gateway}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "compute",
+      "resource_type": "vpnTunnel",
+      "template": "//compute.googleapis.com/projects/{project}/regions/{region}/vpnTunnels/{tunnel}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "data_catalog",
+      "resource_type": "entryGroup",
+      "template": "//datacatalog.googleapis.com/projects/{project}/locations/{location}/entryGroups/{entryGroup}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "dataflow",
+      "resource_type": "job",
+      "template": "//dataflow.googleapis.com/projects/{project}/locations/{location}/jobs/{job}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "dataproc",
+      "resource_type": "cluster",
+      "template": "//dataproc.googleapis.com/projects/{project}/regions/{region}/clusters/{cluster}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "dataproc",
+      "resource_type": "job",
+      "template": "//dataproc.googleapis.com/projects/{project}/regions/{region}/jobs/{job}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "dataproc",
+      "resource_type": "workflowTemplate",
+      "template": "//dataproc.googleapis.com/projects/{project}/regions/{region}/workflowTemplates/{template}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "dialogflow",
+      "resource_type": "agent",
+      "template": "//dialogflow.googleapis.com/projects/{project}/locations/{location}/agents/{agent}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "eventarc",
+      "resource_type": "trigger",
+      "template": "//eventarc.googleapis.com/projects/{project}/locations/{location}/triggers/{trigger}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "filestore",
+      "resource_type": "instance",
+      "template": "//file.googleapis.com/projects/{project}/locations/{location}/instances/{instance}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "firestore",
+      "resource_type": "database",
+      "template": "//firestore.googleapis.com/projects/{project}/databases/{database}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "gke_hub",
+      "resource_type": "membership",
+      "template": "//gkehub.googleapis.com/projects/{project}/locations/{location}/memberships/{membership}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "kubernetes_engine",
+      "resource_type": "cluster",
+      "template": "//container.googleapis.com/projects/{project}/locations/{location}/clusters/{cluster}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "memorystore",
+      "resource_type": "instance",
+      "template": "//redis.googleapis.com/projects/{project}/locations/{location}/instances/{instance}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "pubsub",
+      "resource_type": "subscription",
+      "template": "//pubsub.googleapis.com/projects/{project}/subscriptions/{subscription}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "pubsub",
+      "resource_type": "topic",
+      "template": "//pubsub.googleapis.com/projects/{project}/topics/{topic}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "secret_manager",
+      "resource_type": "secret",
+      "template": "//secretmanager.googleapis.com/projects/{project}/secrets/{secret}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "security_command_center",
+      "resource_type": "source",
+      "template": "//securitycenter.googleapis.com/organizations/{organization}/sources/{source}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "service_directory",
+      "resource_type": "namespace",
+      "template": "//servicedirectory.googleapis.com/projects/{project}/locations/{location}/namespaces/{namespace}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "spanner",
+      "resource_type": "database",
+      "template": "//spanner.googleapis.com/projects/{project}/instances/{instance}/databases/{database}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "spanner",
+      "resource_type": "instance",
+      "template": "//spanner.googleapis.com/projects/{project}/instances/{instance}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "vertex_ai",
+      "resource_type": "dataset",
+      "template": "//aiplatform.googleapis.com/projects/{project}/locations/{location}/datasets/{dataset}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "vertex_ai",
+      "resource_type": "endpoint",
+      "template": "//aiplatform.googleapis.com/projects/{project}/locations/{location}/endpoints/{endpoint}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "vertex_ai",
+      "resource_type": "model",
+      "template": "//aiplatform.googleapis.com/projects/{project}/locations/{location}/models/{model}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "vertex_ai",
+      "resource_type": "trainingPipeline",
+      "template": "//aiplatform.googleapis.com/projects/{project}/locations/{location}/trainingPipelines/{pipeline}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    },
+    {
+      "service": "workflows",
+      "resource_type": "workflow",
+      "template": "//workflows.googleapis.com/projects/{project}/locations/{location}/workflows/{workflow}",
+      "template_format": "gcp_resource_name",
+      "region_behavior": "regional"
+    }
+  ]
+}

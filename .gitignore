@@ -2,3 +2,14 @@
 tests/CRIT-samples.json
 /crit-validate
 /crit-test
+
+# Hugo build output
+website/public/
+website/resources/_gen/
+.hugo_build.lock
+
+# Terraform
+**/.terraform/
+**/terraform.tfstate
+**/terraform.tfstate.backup
+**/*.tfvars
