@@ -1,6 +1,6 @@
 // crit-validate validates CVEListv5 JSON files containing Vulnetix VVD ADP
 // containers with x_crit extensions against the CRIT specification
-// (draft-vulnetix-crit-02).
+// (draft-vulnetix-crit-03).
 //
 // The binary embeds the Spec Default Dictionary and the dictionary JSON Schema
 // at build time. Custom dictionaries provided via --dictionary are validated
@@ -961,7 +961,7 @@ func runConvert(args []string) {
 			saEpoch = dateToEpoch(*rec.Temporal.ServiceAvailableDate)
 		}
 		v := critspec.CRITVector{
-			CRITVersion:    "0.2.0",
+			CRITVersion:    "0.3.0",
 			Provider:       rec.Provider,
 			VEXStatus:      rec.VexStatus,
 			FixPropagation: rec.FixPropagation,

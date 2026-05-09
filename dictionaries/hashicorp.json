@@ -1,0 +1,69 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "hashicorp",
+  "entries": [
+    {
+      "service": "vault",
+      "resource_type": "cluster",
+      "template": "https://{cluster}.vault.{tenant}.cloud.hashicorp.com",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "vault",
+      "resource_type": "self_hosted",
+      "template": "https://{host}:8200",
+      "template_format": "uri",
+      "region_behavior": "self-hosted"
+    },
+    {
+      "service": "consul",
+      "resource_type": "cluster",
+      "template": "https://{cluster}.consul.{tenant}.cloud.hashicorp.com",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "consul",
+      "resource_type": "self_hosted",
+      "template": "https://{host}:8500",
+      "template_format": "uri",
+      "region_behavior": "self-hosted"
+    },
+    {
+      "service": "nomad",
+      "resource_type": "cluster",
+      "template": "https://{host}:4646",
+      "template_format": "uri",
+      "region_behavior": "self-hosted"
+    },
+    {
+      "service": "terraform_cloud",
+      "resource_type": "organization",
+      "template": "https://app.terraform.io/app/{org}",
+      "template_format": "uri",
+      "region_behavior": "endpoint-only"
+    },
+    {
+      "service": "terraform_cloud",
+      "resource_type": "workspace",
+      "template": "https://app.terraform.io/app/{org}/workspaces/{workspace}",
+      "template_format": "uri",
+      "region_behavior": "endpoint-only"
+    },
+    {
+      "service": "packer",
+      "resource_type": "build",
+      "template": "https://packer.{tenant}.cloud.hashicorp.com/builds/{build-id}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "boundary",
+      "resource_type": "cluster",
+      "template": "https://{cluster}.boundary.{tenant}.cloud.hashicorp.com",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    }
+  ]
+}

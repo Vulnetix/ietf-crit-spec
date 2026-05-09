@@ -213,14 +213,36 @@ var providerPrefixes = map[string]string{
 }
 
 var knownSlotFiles = map[string]map[string]bool{
-	"aws":        {"region": true, "account": true, "resource-id": true},
-	"azure":      {"subscriptionId": true, "resourceGroup": true, "name": true},
-	"gcp":        {"project": true, "location": true, "zone": true, "region": true, "resource-id": true},
-	"cloudflare": {"account_id": true, "id": true},
-	"oracle":     {"region": true, "unique-id": true},
-	"salesforce": {"instance": true, "api-version": true, "org-id": true},
-	"sap":        {"region": true, "host": true, "api-server": true},
-	"servicenow": {"instance": true, "sys-id": true},
+	"aws": {"account": true, "region": true, "resource-id": true},
+	"azure": {"cluster": true, "gallery": true, "image": true, "name": true, "pool": true, "resource-group": true, "resourceGroup": true, "subscription-id": true, "subscriptionId": true, "version": true},
+	"cloudflare": {"account-id": true, "account_id": true, "app-id": true, "datacenter": true, "device-id": true, "id": true, "policy-id": true, "rule-id": true, "tunnel-id": true},
+	"gcp": {"location": true, "project": true, "region": true, "resource-id": true, "zone": true},
+	"oracle": {"account": true, "instance": true, "integration": true, "module": true, "region": true, "tenant": true, "unique-id": true},
+	"salesforce": {"account-id": true, "agent-id": true, "api-version": true, "app-name": true, "copilot-id": true, "env-id": true, "instance": true, "org-id": true, "record-id": true, "server-id": true, "site-id": true, "store-id": true, "tableau-host": true, "tenant-id": true, "workspace-id": true},
+	"sap": {"api-domain": true, "api-server": true, "app-guid": true, "app-id": true, "category": true, "chart-of-accounts": true, "client-id": true, "cluster-id": true, "company-code": true, "controlling-area": true, "data-center": true, "destination-name": true, "fiscal-year": true, "host": true, "instance-id": true, "line-item": true, "material": true, "object-id": true, "plant": true, "port": true, "position-id": true, "purchase-order": true, "realm-id": true, "region": true, "sales-order": true, "seq-number": true, "service-binding-guid": true, "service-id": true, "service-instance-guid": true, "site-id": true, "space-guid": true, "start-date": true, "subdomain": true, "system-id": true, "tenant-id": true, "tool-name": true, "usage": true, "user-id": true, "validity-end-date": true, "variant": true, "version": true, "workspace-id": true},
+	"servicenow": {"ai-component": true, "app-id": true, "flow-id": true, "instance": true, "sys-id": true},
+	"ibm": {"account-id": true, "appliance-id": true, "array-id": true, "cell-id": true, "chassis-id": true, "cluster-host": true, "cluster-id": true, "console-id": true, "database": true, "gateway-id": true, "host": true, "install-id": true, "instance-id": true, "lpar-id": true, "partition-id": true, "port": true, "project-id": true, "queue-manager-id": true, "region": true, "region-id": true, "server-id": true, "sysplex": true, "tenant": true, "tenant-id": true},
+	"vmware": {"buildpack": true, "cluster-id": true, "distro": true, "foundation-id": true, "host-id": true, "install-id": true, "registry-id": true, "version": true},
+	"adobe": {"bulletin": true, "product": true},
+	"akamai": {"asset-id": true, "config-id": true, "property-id": true, "zone-name": true},
+	"alibaba": {"account": true, "bucket-name": true, "cluster-id": true, "instance-id": true, "region": true},
+	"atlassian": {"deployment": true, "directory": true, "instance": true, "project": true, "repo": true, "server": true, "site": true, "space": true, "workspace": true},
+	"digitalocean": {"app-id": true, "bucket-name": true, "cluster-id": true, "database-id": true, "droplet-id": true, "region": true},
+	"elastic": {"agent-id": true, "cluster": true, "deployment": true, "deployment-id": true, "host": true, "namespace": true, "package": true},
+	"fastly": {"channel": true, "corp": true, "project": true, "service-id": true, "site": true, "version": true},
+	"gitlab": {"deployment": true, "group": true, "host": true, "project": true, "runner-id": true, "tenant": true},
+	"hashicorp": {"build-id": true, "cluster": true, "host": true, "org": true, "tenant": true, "workspace": true},
+	"hetzner": {"bucket-name": true, "lb-id": true, "location": true, "server-id": true, "server-number": true},
+	"linode": {"bucket-name": true, "cluster": true, "cluster-id": true, "database-id": true, "engine": true, "linode-id": true},
+	"mongodb": {"cluster": true, "deployment": true, "host": true, "install": true, "language": true, "org": true, "package": true, "project": true, "version": true},
+	"ovh": {"bucket-name": true, "cluster-id": true, "instance-id": true, "project-id": true, "region": true, "server-name": true, "tenant-id": true},
+	"snowflake": {"account": true, "app": true, "connector": true, "container": true, "language": true, "org": true, "package": true, "warehouse": true},
+	"tailscale": {"node": true, "policy": true, "session": true, "tailnet": true},
+	"tencent": {"appid": true, "bucket-name": true, "cluster-id": true, "function-name": true, "instance-id": true, "region": true, "uin": true},
+	"twilio": {"account": true, "resource-id": true},
+	"vercel": {"database": true, "project": true, "store": true, "team": true},
+	"vultr": {"bucket-name": true, "cluster": true, "cluster-id": true, "database-id": true, "instance-id": true},
+	"zoom": {"app-id": true, "install": true, "line": true, "meeting-id": true, "room-id": true, "tenant": true, "version": true, "webinar-id": true},
 }
 
 var dictLookup map[DictKey]DictEntry
@@ -403,7 +425,13 @@ func loadSampleRecords(samplesDir string) ([]CRITRecord, error) {
 
 func generateSamples(dicts []*Dictionary, testsDir string) ([]Sample, error) {
 	providerWordlists := make(map[string]map[string][]string)
-	for _, p := range []string{"aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow"} {
+	for _, p := range []string{
+		"aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow",
+		"ibm", "vmware",
+		"adobe", "akamai", "alibaba", "atlassian", "digitalocean", "elastic", "fastly",
+		"gitlab", "hashicorp", "hetzner", "linode", "mongodb", "ovh", "snowflake", "tailscale",
+		"tencent", "twilio", "vercel", "vultr", "zoom",
+	} {
 		wl, err := loadWordlists(p, testsDir)
 		if err != nil {
 			return nil, fmt.Errorf("loading wordlists for %s: %w", p, err)
@@ -1030,7 +1058,7 @@ func defineRecordRules() []RecordRule {
 				saEpoch = dateToEpoch(*rec.Temporal.ServiceAvailableDate)
 			}
 			expected, err := critspec.ComputeVector(critspec.CRITVector{
-				CRITVersion:    "0.2.0",
+				CRITVersion:    "0.3.0",
 				Provider:       rec.Provider,
 				VEXStatus:      rec.VexStatus,
 				FixPropagation: rec.FixPropagation,
@@ -1112,7 +1140,7 @@ func defineRecordRules() []RecordRule {
 		}},
 		{"4.1.2", "vector-missing-registered-rejected", "MUST", "consumer MUST reject vectors missing a registered metric", func(rec *CRITRecord) (bool, string) {
 			// Test with a synthetic vector that omits the CP metric.
-			synth := "CRITv0.2.0/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE-2024-0001:svc:rt"
+			synth := "CRITv0.3.0/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE-2024-0001:svc:rt"
 			_, _, err := critspec.ParseVector(synth)
 			if err == nil {
 				return false, "parser accepted vector missing CP metric"
@@ -1607,7 +1635,13 @@ func main() {
 		Schema: "../schemas/crit-samples-v0.1.0.schema.json", GeneratedAt: time.Now().UTC().Format(time.RFC3339),
 		Wordlists: make(map[string]map[string][]string), Samples: samples,
 	}
-	for _, p := range []string{"aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow"} {
+	for _, p := range []string{
+		"aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow",
+		"ibm", "vmware",
+		"adobe", "akamai", "alibaba", "atlassian", "digitalocean", "elastic", "fastly",
+		"gitlab", "hashicorp", "hetzner", "linode", "mongodb", "ovh", "snowflake", "tailscale",
+		"tencent", "twilio", "vercel", "vultr", "zoom",
+	} {
 		wl, _ := loadWordlists(p, testsDir)
 		samplesOut.Wordlists[p] = wl
 	}

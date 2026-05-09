@@ -1,5 +1,5 @@
 {
-  "vectorString": "CRITv0.2.0/CP:GC/VS:FX/FP:CC/SR:SH/RL:EP/EV:T/PP:1721606400/SA:1500940800#TRA-2024-20:cloud_functions:function",
+  "vectorString": "CRITv0.3.0/CP:GC/VS:FX/FP:CC/SR:SH/RL:EP/EV:T/PP:1721606400/SA:1500940800#TRA-2024-20:cloud_functions:function",
   "vuln_id": "TRA-2024-20",
   "provider": "gcp",
   "service": "cloud_functions",

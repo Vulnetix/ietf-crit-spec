@@ -1,72 +1,554 @@
 {
   "$schema": "../schemas/crit-dictionary-v0.2.0.schema.json",
-  "dictionary_version": "0.2.0",
+  "dictionary_version": "0.3.0",
   "provider": "servicenow",
   "entries": [
-    { "service": "itsm", "resource_type": "incident", "template": "https://{instance}.service-now.com/api/now/table/incident/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Incident record. {instance} is the instance subdomain (e.g. mycompany, dev111222). {sys-id} is the 32-character hexadecimal sys_id. Discover sys_id via: GET /api/now/table/incident?sysparm_query=number=INC0001234&sysparm_fields=sys_id" },
-    { "service": "itsm", "resource_type": "change_request", "template": "https://{instance}.service-now.com/api/now/table/change_request/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Change Request. Discover sys_id via: GET /api/now/table/change_request?sysparm_query=number=CHG0001234" },
-    { "service": "itsm", "resource_type": "change_task", "template": "https://{instance}.service-now.com/api/now/table/change_task/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Change Task (child task of a Change Request)." },
-    { "service": "itsm", "resource_type": "problem", "template": "https://{instance}.service-now.com/api/now/table/problem/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Problem record. Discover sys_id via: GET /api/now/table/problem?sysparm_query=number=PRB0001234" },
-    { "service": "itsm", "resource_type": "problem_task", "template": "https://{instance}.service-now.com/api/now/table/problem_task/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Problem Task (child task assigned to resolve a problem)." },
-    { "service": "itsm", "resource_type": "incident_task", "template": "https://{instance}.service-now.com/api/now/table/incident_task/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Incident Task (child task of an Incident)." },
-    { "service": "cmdb", "resource_type": "configuration_item", "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Configuration Item (CI) base class. All CMDB CIs extend this table. Discover sys_id via: GET /api/now/table/cmdb_ci?sysparm_query=name={ci-name}&sysparm_fields=sys_id,name,sys_class_name" },
-    { "service": "cmdb", "resource_type": "server", "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_server/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Server CI (physical or virtual server). Extends cmdb_ci." },
-    { "service": "cmdb", "resource_type": "database_instance", "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_db_instance/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Database Instance CI. Represents a running database (MySQL, Oracle, MSSQL, etc.)." },
-    { "service": "cmdb", "resource_type": "application", "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_appl/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Application CI (software application installed on infrastructure)." },
-    { "service": "cmdb", "resource_type": "virtual_machine", "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_vmware_instance/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow VMware virtual machine CI. Other hypervisor tables: cmdb_ci_hyper_v_instance, cmdb_ci_xen_instance." },
-    { "service": "cmdb", "resource_type": "network_adapter", "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_network_adapter/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Network Adapter CI. Represents a NIC attached to a server or VM." },
-    { "service": "cmdb", "resource_type": "storage_device", "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_storage_device/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Storage Device CI (disk, SAN LUN, NFS mount, etc.)." },
-    { "service": "cmdb", "resource_type": "cloud_service_account", "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_cloud_service_account/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Cloud Service Account CI (AWS account, Azure subscription, GCP project registered in CMDB)." },
-    { "service": "cmdb", "resource_type": "ip_address", "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_ip_address/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow IP Address CI. Represents an IPv4 or IPv6 address assigned to a network adapter." },
-    { "service": "cmdb", "resource_type": "business_service", "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_service/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Business Service CI. Top-level service used in service maps and impact analysis." },
-    { "service": "cmdb", "resource_type": "web_server", "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_web_server/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Web Server CI (Apache, IIS, Nginx, etc. installed on a server)." },
-    { "service": "cmdb", "resource_type": "network_gear", "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_netgear/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Network Gear CI (routers, switches, firewalls). Parent class for all network hardware." },
-    { "service": "cmdb", "resource_type": "printer", "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_printer/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only" },
-    { "service": "hr", "resource_type": "hr_case", "template": "https://{instance}.service-now.com/api/now/table/sn_hr_core_case/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow HR Service Delivery case. {instance} must have the HR Service Delivery plugin activated. Discover sys_id via: GET /api/now/table/sn_hr_core_case?sysparm_query=number=HR0001234" },
-    { "service": "hr", "resource_type": "hr_task", "template": "https://{instance}.service-now.com/api/now/table/sn_hr_core_task/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow HR Task (activity within an HR case)." },
-    { "service": "hr", "resource_type": "hr_service", "template": "https://{instance}.service-now.com/api/now/table/sn_hr_core_service/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow HR Service catalog entry (defines an HR service offered to employees)." },
-    { "service": "csm", "resource_type": "customer_case", "template": "https://{instance}.service-now.com/api/now/table/sn_customerservice_case/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Customer Service Management (CSM) case. Requires CSM plugin. Discover sys_id via: GET /api/now/table/sn_customerservice_case?sysparm_query=number=CS0001234" },
-    { "service": "csm", "resource_type": "customer_account", "template": "https://{instance}.service-now.com/api/now/table/customer_account/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow CSM Customer Account (B2B company record). Requires CSM plugin." },
-    { "service": "csm", "resource_type": "customer_contact", "template": "https://{instance}.service-now.com/api/now/table/customer_contact/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow CSM Contact (individual person associated with a customer account)." },
-    { "service": "security_ops", "resource_type": "security_incident", "template": "https://{instance}.service-now.com/api/now/table/sn_si_incident/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Security Incident Response (SIR) incident. Requires Security Incident Response plugin. Distinct from ITSM incidents (table: incident)." },
-    { "service": "security_ops", "resource_type": "vulnerability", "template": "https://{instance}.service-now.com/api/now/table/sn_vul_vulnerability/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Vulnerability Response vulnerability definition. Requires Vulnerability Response plugin. Discover via: GET /api/now/table/sn_vul_vulnerability?sysparm_query=source_vulnerability_id=CVE-YYYY-NNNNN" },
-    { "service": "security_ops", "resource_type": "vulnerability_entry", "template": "https://{instance}.service-now.com/api/now/table/sn_vul_entry/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Vulnerability Entry (a vulnerability instance on a specific CI). Table: sn_vul_entry. Links sn_vul_vulnerability to cmdb_ci records. NVD-sourced entries may additionally use sn_vul_nvd_entry; sn_vul_entry is the base table for all scanner-imported vulnerability instances." },
-    { "service": "grc", "resource_type": "policy", "template": "https://{instance}.service-now.com/api/now/table/sn_compliance_policy/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow GRC Policy and Compliance policy statement. Requires Policy and Compliance Management plugin." },
-    { "service": "grc", "resource_type": "control", "template": "https://{instance}.service-now.com/api/now/table/sn_compliance_control/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow GRC Control (a specific control requirement derived from a policy)." },
-    { "service": "grc", "resource_type": "risk", "template": "https://{instance}.service-now.com/api/now/table/sn_risk_risk/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow GRC Risk record. Requires Integrated Risk Management plugin." },
-    { "service": "grc", "resource_type": "audit_engagement", "template": "https://{instance}.service-now.com/api/now/table/sn_audit_engagement/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Audit Management engagement (audit project). Requires Audit Management plugin." },
-    { "service": "grc", "resource_type": "audit_task", "template": "https://{instance}.service-now.com/api/now/table/sn_audit_task/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Audit Task (individual work item within an audit engagement)." },
-    { "service": "platform", "resource_type": "user", "template": "https://{instance}.service-now.com/api/now/table/sys_user/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow platform user record. Discover sys_id via: GET /api/now/table/sys_user?sysparm_query=user_name={username}&sysparm_fields=sys_id,user_name" },
-    { "service": "platform", "resource_type": "user_group", "template": "https://{instance}.service-now.com/api/now/table/sys_user_group/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow user group (used for assignment, escalation, and approval routing)." },
-    { "service": "platform", "resource_type": "role", "template": "https://{instance}.service-now.com/api/now/table/sys_user_role/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow platform role (defines access permissions). Discover via: GET /api/now/table/sys_user_role?sysparm_query=name={role_name}" },
-    { "service": "platform", "resource_type": "business_rule", "template": "https://{instance}.service-now.com/api/now/table/sys_script/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Business Rule (server-side script triggered on table operations). Discover via: GET /api/now/table/sys_script?sysparm_query=name={rule_name}^collection={table_name}" },
-    { "service": "platform", "resource_type": "script_include", "template": "https://{instance}.service-now.com/api/now/table/sys_script_include/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Script Include (reusable server-side JavaScript library)." },
-    { "service": "platform", "resource_type": "scheduled_job", "template": "https://{instance}.service-now.com/api/now/table/sysauto_script/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Scheduled Script Execution (scheduled job / cron). Discover via: GET /api/now/table/sysauto_script?sysparm_query=name={job_name}" },
-    { "service": "platform", "resource_type": "flow", "template": "https://{instance}.service-now.com/api/now/table/sys_hub_flow/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Flow Designer flow. Distinct from legacy Workflow (wf_workflow). Requires Flow Designer plugin." },
-    { "service": "platform", "resource_type": "workflow", "template": "https://{instance}.service-now.com/api/now/table/wf_workflow/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow legacy Workflow (deprecated in favor of Flow Designer). Still used for approval workflows in many instances." },
-    { "service": "platform", "resource_type": "acl_rule", "template": "https://{instance}.service-now.com/api/now/table/sys_security_acl/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Access Control List rule (record-level security). Discover via: GET /api/now/table/sys_security_acl?sysparm_query=name={table_name}" },
-    { "service": "platform", "resource_type": "ui_action", "template": "https://{instance}.service-now.com/api/now/table/sys_ui_action/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow UI Action (button, link, or context menu item on a form or list)." },
-    { "service": "platform", "resource_type": "update_set", "template": "https://{instance}.service-now.com/api/now/table/sys_update_set/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Update Set (container for transporting configuration changes between instances). Discover via: GET /api/now/table/sys_update_set?sysparm_query=name={update_set_name}" },
-    { "service": "service_catalog", "resource_type": "catalog_item", "template": "https://{instance}.service-now.com/api/now/table/sc_cat_item/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Service Catalog item (orderable item). Discover via: GET /api/now/table/sc_cat_item?sysparm_query=name={item_name}" },
-    { "service": "service_catalog", "resource_type": "catalog_category", "template": "https://{instance}.service-now.com/api/now/table/sc_category/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Service Catalog category (grouping of catalog items)." },
-    { "service": "service_catalog", "resource_type": "request", "template": "https://{instance}.service-now.com/api/now/table/sc_request/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Service Catalog request (container for one or more request items). Discover via: GET /api/now/table/sc_request?sysparm_query=number=REQ0001234" },
-    { "service": "service_catalog", "resource_type": "request_item", "template": "https://{instance}.service-now.com/api/now/table/sc_req_item/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Requested Item (RITM) — a single catalog item order within a request. Discover via: GET /api/now/table/sc_req_item?sysparm_query=number=RITM0001234" },
-    { "service": "service_catalog", "resource_type": "variable_value", "template": "https://{instance}.service-now.com/api/now/table/sc_item_option/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow catalog variable value (a single variable answer on a requested item). Table: sc_item_option. Links sc_req_item records to their submitted variable values. Related table sc_item_option_mtom joins variables to request items." },
-    { "service": "discovery", "resource_type": "mid_server", "template": "https://{instance}.service-now.com/api/now/table/ecc_agent/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow MID Server configuration record (table: ecc_agent). Naming convention: {LOCATION}-{PURPOSE}-{NNNN} e.g. NYC-DevOps-0001. Discover via: GET /api/now/table/ecc_agent?sysparm_query=name={mid_server_name}" },
-    { "service": "discovery", "resource_type": "discovery_schedule", "template": "https://{instance}.service-now.com/api/now/table/discovery_schedule/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Discovery schedule (defines what IP ranges to scan and when)." },
-    { "service": "discovery", "resource_type": "discovery_status", "template": "https://{instance}.service-now.com/api/now/table/discovery_status/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Discovery Status (a single discovery run result/log). Discover via: GET /api/now/table/discovery_status?sysparm_query=dscheduler={schedule_sys_id}&sysparm_limit=1&sysparm_orderby=sys_created_on" },
-    { "service": "event_management", "resource_type": "alert", "template": "https://{instance}.service-now.com/api/now/table/em_alert/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Event Management alert (correlated, deduplicated alert). Requires Event Management plugin. Discover via: GET /api/now/table/em_alert?sysparm_query=source={source_name}^message_key={alert_key}" },
-    { "service": "event_management", "resource_type": "event", "template": "https://{instance}.service-now.com/api/now/table/em_event/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow raw Event (inbound event before correlation into an alert). Ingested via /api/global/em/jsonv2 endpoint." },
-    { "service": "asset_management", "resource_type": "asset", "template": "https://{instance}.service-now.com/api/now/table/alm_asset/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Asset (financial/lifecycle view of a CI). Discover via: GET /api/now/table/alm_asset?sysparm_query=asset_tag={tag}" },
-    { "service": "asset_management", "resource_type": "hardware_asset", "template": "https://{instance}.service-now.com/api/now/table/alm_hardware/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Hardware Asset (extends alm_asset for physical devices with serial numbers, purchase info)." },
-    { "service": "asset_management", "resource_type": "software_license", "template": "https://{instance}.service-now.com/api/now/table/alm_license/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Software License asset. Requires Software Asset Management plugin." },
-    { "service": "knowledge", "resource_type": "knowledge_base", "template": "https://{instance}.service-now.com/api/now/table/kb_knowledge_base/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Knowledge Base (container for knowledge articles). Discover via: GET /api/now/table/kb_knowledge_base?sysparm_query=title={name}" },
-    { "service": "knowledge", "resource_type": "knowledge_article", "template": "https://{instance}.service-now.com/api/now/table/kb_knowledge/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Knowledge Article. Discover via: GET /api/now/table/kb_knowledge?sysparm_query=number=KB0001234" },
-    { "service": "performance_analytics", "resource_type": "indicator", "template": "https://{instance}.service-now.com/api/now/table/pa_indicators/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Performance Analytics indicator (metric definition). Requires Performance Analytics plugin (com.snc.pa)." },
-    { "service": "performance_analytics", "resource_type": "dashboard", "template": "https://{instance}.service-now.com/api/now/table/pa_dashboards/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Performance Analytics dashboard container. Requires Performance Analytics plugin. Note: ServiceNow also has a separate homepage/workspace dashboard framework (sys_portal_page) — pa_dashboards is specific to the PA module." },
-    { "service": "performance_analytics", "resource_type": "widget", "template": "https://{instance}.service-now.com/api/now/table/pa_widgets/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow Performance Analytics widget (scorecard, chart element within a PA dashboard). Requires Performance Analytics plugin. Widget configuration options are in pa_widget_options." },
-    { "service": "devops", "resource_type": "pipeline", "template": "https://{instance}.service-now.com/api/now/table/sn_devops_pipeline/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow DevOps pipeline configuration record. Requires ServiceNow DevOps plugin (com.snc.devops). Table names in the DevOps plugin are version-specific; verify the exact table name against your installed plugin version in Schema Map (sys_db_object)." },
-    { "service": "devops", "resource_type": "artifact", "template": "https://{instance}.service-now.com/api/now/table/sn_devops_artifact/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow DevOps artifact (versioned build output tracked through the pipeline). Requires DevOps plugin. Verify table name against installed plugin version." },
-    { "service": "devops", "resource_type": "deployment", "template": "https://{instance}.service-now.com/api/now/table/sn_devops_deployment/{sys-id}", "template_format": "servicenow_table_url", "region_behavior": "global-only", "notes": "ServiceNow DevOps deployment record (tracks what artifact was deployed, when, and to which environment). Requires DevOps plugin. Verify table name against installed plugin version." }
+    {
+      "service": "ai_platform",
+      "resource_type": "instance",
+      "template": "https://{instance}.service-now.com/api/now/ai/{ai-component}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "app_engine",
+      "resource_type": "application",
+      "template": "https://{instance}.service-now.com/api/now/table/sys_app/{app-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "asset_management",
+      "resource_type": "asset",
+      "template": "https://{instance}.service-now.com/api/now/table/alm_asset/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Asset (financial/lifecycle view of a CI). Discover via: GET /api/now/table/alm_asset?sysparm_query=asset_tag={tag}"
+    },
+    {
+      "service": "asset_management",
+      "resource_type": "hardware_asset",
+      "template": "https://{instance}.service-now.com/api/now/table/alm_hardware/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Hardware Asset (extends alm_asset for physical devices with serial numbers, purchase info)."
+    },
+    {
+      "service": "asset_management",
+      "resource_type": "software_license",
+      "template": "https://{instance}.service-now.com/api/now/table/alm_license/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Software License asset. Requires Software Asset Management plugin."
+    },
+    {
+      "service": "automation_engine",
+      "resource_type": "flow",
+      "template": "https://{instance}.service-now.com/api/now/table/sys_hub_flow/{flow-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cmdb",
+      "resource_type": "application",
+      "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_appl/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Application CI (software application installed on infrastructure)."
+    },
+    {
+      "service": "cmdb",
+      "resource_type": "business_service",
+      "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_service/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Business Service CI. Top-level service used in service maps and impact analysis."
+    },
+    {
+      "service": "cmdb",
+      "resource_type": "cloud_service_account",
+      "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_cloud_service_account/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Cloud Service Account CI (AWS account, Azure subscription, GCP project registered in CMDB)."
+    },
+    {
+      "service": "cmdb",
+      "resource_type": "configuration_item",
+      "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Configuration Item (CI) base class. All CMDB CIs extend this table. Discover sys_id via: GET /api/now/table/cmdb_ci?sysparm_query=name={ci-name}&sysparm_fields=sys_id,name,sys_class_name"
+    },
+    {
+      "service": "cmdb",
+      "resource_type": "database_instance",
+      "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_db_instance/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Database Instance CI. Represents a running database (MySQL, Oracle, MSSQL, etc.)."
+    },
+    {
+      "service": "cmdb",
+      "resource_type": "ip_address",
+      "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_ip_address/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow IP Address CI. Represents an IPv4 or IPv6 address assigned to a network adapter."
+    },
+    {
+      "service": "cmdb",
+      "resource_type": "network_adapter",
+      "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_network_adapter/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Network Adapter CI. Represents a NIC attached to a server or VM."
+    },
+    {
+      "service": "cmdb",
+      "resource_type": "network_gear",
+      "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_netgear/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Network Gear CI (routers, switches, firewalls). Parent class for all network hardware."
+    },
+    {
+      "service": "cmdb",
+      "resource_type": "printer",
+      "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_printer/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "cmdb",
+      "resource_type": "server",
+      "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_server/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Server CI (physical or virtual server). Extends cmdb_ci."
+    },
+    {
+      "service": "cmdb",
+      "resource_type": "storage_device",
+      "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_storage_device/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Storage Device CI (disk, SAN LUN, NFS mount, etc.)."
+    },
+    {
+      "service": "cmdb",
+      "resource_type": "virtual_machine",
+      "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_vmware_instance/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow VMware virtual machine CI. Other hypervisor tables: cmdb_ci_hyper_v_instance, cmdb_ci_xen_instance."
+    },
+    {
+      "service": "cmdb",
+      "resource_type": "web_server",
+      "template": "https://{instance}.service-now.com/api/now/table/cmdb_ci_web_server/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Web Server CI (Apache, IIS, Nginx, etc. installed on a server)."
+    },
+    {
+      "service": "csm",
+      "resource_type": "customer_account",
+      "template": "https://{instance}.service-now.com/api/now/table/customer_account/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow CSM Customer Account (B2B company record). Requires CSM plugin."
+    },
+    {
+      "service": "csm",
+      "resource_type": "customer_case",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_customerservice_case/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Customer Service Management (CSM) case. Requires CSM plugin. Discover sys_id via: GET /api/now/table/sn_customerservice_case?sysparm_query=number=CS0001234"
+    },
+    {
+      "service": "csm",
+      "resource_type": "customer_contact",
+      "template": "https://{instance}.service-now.com/api/now/table/customer_contact/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow CSM Contact (individual person associated with a customer account)."
+    },
+    {
+      "service": "devops",
+      "resource_type": "artifact",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_devops_artifact/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow DevOps artifact (versioned build output tracked through the pipeline). Requires DevOps plugin. Verify table name against installed plugin version."
+    },
+    {
+      "service": "devops",
+      "resource_type": "deployment",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_devops_deployment/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow DevOps deployment record (tracks what artifact was deployed, when, and to which environment). Requires DevOps plugin. Verify table name against installed plugin version."
+    },
+    {
+      "service": "devops",
+      "resource_type": "pipeline",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_devops_pipeline/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow DevOps pipeline configuration record. Requires ServiceNow DevOps plugin (com.snc.devops). Table names in the DevOps plugin are version-specific; verify the exact table name against your installed plugin version in Schema Map (sys_db_object)."
+    },
+    {
+      "service": "discovery",
+      "resource_type": "discovery_schedule",
+      "template": "https://{instance}.service-now.com/api/now/table/discovery_schedule/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Discovery schedule (defines what IP ranges to scan and when)."
+    },
+    {
+      "service": "discovery",
+      "resource_type": "discovery_status",
+      "template": "https://{instance}.service-now.com/api/now/table/discovery_status/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Discovery Status (a single discovery run result/log). Discover via: GET /api/now/table/discovery_status?sysparm_query=dscheduler={schedule_sys_id}&sysparm_limit=1&sysparm_orderby=sys_created_on"
+    },
+    {
+      "service": "discovery",
+      "resource_type": "mid_server",
+      "template": "https://{instance}.service-now.com/api/now/table/ecc_agent/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow MID Server configuration record (table: ecc_agent). Naming convention: {LOCATION}-{PURPOSE}-{NNNN} e.g. NYC-DevOps-0001. Discover via: GET /api/now/table/ecc_agent?sysparm_query=name={mid_server_name}"
+    },
+    {
+      "service": "event_management",
+      "resource_type": "alert",
+      "template": "https://{instance}.service-now.com/api/now/table/em_alert/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Event Management alert (correlated, deduplicated alert). Requires Event Management plugin. Discover via: GET /api/now/table/em_alert?sysparm_query=source={source_name}^message_key={alert_key}"
+    },
+    {
+      "service": "event_management",
+      "resource_type": "event",
+      "template": "https://{instance}.service-now.com/api/now/table/em_event/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow raw Event (inbound event before correlation into an alert). Ingested via /api/global/em/jsonv2 endpoint."
+    },
+    {
+      "service": "grc",
+      "resource_type": "audit_engagement",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_audit_engagement/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Audit Management engagement (audit project). Requires Audit Management plugin."
+    },
+    {
+      "service": "grc",
+      "resource_type": "audit_task",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_audit_task/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Audit Task (individual work item within an audit engagement)."
+    },
+    {
+      "service": "grc",
+      "resource_type": "control",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_compliance_control/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow GRC Control (a specific control requirement derived from a policy)."
+    },
+    {
+      "service": "grc",
+      "resource_type": "policy",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_compliance_policy/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow GRC Policy and Compliance policy statement. Requires Policy and Compliance Management plugin."
+    },
+    {
+      "service": "grc",
+      "resource_type": "risk",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_risk_risk/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow GRC Risk record. Requires Integrated Risk Management plugin."
+    },
+    {
+      "service": "hr",
+      "resource_type": "hr_case",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_hr_core_case/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow HR Service Delivery case. {instance} must have the HR Service Delivery plugin activated. Discover sys_id via: GET /api/now/table/sn_hr_core_case?sysparm_query=number=HR0001234"
+    },
+    {
+      "service": "hr",
+      "resource_type": "hr_service",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_hr_core_service/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow HR Service catalog entry (defines an HR service offered to employees)."
+    },
+    {
+      "service": "hr",
+      "resource_type": "hr_task",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_hr_core_task/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow HR Task (activity within an HR case)."
+    },
+    {
+      "service": "itsm",
+      "resource_type": "change_request",
+      "template": "https://{instance}.service-now.com/api/now/table/change_request/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Change Request. Discover sys_id via: GET /api/now/table/change_request?sysparm_query=number=CHG0001234"
+    },
+    {
+      "service": "itsm",
+      "resource_type": "change_task",
+      "template": "https://{instance}.service-now.com/api/now/table/change_task/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Change Task (child task of a Change Request)."
+    },
+    {
+      "service": "itsm",
+      "resource_type": "incident",
+      "template": "https://{instance}.service-now.com/api/now/table/incident/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Incident record. {instance} is the instance subdomain (e.g. mycompany, dev111222). {sys-id} is the 32-character hexadecimal sys_id. Discover sys_id via: GET /api/now/table/incident?sysparm_query=number=INC0001234&sysparm_fields=sys_id"
+    },
+    {
+      "service": "itsm",
+      "resource_type": "incident_task",
+      "template": "https://{instance}.service-now.com/api/now/table/incident_task/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Incident Task (child task of an Incident)."
+    },
+    {
+      "service": "itsm",
+      "resource_type": "problem",
+      "template": "https://{instance}.service-now.com/api/now/table/problem/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Problem record. Discover sys_id via: GET /api/now/table/problem?sysparm_query=number=PRB0001234"
+    },
+    {
+      "service": "itsm",
+      "resource_type": "problem_task",
+      "template": "https://{instance}.service-now.com/api/now/table/problem_task/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Problem Task (child task assigned to resolve a problem)."
+    },
+    {
+      "service": "knowledge",
+      "resource_type": "knowledge_article",
+      "template": "https://{instance}.service-now.com/api/now/table/kb_knowledge/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Knowledge Article. Discover via: GET /api/now/table/kb_knowledge?sysparm_query=number=KB0001234"
+    },
+    {
+      "service": "knowledge",
+      "resource_type": "knowledge_base",
+      "template": "https://{instance}.service-now.com/api/now/table/kb_knowledge_base/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Knowledge Base (container for knowledge articles). Discover via: GET /api/now/table/kb_knowledge_base?sysparm_query=title={name}"
+    },
+    {
+      "service": "now_platform",
+      "resource_type": "instance",
+      "template": "https://{instance}.service-now.com",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only"
+    },
+    {
+      "service": "performance_analytics",
+      "resource_type": "dashboard",
+      "template": "https://{instance}.service-now.com/api/now/table/pa_dashboards/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Performance Analytics dashboard container. Requires Performance Analytics plugin. Note: ServiceNow also has a separate homepage/workspace dashboard framework (sys_portal_page) — pa_dashboards is specific to the PA module."
+    },
+    {
+      "service": "performance_analytics",
+      "resource_type": "indicator",
+      "template": "https://{instance}.service-now.com/api/now/table/pa_indicators/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Performance Analytics indicator (metric definition). Requires Performance Analytics plugin (com.snc.pa)."
+    },
+    {
+      "service": "performance_analytics",
+      "resource_type": "widget",
+      "template": "https://{instance}.service-now.com/api/now/table/pa_widgets/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Performance Analytics widget (scorecard, chart element within a PA dashboard). Requires Performance Analytics plugin. Widget configuration options are in pa_widget_options."
+    },
+    {
+      "service": "platform",
+      "resource_type": "acl_rule",
+      "template": "https://{instance}.service-now.com/api/now/table/sys_security_acl/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Access Control List rule (record-level security). Discover via: GET /api/now/table/sys_security_acl?sysparm_query=name={table_name}"
+    },
+    {
+      "service": "platform",
+      "resource_type": "business_rule",
+      "template": "https://{instance}.service-now.com/api/now/table/sys_script/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Business Rule (server-side script triggered on table operations). Discover via: GET /api/now/table/sys_script?sysparm_query=name={rule_name}^collection={table_name}"
+    },
+    {
+      "service": "platform",
+      "resource_type": "flow",
+      "template": "https://{instance}.service-now.com/api/now/table/sys_hub_flow/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Flow Designer flow. Distinct from legacy Workflow (wf_workflow). Requires Flow Designer plugin."
+    },
+    {
+      "service": "platform",
+      "resource_type": "role",
+      "template": "https://{instance}.service-now.com/api/now/table/sys_user_role/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow platform role (defines access permissions). Discover via: GET /api/now/table/sys_user_role?sysparm_query=name={role_name}"
+    },
+    {
+      "service": "platform",
+      "resource_type": "scheduled_job",
+      "template": "https://{instance}.service-now.com/api/now/table/sysauto_script/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Scheduled Script Execution (scheduled job / cron). Discover via: GET /api/now/table/sysauto_script?sysparm_query=name={job_name}"
+    },
+    {
+      "service": "platform",
+      "resource_type": "script_include",
+      "template": "https://{instance}.service-now.com/api/now/table/sys_script_include/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Script Include (reusable server-side JavaScript library)."
+    },
+    {
+      "service": "platform",
+      "resource_type": "ui_action",
+      "template": "https://{instance}.service-now.com/api/now/table/sys_ui_action/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow UI Action (button, link, or context menu item on a form or list)."
+    },
+    {
+      "service": "platform",
+      "resource_type": "update_set",
+      "template": "https://{instance}.service-now.com/api/now/table/sys_update_set/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Update Set (container for transporting configuration changes between instances). Discover via: GET /api/now/table/sys_update_set?sysparm_query=name={update_set_name}"
+    },
+    {
+      "service": "platform",
+      "resource_type": "user",
+      "template": "https://{instance}.service-now.com/api/now/table/sys_user/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow platform user record. Discover sys_id via: GET /api/now/table/sys_user?sysparm_query=user_name={username}&sysparm_fields=sys_id,user_name"
+    },
+    {
+      "service": "platform",
+      "resource_type": "user_group",
+      "template": "https://{instance}.service-now.com/api/now/table/sys_user_group/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow user group (used for assignment, escalation, and approval routing)."
+    },
+    {
+      "service": "platform",
+      "resource_type": "workflow",
+      "template": "https://{instance}.service-now.com/api/now/table/wf_workflow/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow legacy Workflow (deprecated in favor of Flow Designer). Still used for approval workflows in many instances."
+    },
+    {
+      "service": "security_ops",
+      "resource_type": "security_incident",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_si_incident/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Security Incident Response (SIR) incident. Requires Security Incident Response plugin. Distinct from ITSM incidents (table: incident)."
+    },
+    {
+      "service": "security_ops",
+      "resource_type": "vulnerability",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_vul_vulnerability/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Vulnerability Response vulnerability definition. Requires Vulnerability Response plugin. Discover via: GET /api/now/table/sn_vul_vulnerability?sysparm_query=source_vulnerability_id=CVE-YYYY-NNNNN"
+    },
+    {
+      "service": "security_ops",
+      "resource_type": "vulnerability_entry",
+      "template": "https://{instance}.service-now.com/api/now/table/sn_vul_entry/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Vulnerability Entry (a vulnerability instance on a specific CI). Table: sn_vul_entry. Links sn_vul_vulnerability to cmdb_ci records. NVD-sourced entries may additionally use sn_vul_nvd_entry; sn_vul_entry is the base table for all scanner-imported vulnerability instances."
+    },
+    {
+      "service": "service_catalog",
+      "resource_type": "catalog_category",
+      "template": "https://{instance}.service-now.com/api/now/table/sc_category/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Service Catalog category (grouping of catalog items)."
+    },
+    {
+      "service": "service_catalog",
+      "resource_type": "catalog_item",
+      "template": "https://{instance}.service-now.com/api/now/table/sc_cat_item/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Service Catalog item (orderable item). Discover via: GET /api/now/table/sc_cat_item?sysparm_query=name={item_name}"
+    },
+    {
+      "service": "service_catalog",
+      "resource_type": "request",
+      "template": "https://{instance}.service-now.com/api/now/table/sc_request/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Service Catalog request (container for one or more request items). Discover via: GET /api/now/table/sc_request?sysparm_query=number=REQ0001234"
+    },
+    {
+      "service": "service_catalog",
+      "resource_type": "request_item",
+      "template": "https://{instance}.service-now.com/api/now/table/sc_req_item/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow Requested Item (RITM) — a single catalog item order within a request. Discover via: GET /api/now/table/sc_req_item?sysparm_query=number=RITM0001234"
+    },
+    {
+      "service": "service_catalog",
+      "resource_type": "variable_value",
+      "template": "https://{instance}.service-now.com/api/now/table/sc_item_option/{sys-id}",
+      "template_format": "servicenow_table_url",
+      "region_behavior": "global-only",
+      "notes": "ServiceNow catalog variable value (a single variable answer on a requested item). Table: sc_item_option. Links sc_req_item records to their submitted variable values. Related table sc_item_option_mtom joins variables to request items."
+    }
   ]
 }

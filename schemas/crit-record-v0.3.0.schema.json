@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://vulnetix.com/schemas/crit-record-v0.2.0.schema.json",
+  "$id": "https://vulnetix.com/schemas/crit-record-v0.3.0.schema.json",
   "title": "CRIT Record",
-  "description": "Schema for a hand-authored CRIT record (v0.2.0). Each record describes the scope, remediation, and detection characteristics of a single vulnerability as it applies to a single cloud resource type.",
+  "description": "Schema for a hand-authored CRIT record (v0.3.0). Each record describes the scope, remediation, and detection characteristics of a single vulnerability as it applies to a single cloud resource type.",
   "type": "object",
   "required": [
     "vectorString",
@@ -33,7 +33,13 @@
       "description": "Vulnerability identifier (e.g., CVE-2024-6387)."
     },
     "provider": {
-      "enum": ["aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow", "ibm", "vmware"],
+      "enum": [
+        "aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow",
+        "ibm", "vmware",
+        "adobe", "akamai", "alibaba", "atlassian", "digitalocean", "elastic", "fastly",
+        "gitlab", "hashicorp", "hetzner", "linode", "mongodb", "ovh", "snowflake", "tailscale",
+        "tencent", "twilio", "vercel", "vultr", "zoom"
+      ],
       "description": "Cloud provider key."
     },
     "service": {
@@ -64,7 +70,16 @@
       "description": "Parameterised identifier string with variable slots."
     },
     "template_format": {
-      "enum": ["aws_arn", "azure_resource_id", "gcp_resource_name", "cloudflare_locator", "oracle_ocid", "salesforce_url", "sap_btp_url", "sap_odata_url", "sap_sf_url", "servicenow_table_url", "ibm_url", "vmware_url"],
+      "enum": [
+        "aws_arn", "azure_resource_id", "gcp_resource_name", "cloudflare_locator",
+        "oracle_ocid", "salesforce_url", "sap_btp_url", "sap_odata_url", "sap_sf_url",
+        "servicenow_table_url", "ibm_url", "vmware_url",
+        "akamai_url", "alibaba_arn", "atlassian_locator", "digitalocean_url",
+        "elastic_locator", "gitlab_locator", "hetzner_locator", "linode_locator",
+        "mongodb_locator", "ovh_locator", "snowflake_locator", "tencent_arn",
+        "twilio_resource_id", "vercel_locator", "vultr_locator", "zoom_locator",
+        "uri"
+      ],
       "description": "Provider-native identifier schema."
     },
     "temporal": { "$ref": "#/$defs/temporal" },

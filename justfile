@@ -1,7 +1,7 @@
 # Draft revision (override with: just rev=01 <recipe>)
-rev := "02"
+rev := "03"
 outdir := "build"
-schema := "schemas/crit-dictionary-v0.2.0.schema.json"
+schema := "schemas/crit-dictionary-v0.3.0.schema.json"
 
 # List available commands
 default:
@@ -72,7 +72,7 @@ test-validate-samples:
 
 # Validate hand-authored CRIT record samples against the record schema
 test-validate-records:
-    check-jsonschema --schemafile schemas/crit-record-v0.2.0.schema.json samples/**/*.json
+    check-jsonschema --schemafile schemas/crit-record-v0.3.0.schema.json samples/**/*.json
 
 # Validate CVE+CRIT data files against CVEListv5 format and CRIT spec rules
 test-cve-crit:

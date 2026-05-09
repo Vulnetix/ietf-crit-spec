@@ -1,0 +1,2 @@
+example-bucket-a
+example-bucket-b

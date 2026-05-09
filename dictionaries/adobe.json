@@ -1,0 +1,48 @@
+{
+  "dictionary_version": "0.3.0",
+  "provider": "adobe",
+  "entries": [
+    {
+      "service": "acrobat",
+      "resource_type": "document",
+      "template": "https://helpx.adobe.com/security/products/acrobat/{bulletin}.html",
+      "template_format": "uri",
+      "region_behavior": "endpoint-only"
+    },
+    {
+      "service": "commerce",
+      "resource_type": "store",
+      "template": "https://helpx.adobe.com/security/products/magento/{bulletin}.html",
+      "template_format": "uri",
+      "region_behavior": "endpoint-only"
+    },
+    {
+      "service": "aem",
+      "resource_type": "instance",
+      "template": "https://helpx.adobe.com/security/products/experience-manager/{bulletin}.html",
+      "template_format": "uri",
+      "region_behavior": "self-hosted"
+    },
+    {
+      "service": "coldfusion",
+      "resource_type": "server",
+      "template": "https://helpx.adobe.com/security/products/coldfusion/{bulletin}.html",
+      "template_format": "uri",
+      "region_behavior": "self-hosted"
+    },
+    {
+      "service": "creative_cloud",
+      "resource_type": "application",
+      "template": "https://helpx.adobe.com/security/products/{product}/{bulletin}.html",
+      "template_format": "uri",
+      "region_behavior": "endpoint-only"
+    },
+    {
+      "service": "experience_cloud",
+      "resource_type": "application",
+      "template": "https://helpx.adobe.com/security/products/{product}/{bulletin}.html",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    }
+  ]
+}

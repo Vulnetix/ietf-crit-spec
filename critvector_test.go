@@ -7,7 +7,7 @@ import (
 
 func TestComputeVector(t *testing.T) {
 	v := CRITVector{
-		CRITVersion:    "0.2.0",
+		CRITVersion:    "0.3.0",
 		Provider:       "aws",
 		VEXStatus:      "fixed",
 		FixPropagation: "rebuild_and_redeploy",
@@ -24,7 +24,7 @@ func TestComputeVector(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ComputeVector: %v", err)
 	}
-	want := "CRITv0.2.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance"
+	want := "CRITv0.3.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance"
 	if got != want {
 		t.Errorf("ComputeVector:\n  got:  %s\n  want: %s", got, want)
 	}
@@ -41,7 +41,7 @@ func TestComputeVectorAllProviders(t *testing.T) {
 	}
 	for _, tc := range cases {
 		v := CRITVector{
-			CRITVersion: "0.2.0", Provider: tc.provider, VEXStatus: "affected",
+			CRITVersion: "0.3.0", Provider: tc.provider, VEXStatus: "affected",
 			FixPropagation: "automatic", SharedResp: "provider_only",
 			Lifecycle: "ephemeral", VulnPublished: 1000000000, ServiceAvail: 900000000,
 			VulnID: "CVE-2024-0001", Service: "svc", ResourceType: "rt",
@@ -59,7 +59,7 @@ func TestComputeVectorAllProviders(t *testing.T) {
 
 func TestComputeVectorErrors(t *testing.T) {
 	base := CRITVector{
-		CRITVersion: "0.2.0", Provider: "aws", VEXStatus: "fixed",
+		CRITVersion: "0.3.0", Provider: "aws", VEXStatus: "fixed",
 		FixPropagation: "automatic", SharedResp: "shared", Lifecycle: "ephemeral",
 		VulnPublished: 1000, ServiceAvail: 900,
 		VulnID: "CVE-2024-0001", Service: "svc", ResourceType: "rt",
@@ -91,7 +91,7 @@ func TestComputeVectorErrors(t *testing.T) {
 }
 
 func TestParseVectorRoundTrip(t *testing.T) {
-	input := "CRITv0.2.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance"
+	input := "CRITv0.3.0/CP:AW/VS:FX/FP:RR/SR:CA/RL:SC/EV:T/PP:1719792000/SA:1514764800#CVE-2024-6387:ec2:instance"
 	parsed, warnings, err := ParseVector(input)
 	if err != nil {
 		t.Fatalf("ParseVector: %v", err)
@@ -109,12 +109,12 @@ func TestParseVectorRoundTrip(t *testing.T) {
 }
 
 func TestParseVectorFields(t *testing.T) {
-	input := "CRITv0.2.0/CP:MA/VS:AF/FP:CC/SR:SH/RL:CF/EV:F/PP:1719792000/SA:1514764800#CVE-2024-37085:azure_vmware_solution:privateClouds"
+	input := "CRITv0.3.0/CP:MA/VS:AF/FP:CC/SR:SH/RL:CF/EV:F/PP:1719792000/SA:1514764800#CVE-2024-37085:azure_vmware_solution:privateClouds"
 	v, _, err := ParseVector(input)
 	if err != nil {
 		t.Fatalf("ParseVector: %v", err)
 	}
-	if v.CRITVersion != "0.2.0" {
+	if v.CRITVersion != "0.3.0" {
 		t.Errorf("CRITVersion = %q, want 0.2.0", v.CRITVersion)
 	}
 	if v.Provider != "azure" {
@@ -154,7 +154,7 @@ func TestParseVectorFields(t *testing.T) {
 
 func TestParseVectorUnknownMetrics(t *testing.T) {
 	// Append an unknown metric "XX:foo" after the registered set.
-	input := "CRITv0.2.0/CP:AW/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900/XX:foo#CVE-2024-0001:svc:rt"
+	input := "CRITv0.3.0/CP:AW/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900/XX:foo#CVE-2024-0001:svc:rt"
 	v, warnings, err := ParseVector(input)
 	if err != nil {
 		t.Fatalf("ParseVector should not error on unknown metrics: %v", err)
@@ -172,13 +172,13 @@ func TestParseVectorErrors(t *testing.T) {
 		name  string
 		input string
 	}{
-		{"no hash", "CRITv0.2.0/CP:AW/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900"},
+		{"no hash", "CRITv0.3.0/CP:AW/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900"},
 		{"bad prefix", "FOOv0.2.0/CP:AW/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE:svc:rt"},
-		{"missing CP", "CRITv0.2.0/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE:svc:rt"},
-		{"wrong order", "CRITv0.2.0/VS:FX/CP:AW/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE:svc:rt"},
-		{"bad qualifier count", "CRITv0.2.0/CP:AW/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE"},
-		{"unknown CP code", "CRITv0.2.0/CP:ZZ/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE:svc:rt"},
-		{"non-integer PP", "CRITv0.2.0/CP:AW/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:abc/SA:900#CVE:svc:rt"},
+		{"missing CP", "CRITv0.3.0/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE:svc:rt"},
+		{"wrong order", "CRITv0.3.0/VS:FX/CP:AW/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE:svc:rt"},
+		{"bad qualifier count", "CRITv0.3.0/CP:AW/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE"},
+		{"unknown CP code", "CRITv0.3.0/CP:ZZ/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:1000/SA:900#CVE:svc:rt"},
+		{"non-integer PP", "CRITv0.3.0/CP:AW/VS:FX/FP:AU/SR:PO/RL:EP/EV:F/PP:abc/SA:900#CVE:svc:rt"},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -213,7 +213,7 @@ func TestSuggestMetric(t *testing.T) {
 
 func TestValidateVector(t *testing.T) {
 	v := CRITVector{
-		CRITVersion: "0.2.0", Provider: "aws", VEXStatus: "fixed",
+		CRITVersion: "0.3.0", Provider: "aws", VEXStatus: "fixed",
 		FixPropagation: "rebuild_and_redeploy", SharedResp: "customer_action_required",
 		Lifecycle: "stateful_customer", ExistingVuln: true,
 		VulnPublished: 1719792000, ServiceAvail: 1514764800,
