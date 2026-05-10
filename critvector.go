@@ -80,6 +80,7 @@ var providerToCode = map[string]string{
 	"vultr":        "VL",
 	"zoom":         "ZM",
 	"hashicorp":    "HC",
+	"confluent":    "CN",
 }
 
 var vexStatusToCode = map[string]string{

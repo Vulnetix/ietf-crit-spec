@@ -36,7 +36,7 @@
       "enum": [
         "aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow",
         "ibm", "vmware",
-        "adobe", "akamai", "alibaba", "atlassian", "digitalocean", "elastic", "fastly",
+        "adobe", "akamai", "alibaba", "atlassian", "confluent", "digitalocean", "elastic", "fastly",
         "gitlab", "hashicorp", "hetzner", "linode", "mongodb", "ovh", "snowflake", "tailscale",
         "tencent", "twilio", "vercel", "vultr", "zoom"
       ],
