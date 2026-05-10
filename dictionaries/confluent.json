@@ -1,0 +1,41 @@
+{
+  "dictionary_version": "0.3.1",
+  "provider": "confluent",
+  "entries": [
+    {
+      "service": "cloud",
+      "resource_type": "cluster",
+      "template": "https://confluent.cloud/environments/{env-id}/clusters/{cluster-id}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "platform",
+      "resource_type": "broker",
+      "template": "https://{host}:9092",
+      "template_format": "uri",
+      "region_behavior": "self-hosted"
+    },
+    {
+      "service": "ksqldb",
+      "resource_type": "cluster",
+      "template": "https://confluent.cloud/environments/{env-id}/ksqldb/{ksql-id}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "schema_registry",
+      "resource_type": "cluster",
+      "template": "https://confluent.cloud/environments/{env-id}/schema-registry/{sr-id}",
+      "template_format": "uri",
+      "region_behavior": "multi-region"
+    },
+    {
+      "service": "connect",
+      "resource_type": "connector",
+      "template": "https://{host}:8083/connectors/{connector-name}",
+      "template_format": "uri",
+      "region_behavior": "self-hosted"
+    }
+  ]
+}

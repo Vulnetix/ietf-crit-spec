@@ -227,6 +227,7 @@ var knownSlotFiles = map[string]map[string]bool{
 	"akamai": {"asset-id": true, "config-id": true, "property-id": true, "zone-name": true},
 	"alibaba": {"account": true, "bucket-name": true, "cluster-id": true, "instance-id": true, "region": true},
 	"atlassian": {"deployment": true, "directory": true, "instance": true, "project": true, "repo": true, "server": true, "site": true, "space": true, "workspace": true},
+	"confluent": {"cluster-id": true, "connector-name": true, "env-id": true, "host": true, "ksql-id": true, "sr-id": true},
 	"digitalocean": {"app-id": true, "bucket-name": true, "cluster-id": true, "database-id": true, "droplet-id": true, "region": true},
 	"elastic": {"agent-id": true, "cluster": true, "deployment": true, "deployment-id": true, "host": true, "namespace": true, "package": true},
 	"fastly": {"channel": true, "corp": true, "project": true, "service-id": true, "site": true, "version": true},
@@ -428,7 +429,7 @@ func generateSamples(dicts []*Dictionary, testsDir string) ([]Sample, error) {
 	for _, p := range []string{
 		"aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow",
 		"ibm", "vmware",
-		"adobe", "akamai", "alibaba", "atlassian", "digitalocean", "elastic", "fastly",
+		"adobe", "akamai", "alibaba", "atlassian", "confluent", "digitalocean", "elastic", "fastly",
 		"gitlab", "hashicorp", "hetzner", "linode", "mongodb", "ovh", "snowflake", "tailscale",
 		"tencent", "twilio", "vercel", "vultr", "zoom",
 	} {
@@ -1638,7 +1639,7 @@ func main() {
 	for _, p := range []string{
 		"aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow",
 		"ibm", "vmware",
-		"adobe", "akamai", "alibaba", "atlassian", "digitalocean", "elastic", "fastly",
+		"adobe", "akamai", "alibaba", "atlassian", "confluent", "digitalocean", "elastic", "fastly",
 		"gitlab", "hashicorp", "hetzner", "linode", "mongodb", "ovh", "snowflake", "tailscale",
 		"tencent", "twilio", "vercel", "vultr", "zoom",
 	} {

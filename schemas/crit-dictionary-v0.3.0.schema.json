@@ -24,7 +24,7 @@
       "enum": [
         "aws", "azure", "gcp", "cloudflare", "oracle", "salesforce", "sap", "servicenow",
         "ibm", "vmware",
-        "adobe", "akamai", "alibaba", "atlassian", "digitalocean", "elastic", "fastly",
+        "adobe", "akamai", "alibaba", "atlassian", "confluent", "digitalocean", "elastic", "fastly",
         "gitlab", "hashicorp", "hetzner", "linode", "mongodb", "ovh", "snowflake", "tailscale",
         "tencent", "twilio", "vercel", "vultr", "zoom"
       ],
@@ -93,6 +93,10 @@
     {
       "if": { "properties": { "provider": { "const": "atlassian" } }, "required": ["provider"] },
       "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "enum": ["atlassian_locator", "uri"] } } } } } }
+    },
+    {
+      "if": { "properties": { "provider": { "const": "confluent" } }, "required": ["provider"] },
+      "then": { "properties": { "entries": { "items": { "properties": { "template_format": { "const": "uri" } } } } } }
     },
     {
       "if": { "properties": { "provider": { "const": "digitalocean" } }, "required": ["provider"] },
