@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  {{ partial "nav.html" . }}
+  <div class="page-shell">
+    {{ if or (eq .Section "docs") (and (eq .Kind "section") (eq .Section "docs")) }}
+      {{ partial "sidebar.html" . }}
+    {{ end }}
+    <div class="content-wrap">
+      {{ block "main" . }}{{ end }}
+      {{ partial "footer.html" . }}
+    </div>
+  </div>
+</body>
+</html>

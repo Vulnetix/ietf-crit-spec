@@ -1,0 +1,25 @@
+<aside class="sidebar">
+  {{ $currentPage := . }}
+  <div class="sidebar__section">
+    <div class="sidebar__heading">Documentation</div>
+    {{ with .Site.GetPage "/docs" }}
+      <a class="sidebar__link{{ if eq $currentPage.RelPermalink .RelPermalink }} active{{ end }}"
+         href="{{ .RelPermalink }}">Overview</a>
+      {{ range .Pages.ByWeight }}
+        <a class="sidebar__link{{ if eq $currentPage.RelPermalink .RelPermalink }} active{{ end }}"
+           href="{{ .RelPermalink }}">{{ .Title }}</a>
+      {{ end }}
+    {{ end }}
+  </div>
+  <div class="sidebar__section">
+    <div class="sidebar__heading">Tools</div>
+    <a class="sidebar__link{{ if eq $currentPage.RelPermalink (absURL "validator/" | replaceRE `^https?://[^/]+` "") }} active{{ end }}"
+       href="{{ "validator/" | relURL }}">Validator</a>
+  </div>
+  <div class="sidebar__section">
+    <div class="sidebar__heading">Standards</div>
+    <a class="sidebar__link" href="https://datatracker.ietf.org/doc/draft-vulnetix-crit/" target="_blank" rel="noopener">IETF Datatracker</a>
+    <a class="sidebar__link" href="https://github.com/Vulnetix/ietf-crit-spec/tree/main/drafts" target="_blank" rel="noopener">Draft sources</a>
+    <a class="sidebar__link" href="https://github.com/Vulnetix/ietf-crit-spec/tree/main/schemas" target="_blank" rel="noopener">JSON Schemas</a>
+  </div>
+</aside>
