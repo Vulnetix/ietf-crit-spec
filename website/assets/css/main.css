@@ -651,6 +651,37 @@ img { max-width: 100%; height: auto; }
 .validator-page__lead p { margin-bottom: 8px; }
 .validator-page__lead a { color: var(--vx-mint); }
 
+/* Override .content styles when used inside the dark validator page. */
+.validator-page .content,
+.validator-page .content p,
+.validator-page .content li,
+.validator-page .content strong,
+.validator-page .content em { color: var(--vx-bone); }
+.validator-page .content h1,
+.validator-page .content h2,
+.validator-page .content h3,
+.validator-page .content h4 { color: var(--vx-white); }
+.validator-page .content h2 {
+  border-bottom-color: rgba(255,255,255,0.12);
+  margin-top: 40px;
+}
+.validator-page .content code {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.12);
+  color: var(--vx-mint);
+}
+.validator-page .content a {
+  color: var(--vx-mint);
+  border-bottom-color: rgba(102,220,200,0.4);
+}
+.validator-page .content a:hover { border-bottom-color: var(--vx-mint); }
+.validator-page .content ul, .validator-page .content ol { color: var(--vx-bone); }
+.validator-page .content blockquote {
+  background: rgba(102,220,200,0.08);
+  color: var(--vx-bone);
+}
+.validator-page .content pre { background: rgba(0,0,0,0.5) !important; }
+
 /* The crit-validator shortcode brings its own styles; we wrap it in a
    glass surface so it sits inside the design system. */
 .validator-page #crit-validator {
