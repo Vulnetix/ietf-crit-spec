@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  {{ partial "nav.html" . }}
+
+  <main>
+    <section class="home-hero">
+      <div class="home-hero__inner">
+        <div class="glass-banner">
+          <div class="home-hero__badge">
+            <a href="https://datatracker.ietf.org/doc/draft-vulnetix-crit/" target="_blank" rel="noopener">v0.3.0 — draft-vulnetix-crit-02</a>
+          </div>
+          <h1 class="home-hero__title">Cloud Resource Identifier Templates. CVSS-style for cloud-native CVEs.</h1>
+          <p class="home-hero__sub">A machine-readable format for identifying the cloud resources a known vulnerability actually affects — with the lifecycle, fix-propagation and shared-responsibility metadata operators need to remediate it.</p>
+          <div class="home-hero__ctas">
+            <a class="btn btn--primary" href="{{ "validator/" | relURL }}">Try the validator</a>
+            <a class="btn btn--outline" href="{{ "docs/" | relURL }}">Read the docs</a>
+            <a class="btn btn--outline" href="https://www.vulnetix.com/articles/matching-cloud-vulns" target="_blank" rel="noopener">Why CRIT — stats &amp; adoption</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-steps">
+      <div class="home-steps__inner">
+        <div class="home-steps__eyebrow">How CRIT works</div>
+        <h2 class="home-steps__title">From CVE to remediation, in three deterministic steps.</h2>
+        <div class="home-steps__grid">
+          <div class="step-card">
+            <div class="step-card__num">1. IDENTIFY</div>
+            <div class="step-card__title">Name the resource, not the package.</div>
+            <p class="step-card__desc">Bind each CVE to a `(provider, service, resource_type)` tuple with a template URL/ARN/locator. Slots — known, derived, opaque or omitted — encode exactly what an operator must resolve.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-card__num">2. MATCH</div>
+            <div class="step-card__title">Resolve templates against live inventory.</div>
+            <p class="step-card__desc">Consumers turn templates into provider identifiers using the dictionary library, then check the exposure window — when the resource was vulnerable, when the provider shipped a fix, and whether your specific resource has propagated past it.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-card__num">3. REMEDIATE</div>
+            <div class="step-card__title">Embed VEX-aware decisions in CVE 5.x.</div>
+            <p class="step-card__desc">CRIT records ride inside the CVE 5.x ADP container as `x_crit`, carrying `vex_status`, `fix_propagation`, `shared_responsibility` and `resource_lifecycle` — spec-bound enums with cross-field consistency the validator enforces.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-ecosystem">
+      <div class="home-ecosystem__inner">
+        <h2 class="home-ecosystem__title">Built for the cloud stack you actually run.</h2>
+        <p class="home-ecosystem__sub">30+ provider dictionaries shipped in the spec library — Tier-1 hyperscalers, Tier-2 IaaS, and Tier-3 SaaS — all addressable through the same template grammar.</p>
+        <div class="chip-wall">
+          <span class="chip">AWS</span>
+          <span class="chip">Azure</span>
+          <span class="chip">GCP</span>
+          <span class="chip">Cloudflare</span>
+          <span class="chip">Oracle</span>
+          <span class="chip">IBM Cloud</span>
+          <span class="chip">Alibaba</span>
+          <span class="chip">Tencent</span>
+          <span class="chip">DigitalOcean</span>
+          <span class="chip">Linode</span>
+          <span class="chip">Vultr</span>
+          <span class="chip">Hetzner</span>
+          <span class="chip">Kubernetes</span>
+          <span class="chip">Confluent</span>
+          <span class="chip">Snowflake</span>
+          <span class="chip">Databricks</span>
+          <span class="chip">Salesforce</span>
+          <span class="chip">SAP</span>
+          <span class="chip">ServiceNow</span>
+          <span class="chip">Workday</span>
+          <span class="chip">Atlassian</span>
+          <span class="chip">GitHub</span>
+          <span class="chip">GitLab</span>
+          <span class="chip">Okta</span>
+          <span class="chip chip--more">+ many more</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-features">
+      <div class="home-features__inner">
+        <div class="home-features__eyebrow">What ships in v0.3.0</div>
+        <h2 class="home-features__title">A standards-track answer to "which cloud resource does this CVE actually affect?"</h2>
+        <div class="home-features__grid">
+          <a class="feature-card" href="{{ "validator/" | relURL }}">
+            <div class="feature-card__title">In-browser validator</div>
+            <p class="feature-card__desc">Paste a CRIT record, a CVE 5.x record with x_crit, or a vector string. Instant JSON Schema validation, vector round-trip checks, dictionary resolution — nothing leaves your browser.</p>
+            <span class="feature-card__link">Try it →</span>
+          </a>
+          <a class="feature-card" href="{{ "docs/vector-string/" | relURL }}">
+            <div class="feature-card__title">Vector strings</div>
+            <p class="feature-card__desc">CVSS-style compact encoding. <code>CRITv0.3.0/CP:AW/VS:FX/FP:RR/SR:SH/RL:SM/…</code> — deterministic, parseable, signable, byte-equal on round-trip.</p>
+            <span class="feature-card__link">See the format →</span>
+          </a>
+          <a class="feature-card" href="{{ "docs/dictionaries/" | relURL }}">
+            <div class="feature-card__title">30+ provider dictionaries</div>
+            <p class="feature-card__desc">AWS, Azure, GCP, Cloudflare, Oracle, Salesforce, SAP, ServiceNow plus 20+ extended providers covering Tier-2 IaaS and Tier-3 SaaS — all shipped in the spec library.</p>
+            <span class="feature-card__link">Browse providers →</span>
+          </a>
+          <a class="feature-card" href="{{ "docs/adp-integration/" | relURL }}">
+            <div class="feature-card__title">CVE 5.x ADP integration</div>
+            <p class="feature-card__desc">CRIT records embed in CVE 5.x via the ADP container's <code>x_crit</code> array. The validator parses both single-record and CVE-with-x_crit shapes.</p>
+            <span class="feature-card__link">How it embeds →</span>
+          </a>
+          <a class="feature-card" href="{{ "docs/spec/" | relURL }}">
+            <div class="feature-card__title">VEX-aware</div>
+            <p class="feature-card__desc"><code>vex_status</code>, <code>fix_propagation</code>, <code>shared_responsibility</code>, <code>resource_lifecycle</code> — spec-bound enums with cross-field consistency rules the validator checks.</p>
+            <span class="feature-card__link">Read the spec →</span>
+          </a>
+          <a class="feature-card" href="https://datatracker.ietf.org/doc/draft-vulnetix-crit/" target="_blank" rel="noopener">
+            <div class="feature-card__title">Open standard</div>
+            <p class="feature-card__desc">Independent submission to the IETF — draft-vulnetix-crit-02. Published under the Trust Provisions. Apache 2.0 implementation reference.</p>
+            <span class="feature-card__link">IETF datatracker →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="home-cta">
+      <div class="home-cta__inner">
+        <div class="glass-banner">
+          <h2 class="home-cta__title">Ready to make CVE-to-cloud-resource matching deterministic?</h2>
+          <p class="home-cta__sub">Validate a record, read the spec, or open an issue on the draft. CRIT is Apache 2.0 and the schemas are versioned alongside the IETF draft.</p>
+          <div class="home-cta__ctas">
+            <a class="btn btn--primary" href="{{ "validator/" | relURL }}">Open the validator</a>
+            <a class="btn btn--outline" href="https://github.com/Vulnetix/ietf-crit-spec" target="_blank" rel="noopener">View on GitHub</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  {{ partial "footer.html" . }}
+</body>
+</html>
