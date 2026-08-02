@@ -5,19 +5,53 @@
 
 set -e
 
+REPORT=tests/reports/crit-test-report.md
+
 echo "=== CRIT pre-commit: running spec conformance tests ==="
 go run ./tests/cmd/crit-test --report tests/reports
 
-# Stage the report the run just produced.
+# Discard a regeneration whose only change is when it ran.
 #
-# Without this the hook rewrote the report on every commit, stamped it with a
-# new timestamp and content hash, and left it unstaged: the working tree was
-# dirty the moment any commit finished, and committing that report dirtied it
-# again. The repository could not be clean.
+# The report is stamped with the run time in two places, the frontmatter
+# `date:` and the body `**Date:**`. Staging it unconditionally meant every
+# commit carried a diff that said nothing except that the hook had run again,
+# which is noise in the history and makes a real change to the conformance
+# results harder to spot.
 #
-# Staging it also keeps the committed report matching the code in the same
-# commit, which is the whole reason it is generated here rather than in CI.
-git add tests/reports/crit-test-report.md
+# Restoring the committed copy, rather than simply not staging it, is what
+# keeps the working tree clean afterwards: leaving the regenerated file in
+# place would dirty the tree the moment any commit finished.
+#
+# Both timestamps are normalised before comparing, so a genuine change to
+# verdict, counts or any rule detail still stages normally.
+normalise_report() {
+    sed -e 's/^date:.*/date: NORMALISED/' \
+        -e 's/^\*\*Date:\*\*.*/**Date:** NORMALISED/' "$1"
+}
+
+if git cat-file -e "HEAD:$REPORT" 2>/dev/null; then
+    committed=$(mktemp)
+    committed_norm=$(mktemp)
+    regenerated_norm=$(mktemp)
+    git show "HEAD:$REPORT" > "$committed"
+
+    normalise_report "$committed" > "$committed_norm"
+    normalise_report "$REPORT" > "$regenerated_norm"
+
+    if cmp -s "$committed_norm" "$regenerated_norm"; then
+        # Nothing changed but the clock. Put the committed copy back.
+        cp "$committed" "$REPORT"
+        echo "CRIT report unchanged apart from its timestamp; not staging it."
+    else
+        git add "$REPORT"
+        echo "CRIT report changed; staged."
+    fi
+
+    rm -f "$committed" "$committed_norm" "$regenerated_norm"
+else
+    # First commit of the report, so there is nothing to compare against.
+    git add "$REPORT"
+fi
 
 echo "=== CRIT pre-commit: validating samples schema ==="
 check-jsonschema --schemafile schemas/crit-samples-v0.1.0.schema.json tests/CRIT-samples.json
