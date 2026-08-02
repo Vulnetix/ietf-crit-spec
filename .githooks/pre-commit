@@ -13,20 +13,24 @@ go run ./tests/cmd/crit-test --report tests/reports
 # Discard a regeneration whose only change is when it ran.
 #
 # The report is stamped with the run time in two places, the frontmatter
-# `date:` and the body `**Date:**`. Staging it unconditionally meant every
-# commit carried a diff that said nothing except that the hook had run again,
-# which is noise in the history and makes a real change to the conformance
-# results harder to spot.
+# `date:` and the body `**Date:**`, and it carries a trailing sha256 of its own
+# content which therefore also changes on every run. Staging it unconditionally
+# meant every commit carried a diff that said nothing except that the hook had
+# run again, which is noise in the history and makes a real change to the
+# conformance results harder to spot.
 #
 # Restoring the committed copy, rather than simply not staging it, is what
 # keeps the working tree clean afterwards: leaving the regenerated file in
 # place would dirty the tree the moment any commit finished.
 #
-# Both timestamps are normalised before comparing, so a genuine change to
-# verdict, counts or any rule detail still stages normally.
+# All three are normalised before comparing, so a genuine change to verdict,
+# counts or any rule detail still stages normally. The sha256 is normalised
+# rather than trusted as a change signal precisely because it covers the
+# timestamps: on its own it reports every run as a change.
 normalise_report() {
     sed -e 's/^date:.*/date: NORMALISED/' \
-        -e 's/^\*\*Date:\*\*.*/**Date:** NORMALISED/' "$1"
+        -e 's/^\*\*Date:\*\*.*/**Date:** NORMALISED/' \
+        -e 's/^<!-- sha256:.*/<!-- sha256: NORMALISED -->/' "$1"
 }
 
 if git cat-file -e "HEAD:$REPORT" 2>/dev/null; then
