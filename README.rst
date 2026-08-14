@@ -783,3 +783,4 @@ interested in cloud vulnerability data, a cloud provider who wants to see your
 services represented accurately, or someone who just finds this problem
 interesting -- your time and attention are appreciated. This specification will
 be better because you looked at it.
+.. ci-touch: 2026-08-14T04:04:34Z
