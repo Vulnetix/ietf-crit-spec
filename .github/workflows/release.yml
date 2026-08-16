@@ -4,51 +4,56 @@ on:
   push:
     tags:
       - "v*"
-
-permissions:
-  contents: write
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Tag to release (e.g., v0.1.0) — must already exist"
+        required: true
+        type: string
 
 jobs:
   build:
     runs-on: [self-hosted, Linux, X64, vulnetix-local]
-    strategy:
-      matrix:
-        include:
-          - goos: linux
-            goarch: amd64
-          - goos: linux
-            goarch: arm64
-          - goos: darwin
-            goarch: amd64
-          - goos: darwin
-            goarch: arm64
-          - goos: windows
-            goarch: amd64
-
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v5
+        with:
+          # On workflow_dispatch there's no tag ref in github.ref, so check
+          # out the existing tag named by the input instead — this is what
+          # lets a failed release be retried without deleting/re-pushing the
+          # (immutable) tag.
+          ref: ${{ github.event.inputs.version || github.ref }}
 
       - uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
 
+      # A single job looping over targets instead of a 5-way matrix: each
+      # matrix leg claimed its own self-hosted vulnetix-local runner for a
+      # few seconds of cross-compilation with no tests, which is wasteful on
+      # a shared, capacity-limited pool (see cloudscan/release.yml for the
+      # same pattern).
       - name: Build
-        env:
-          GOOS: ${{ matrix.goos }}
-          GOARCH: ${{ matrix.goarch }}
         run: |
-          ext=""
-          if [ "$GOOS" = "windows" ]; then ext=".exe"; fi
-          go build -ldflags="-s -w" -o "crit-validate-${GOOS}-${GOARCH}${ext}" ./cmd/crit-validate
+          for target in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64; do
+            GOOS=${target%/*}
+            GOARCH=${target#*/}
+            ext=""
+            if [ "$GOOS" = "windows" ]; then ext=".exe"; fi
+            GOOS=$GOOS GOARCH=$GOARCH go build -ldflags="-s -w" -o "crit-validate-${GOOS}-${GOARCH}${ext}" ./cmd/crit-validate
+          done
 
       - uses: actions/upload-artifact@v6
         with:
-          name: crit-validate-${{ matrix.goos }}-${{ matrix.goarch }}
+          name: crit-validate-binaries
           path: crit-validate-*
 
   release:
     needs: build
     runs-on: [self-hosted, Linux, X64, vulnetix-local]
+    permissions:
+      contents: write
     steps:
       - uses: actions/download-artifact@v7
         with:
@@ -57,5 +62,6 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
         with:
+          tag_name: ${{ github.event.inputs.version || github.ref_name }}
           generate_release_notes: true
           files: crit-validate-*
