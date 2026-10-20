@@ -48,6 +48,7 @@ jobs:
         with:
           name: crit-validate-binaries
           path: crit-validate-*
+          retention-days: 1
 
   release:
     needs: build
