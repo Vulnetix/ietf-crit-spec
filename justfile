@@ -132,3 +132,19 @@ setup-hooks:
 # Clean generated output files
 clean:
     rm -rf {{outdir}}
+
+# ---- Terraform (state in S3: vdb-manager-terraform-state, key ietf-crit-spec/terraform.tfstate) ----
+# Runs from any operator machine (Vulnetix/ops RUNBOOK): AWS credentials for the
+# state bucket, and the Cloudflare token from Bitwarden, in memory only.
+
+# terraform init against the S3 backend
+tf-init:
+    terraform -chdir=terraform init -input=false
+
+# Show what would change
+tf-plan: tf-init
+    vx-secrets run shared -- terraform -chdir=terraform plan -input=false
+
+# Apply (asks for confirmation)
+tf-apply: tf-init
+    vx-secrets run shared -- terraform -chdir=terraform apply -input=false
