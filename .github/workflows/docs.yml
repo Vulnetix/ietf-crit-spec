@@ -23,7 +23,7 @@ jobs:
   build:
     runs-on: [self-hosted, Linux, X64, vulnetix-local]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5.1.0
         with:
           submodules: true
           fetch-depth: 0
@@ -38,13 +38,13 @@ jobs:
           cp schemas/crit-dictionary-v0.3.0.schema.json website/static/schemas/
           cp dictionaries/*.json                        website/static/dictionaries/
 
-      - uses: peaceiris/actions-hugo@v3
+      - uses: peaceiris/actions-hugo@v3.2.1
         with:
           hugo-version: "latest"
           extended: true
 
       - name: Setup Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v6.5.0
         with:
           go-version: "1.21"
 
@@ -54,7 +54,7 @@ jobs:
           hugo mod get
           hugo --minify
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v3.0.1
         with:
           path: website/public
           retention-days: 1
@@ -68,4 +68,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v5.0.1
