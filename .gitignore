@@ -16,3 +16,4 @@ website/resources/_gen/
 # Vulnetix scan output and credentials
 .vulnetix/
 !.vulnetix/workflow.yaml
+!.vulnetix/workflow.yaml
