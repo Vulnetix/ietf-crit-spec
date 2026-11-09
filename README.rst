@@ -5,9 +5,9 @@ Cloud Resource Identifier Templates (CRIT)
 A machine-readable format for identifying cloud resources affected by known
 vulnerabilities.
 
-| **Specification:** ``draft-vulnetix-crit-02`` https://datatracker.ietf.org/doc/draft-vulnetix-crit/
+| **Specification:** ``draft-vulnetix-crit-03`` https://datatracker.ietf.org/doc/draft-vulnetix-crit/
 | **Conformance:** ``tests/reports/crit-test-report.md``
-| **Read:** ``build/draft-vulnetix-crit-02.html`` -- **Edit:** ``drafts/draft-vulnetix-crit-02.xml``
+| **Read:** ``build/draft-vulnetix-crit-03.html`` -- **Edit:** ``drafts/draft-vulnetix-crit-03.xml``
 | **Author:** Christopher Daniel Langton, Vulnetix
 | **Status:** Active development
 
@@ -688,7 +688,7 @@ For IETF Spec Editors
 
 This is an independent submission targeting informational RFC status. The
 source is in xml2rfc v3 format (RFC 7991bis schema) at
-``drafts/draft-vulnetix-crit-02.xml``.
+``drafts/draft-vulnetix-crit-03.xml``.
 
 Building the Draft
 ------------------
@@ -729,7 +729,7 @@ Repository Structure
      cmd/
        crit-validate/           CVE+CRIT validator (go install)
      drafts/                    IETF XML source (xml2rfc v3)
-       draft-vulnetix-crit-02.xml
+       draft-vulnetix-crit-03.xml
      dictionaries/              Provider service catalogs (JSON)
        aws.json                   238 resource types
        azure.json                  88 resource types

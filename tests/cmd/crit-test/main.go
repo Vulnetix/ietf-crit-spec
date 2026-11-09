@@ -94,9 +94,24 @@ type SamplesOutput struct {
 // CRIT record types (hand-authored samples)
 // ---------------------------------------------------------------------------
 
+// VulnAlias is another identifier for the vulnerability a record describes.
+type VulnAlias struct {
+	Scheme string `json:"scheme"`
+	ID     string `json:"id"`
+}
+
+var (
+	vulnIDRe = regexp.MustCompile(`^[A-Za-z0-9._-]+$`)
+	schemeRe = regexp.MustCompile(`^[a-z][a-z0-9_-]*$`)
+	cveIDRe  = regexp.MustCompile(`^CVE-\d{4}-\d{4,}$`)
+)
+
 type CRITRecord struct {
 	VectorString                        string              `json:"vectorString"`
 	VulnID                              string              `json:"vuln_id"`
+	Scheme                              string              `json:"scheme,omitempty"`
+	Issuer                              string              `json:"issuer,omitempty"`
+	Aliases                             []VulnAlias         `json:"aliases,omitempty"`
 	Provider                            string              `json:"provider"`
 	Service                             string              `json:"service"`
 	ResourceType                        string              `json:"resource_type"`
@@ -213,37 +228,37 @@ var providerPrefixes = map[string]string{
 }
 
 var knownSlotFiles = map[string]map[string]bool{
-	"aws": {"account": true, "region": true, "resource-id": true},
-	"azure": {"cluster": true, "gallery": true, "image": true, "name": true, "pool": true, "resource-group": true, "resourceGroup": true, "subscription-id": true, "subscriptionId": true, "version": true},
-	"cloudflare": {"account-id": true, "account_id": true, "app-id": true, "datacenter": true, "device-id": true, "id": true, "policy-id": true, "rule-id": true, "tunnel-id": true},
-	"gcp": {"location": true, "project": true, "region": true, "resource-id": true, "zone": true},
-	"oracle": {"account": true, "instance": true, "integration": true, "module": true, "region": true, "tenant": true, "unique-id": true},
-	"salesforce": {"account-id": true, "agent-id": true, "api-version": true, "app-name": true, "copilot-id": true, "env-id": true, "instance": true, "org-id": true, "record-id": true, "server-id": true, "site-id": true, "store-id": true, "tableau-host": true, "tenant-id": true, "workspace-id": true},
-	"sap": {"api-domain": true, "api-server": true, "app-guid": true, "app-id": true, "category": true, "chart-of-accounts": true, "client-id": true, "cluster-id": true, "company-code": true, "controlling-area": true, "data-center": true, "destination-name": true, "fiscal-year": true, "host": true, "instance-id": true, "line-item": true, "material": true, "object-id": true, "plant": true, "port": true, "position-id": true, "purchase-order": true, "realm-id": true, "region": true, "sales-order": true, "seq-number": true, "service-binding-guid": true, "service-id": true, "service-instance-guid": true, "site-id": true, "space-guid": true, "start-date": true, "subdomain": true, "system-id": true, "tenant-id": true, "tool-name": true, "usage": true, "user-id": true, "validity-end-date": true, "variant": true, "version": true, "workspace-id": true},
-	"servicenow": {"ai-component": true, "app-id": true, "flow-id": true, "instance": true, "sys-id": true},
-	"ibm": {"account-id": true, "appliance-id": true, "array-id": true, "cell-id": true, "chassis-id": true, "cluster-host": true, "cluster-id": true, "console-id": true, "database": true, "gateway-id": true, "host": true, "install-id": true, "instance-id": true, "lpar-id": true, "partition-id": true, "port": true, "project-id": true, "queue-manager-id": true, "region": true, "region-id": true, "server-id": true, "sysplex": true, "tenant": true, "tenant-id": true},
-	"vmware": {"buildpack": true, "cluster-id": true, "distro": true, "foundation-id": true, "host-id": true, "install-id": true, "registry-id": true, "version": true},
-	"adobe": {"bulletin": true, "product": true},
-	"akamai": {"asset-id": true, "config-id": true, "property-id": true, "zone-name": true},
-	"alibaba": {"account": true, "bucket-name": true, "cluster-id": true, "instance-id": true, "region": true},
-	"atlassian": {"deployment": true, "directory": true, "instance": true, "project": true, "repo": true, "server": true, "site": true, "space": true, "workspace": true},
-	"confluent": {"cluster-id": true, "connector-name": true, "env-id": true, "host": true, "ksql-id": true, "sr-id": true},
+	"aws":          {"account": true, "region": true, "resource-id": true},
+	"azure":        {"cluster": true, "gallery": true, "image": true, "name": true, "pool": true, "resource-group": true, "resourceGroup": true, "subscription-id": true, "subscriptionId": true, "version": true},
+	"cloudflare":   {"account-id": true, "account_id": true, "app-id": true, "datacenter": true, "device-id": true, "id": true, "policy-id": true, "rule-id": true, "tunnel-id": true},
+	"gcp":          {"location": true, "project": true, "region": true, "resource-id": true, "zone": true},
+	"oracle":       {"account": true, "instance": true, "integration": true, "module": true, "region": true, "tenant": true, "unique-id": true},
+	"salesforce":   {"account-id": true, "agent-id": true, "api-version": true, "app-name": true, "copilot-id": true, "env-id": true, "instance": true, "org-id": true, "record-id": true, "server-id": true, "site-id": true, "store-id": true, "tableau-host": true, "tenant-id": true, "workspace-id": true},
+	"sap":          {"api-domain": true, "api-server": true, "app-guid": true, "app-id": true, "category": true, "chart-of-accounts": true, "client-id": true, "cluster-id": true, "company-code": true, "controlling-area": true, "data-center": true, "destination-name": true, "fiscal-year": true, "host": true, "instance-id": true, "line-item": true, "material": true, "object-id": true, "plant": true, "port": true, "position-id": true, "purchase-order": true, "realm-id": true, "region": true, "sales-order": true, "seq-number": true, "service-binding-guid": true, "service-id": true, "service-instance-guid": true, "site-id": true, "space-guid": true, "start-date": true, "subdomain": true, "system-id": true, "tenant-id": true, "tool-name": true, "usage": true, "user-id": true, "validity-end-date": true, "variant": true, "version": true, "workspace-id": true},
+	"servicenow":   {"ai-component": true, "app-id": true, "flow-id": true, "instance": true, "sys-id": true},
+	"ibm":          {"account-id": true, "appliance-id": true, "array-id": true, "cell-id": true, "chassis-id": true, "cluster-host": true, "cluster-id": true, "console-id": true, "database": true, "gateway-id": true, "host": true, "install-id": true, "instance-id": true, "lpar-id": true, "partition-id": true, "port": true, "project-id": true, "queue-manager-id": true, "region": true, "region-id": true, "server-id": true, "sysplex": true, "tenant": true, "tenant-id": true},
+	"vmware":       {"buildpack": true, "cluster-id": true, "distro": true, "foundation-id": true, "host-id": true, "install-id": true, "registry-id": true, "version": true},
+	"adobe":        {"bulletin": true, "product": true},
+	"akamai":       {"asset-id": true, "config-id": true, "property-id": true, "zone-name": true},
+	"alibaba":      {"account": true, "bucket-name": true, "cluster-id": true, "instance-id": true, "region": true},
+	"atlassian":    {"deployment": true, "directory": true, "instance": true, "project": true, "repo": true, "server": true, "site": true, "space": true, "workspace": true},
+	"confluent":    {"cluster-id": true, "connector-name": true, "env-id": true, "host": true, "ksql-id": true, "sr-id": true},
 	"digitalocean": {"app-id": true, "bucket-name": true, "cluster-id": true, "database-id": true, "droplet-id": true, "region": true},
-	"elastic": {"agent-id": true, "cluster": true, "deployment": true, "deployment-id": true, "host": true, "namespace": true, "package": true},
-	"fastly": {"channel": true, "corp": true, "project": true, "service-id": true, "site": true, "version": true},
-	"gitlab": {"deployment": true, "group": true, "host": true, "project": true, "runner-id": true, "tenant": true},
-	"hashicorp": {"build-id": true, "cluster": true, "host": true, "org": true, "tenant": true, "workspace": true},
-	"hetzner": {"bucket-name": true, "lb-id": true, "location": true, "server-id": true, "server-number": true},
-	"linode": {"bucket-name": true, "cluster": true, "cluster-id": true, "database-id": true, "engine": true, "linode-id": true},
-	"mongodb": {"cluster": true, "deployment": true, "host": true, "install": true, "language": true, "org": true, "package": true, "project": true, "version": true},
-	"ovh": {"bucket-name": true, "cluster-id": true, "instance-id": true, "project-id": true, "region": true, "server-name": true, "tenant-id": true},
-	"snowflake": {"account": true, "app": true, "connector": true, "container": true, "language": true, "org": true, "package": true, "warehouse": true},
-	"tailscale": {"node": true, "policy": true, "session": true, "tailnet": true},
-	"tencent": {"appid": true, "bucket-name": true, "cluster-id": true, "function-name": true, "instance-id": true, "region": true, "uin": true},
-	"twilio": {"account": true, "resource-id": true},
-	"vercel": {"database": true, "project": true, "store": true, "team": true},
-	"vultr": {"bucket-name": true, "cluster": true, "cluster-id": true, "database-id": true, "instance-id": true},
-	"zoom": {"app-id": true, "install": true, "line": true, "meeting-id": true, "room-id": true, "tenant": true, "version": true, "webinar-id": true},
+	"elastic":      {"agent-id": true, "cluster": true, "deployment": true, "deployment-id": true, "host": true, "namespace": true, "package": true},
+	"fastly":       {"channel": true, "corp": true, "project": true, "service-id": true, "site": true, "version": true},
+	"gitlab":       {"deployment": true, "group": true, "host": true, "project": true, "runner-id": true, "tenant": true},
+	"hashicorp":    {"build-id": true, "cluster": true, "host": true, "org": true, "tenant": true, "workspace": true},
+	"hetzner":      {"bucket-name": true, "lb-id": true, "location": true, "server-id": true, "server-number": true},
+	"linode":       {"bucket-name": true, "cluster": true, "cluster-id": true, "database-id": true, "engine": true, "linode-id": true},
+	"mongodb":      {"cluster": true, "deployment": true, "host": true, "install": true, "language": true, "org": true, "package": true, "project": true, "version": true},
+	"ovh":          {"bucket-name": true, "cluster-id": true, "instance-id": true, "project-id": true, "region": true, "server-name": true, "tenant-id": true},
+	"snowflake":    {"account": true, "app": true, "connector": true, "container": true, "language": true, "org": true, "package": true, "warehouse": true},
+	"tailscale":    {"node": true, "policy": true, "session": true, "tailnet": true},
+	"tencent":      {"appid": true, "bucket-name": true, "cluster-id": true, "function-name": true, "instance-id": true, "region": true, "uin": true},
+	"twilio":       {"account": true, "resource-id": true},
+	"vercel":       {"database": true, "project": true, "store": true, "team": true},
+	"vultr":        {"bucket-name": true, "cluster": true, "cluster-id": true, "database-id": true, "instance-id": true},
+	"zoom":         {"app-id": true, "install": true, "line": true, "meeting-id": true, "room-id": true, "tenant": true, "version": true, "webinar-id": true},
 }
 
 var dictLookup map[DictKey]DictEntry
@@ -712,6 +727,48 @@ func defineRecordRules() []RecordRule {
 		{"4.1", "natural-key-fields-present", "MUST", "vuln_id, provider, service, resource_type MUST all be non-empty", func(rec *CRITRecord) (bool, string) {
 			if rec.VulnID == "" || rec.Provider == "" || rec.Service == "" || rec.ResourceType == "" {
 				return false, "natural key field is empty"
+			}
+			return true, ""
+		}},
+		{"4.1.3", "vuln-id-vector-safe", "MUST", "vuln_id MUST consist only of ALPHA, DIGIT, '-', '_' and '.'", func(rec *CRITRecord) (bool, string) {
+			if !vulnIDRe.MatchString(rec.VulnID) {
+				return false, fmt.Sprintf("vuln_id %q contains characters the vector string cannot carry", rec.VulnID)
+			}
+			return true, ""
+		}},
+		{"4.1.4", "vuln-scheme-consistent", "MUST", "scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix", func(rec *CRITRecord) (bool, string) {
+			if rec.Scheme == "" {
+				return true, ""
+			}
+			if !schemeRe.MatchString(rec.Scheme) {
+				return false, fmt.Sprintf("scheme %q invalid", rec.Scheme)
+			}
+			switch rec.Scheme {
+			case "cve":
+				if !cveIDRe.MatchString(rec.VulnID) {
+					return false, fmt.Sprintf("scheme cve but vuln_id %q is not CVE-YYYY-N{4,}", rec.VulnID)
+				}
+			case "gcve":
+				if !strings.HasPrefix(rec.VulnID, "GCVE-") {
+					return false, fmt.Sprintf("scheme gcve but vuln_id %q does not start with GCVE-", rec.VulnID)
+				}
+			}
+			return true, ""
+		}},
+		{"4.1.5", "aliases-well-formed", "MUST", "aliases MUST be unique, have a valid scheme and non-empty id, and MUST NOT repeat vuln_id", func(rec *CRITRecord) (bool, string) {
+			seen := map[string]bool{}
+			for i, a := range rec.Aliases {
+				if !schemeRe.MatchString(a.Scheme) || a.ID == "" {
+					return false, fmt.Sprintf("aliases[%d] malformed", i)
+				}
+				if a.ID == rec.VulnID {
+					return false, fmt.Sprintf("aliases[%d] repeats vuln_id", i)
+				}
+				k := a.Scheme + "|" + a.ID
+				if seen[k] {
+					return false, fmt.Sprintf("aliases[%d] duplicates an earlier entry", i)
+				}
+				seen[k] = true
 			}
 			return true, ""
 		}},

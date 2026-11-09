@@ -74,8 +74,14 @@ type ProviderMetadata struct {
 // ---------------------------------------------------------------------------
 
 type CRITRecord struct {
-	VectorString                        string              `json:"vectorString"`
-	VulnID                              string              `json:"vuln_id"`
+	VectorString string `json:"vectorString"`
+	VulnID       string `json:"vuln_id"`
+	Scheme       string `json:"scheme,omitempty"`
+	Issuer       string `json:"issuer,omitempty"`
+	Aliases      []struct {
+		Scheme string `json:"scheme"`
+		ID     string `json:"id"`
+	} `json:"aliases,omitempty"`
 	Provider                            string              `json:"provider"`
 	Service                             string              `json:"service"`
 	ResourceType                        string              `json:"resource_type"`
