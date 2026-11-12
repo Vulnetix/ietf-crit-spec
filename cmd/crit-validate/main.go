@@ -74,29 +74,26 @@ type ProviderMetadata struct {
 // ---------------------------------------------------------------------------
 
 type CRITRecord struct {
-	VectorString string `json:"vectorString"`
-	VulnID       string `json:"vuln_id"`
-	Scheme       string `json:"scheme,omitempty"`
-	Issuer       string `json:"issuer,omitempty"`
-	Aliases      []struct {
-		Scheme string `json:"scheme"`
-		ID     string `json:"id"`
-	} `json:"aliases,omitempty"`
-	Provider                            string              `json:"provider"`
-	Service                             string              `json:"service"`
-	ResourceType                        string              `json:"resource_type"`
-	ResourceLifecycle                   string              `json:"resource_lifecycle"`
-	SharedResponsibility                string              `json:"shared_responsibility"`
-	VexStatus                           string              `json:"vex_status"`
-	Template                            string              `json:"template"`
-	TemplateFormat                      string              `json:"template_format"`
-	Temporal                            Temporal            `json:"temporal"`
-	FixPropagation                      string              `json:"fix_propagation"`
-	ExistingDeploymentsRemainVulnerable bool                `json:"existing_deployments_remain_vulnerable"`
-	ProviderFixVersion                  *ProviderFixVersion `json:"provider_fix_version,omitempty"`
-	RemediationActions                  []RemediationAction `json:"remediation_actions"`
-	Detections                          []Detection         `json:"detections,omitempty"`
-	ProviderAdvisory                    *ProviderAdvisory   `json:"provider_advisory,omitempty"`
+	VectorString                        string               `json:"vectorString"`
+	VulnID                              string               `json:"vuln_id"`
+	Scheme                              string               `json:"scheme,omitempty"`
+	Issuer                              string               `json:"issuer,omitempty"`
+	Aliases                             []critspec.VulnAlias `json:"aliases,omitempty"`
+	Provider                            string               `json:"provider"`
+	Service                             string               `json:"service"`
+	ResourceType                        string               `json:"resource_type"`
+	ResourceLifecycle                   string               `json:"resource_lifecycle"`
+	SharedResponsibility                string               `json:"shared_responsibility"`
+	VexStatus                           string               `json:"vex_status"`
+	Template                            string               `json:"template"`
+	TemplateFormat                      string               `json:"template_format"`
+	Temporal                            Temporal             `json:"temporal"`
+	FixPropagation                      string               `json:"fix_propagation"`
+	ExistingDeploymentsRemainVulnerable bool                 `json:"existing_deployments_remain_vulnerable"`
+	ProviderFixVersion                  *ProviderFixVersion  `json:"provider_fix_version,omitempty"`
+	RemediationActions                  []RemediationAction  `json:"remediation_actions"`
+	Detections                          []Detection          `json:"detections,omitempty"`
+	ProviderAdvisory                    *ProviderAdvisory    `json:"provider_advisory,omitempty"`
 }
 
 type Temporal struct {
@@ -563,6 +560,54 @@ func defineRules(dict DictionaryLookup) []Rule {
 		},
 
 		// --- Embedded CRIT record validation ---
+		{
+			Section: "4.1.3", Name: "x-crit-vuln-id-vector-safe",
+			Requirement: "Each x_crit entry vuln_id MUST consist only of ALPHA, DIGIT, '-', '_' and '.'",
+			Check: func(rec *CVERecord) (bool, string) {
+				vvd := findADP(rec)
+				if vvd == nil {
+					return true, ""
+				}
+				for i, cr := range vvd.XCrit {
+					if !critspec.ValidVulnID(cr.VulnID) {
+						return false, fmt.Sprintf("x_crit[%d].vuln_id %q contains characters the vector string cannot carry", i, cr.VulnID)
+					}
+				}
+				return true, ""
+			},
+		},
+		{
+			Section: "4.1.4", Name: "x-crit-vuln-scheme-consistent",
+			Requirement: "Each x_crit entry scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix",
+			Check: func(rec *CVERecord) (bool, string) {
+				vvd := findADP(rec)
+				if vvd == nil {
+					return true, ""
+				}
+				for i, cr := range vvd.XCrit {
+					if err := critspec.CheckScheme(cr.Scheme, cr.VulnID); err != nil {
+						return false, fmt.Sprintf("x_crit[%d]: %v", i, err)
+					}
+				}
+				return true, ""
+			},
+		},
+		{
+			Section: "4.1.5", Name: "x-crit-aliases-well-formed",
+			Requirement: "Each x_crit entry aliases MUST be unique, have a valid scheme and non-empty id, and MUST NOT repeat vuln_id",
+			Check: func(rec *CVERecord) (bool, string) {
+				vvd := findADP(rec)
+				if vvd == nil {
+					return true, ""
+				}
+				for i, cr := range vvd.XCrit {
+					if err := critspec.CheckAliases(cr.Aliases, cr.VulnID); err != nil {
+						return false, fmt.Sprintf("x_crit[%d]: %v", i, err)
+					}
+				}
+				return true, ""
+			},
+		},
 		{
 			Section: "9.1", Name: "x-crit-service-key-pattern",
 			Requirement: "Each x_crit entry service MUST match ^[a-z][a-z0-9_]*$",

@@ -94,40 +94,28 @@ type SamplesOutput struct {
 // CRIT record types (hand-authored samples)
 // ---------------------------------------------------------------------------
 
-// VulnAlias is another identifier for the vulnerability a record describes.
-type VulnAlias struct {
-	Scheme string `json:"scheme"`
-	ID     string `json:"id"`
-}
-
-var (
-	vulnIDRe = regexp.MustCompile(`^[A-Za-z0-9._-]+$`)
-	schemeRe = regexp.MustCompile(`^[a-z][a-z0-9_-]*$`)
-	cveIDRe  = regexp.MustCompile(`^CVE-\d{4}-\d{4,}$`)
-)
-
 type CRITRecord struct {
-	VectorString                        string              `json:"vectorString"`
-	VulnID                              string              `json:"vuln_id"`
-	Scheme                              string              `json:"scheme,omitempty"`
-	Issuer                              string              `json:"issuer,omitempty"`
-	Aliases                             []VulnAlias         `json:"aliases,omitempty"`
-	Provider                            string              `json:"provider"`
-	Service                             string              `json:"service"`
-	ResourceType                        string              `json:"resource_type"`
-	ResourceLifecycle                   string              `json:"resource_lifecycle"`
-	SharedResponsibility                string              `json:"shared_responsibility"`
-	VexStatus                           string              `json:"vex_status"`
-	Template                            string              `json:"template"`
-	TemplateFormat                      string              `json:"template_format"`
-	Temporal                            Temporal            `json:"temporal"`
-	FixPropagation                      string              `json:"fix_propagation"`
-	ExistingDeploymentsRemainVulnerable bool                `json:"existing_deployments_remain_vulnerable"`
-	ProviderFixVersion                  *ProviderFixVersion `json:"provider_fix_version,omitempty"`
-	RemediationActions                  []RemediationAction `json:"remediation_actions"`
-	Detections                          []Detection         `json:"detections,omitempty"`
-	ProviderAdvisory                    *ProviderAdvisory   `json:"provider_advisory,omitempty"`
-	FilePath                            string              `json:"-"`
+	VectorString                        string               `json:"vectorString"`
+	VulnID                              string               `json:"vuln_id"`
+	Scheme                              string               `json:"scheme,omitempty"`
+	Issuer                              string               `json:"issuer,omitempty"`
+	Aliases                             []critspec.VulnAlias `json:"aliases,omitempty"`
+	Provider                            string               `json:"provider"`
+	Service                             string               `json:"service"`
+	ResourceType                        string               `json:"resource_type"`
+	ResourceLifecycle                   string               `json:"resource_lifecycle"`
+	SharedResponsibility                string               `json:"shared_responsibility"`
+	VexStatus                           string               `json:"vex_status"`
+	Template                            string               `json:"template"`
+	TemplateFormat                      string               `json:"template_format"`
+	Temporal                            Temporal             `json:"temporal"`
+	FixPropagation                      string               `json:"fix_propagation"`
+	ExistingDeploymentsRemainVulnerable bool                 `json:"existing_deployments_remain_vulnerable"`
+	ProviderFixVersion                  *ProviderFixVersion  `json:"provider_fix_version,omitempty"`
+	RemediationActions                  []RemediationAction  `json:"remediation_actions"`
+	Detections                          []Detection          `json:"detections,omitempty"`
+	ProviderAdvisory                    *ProviderAdvisory    `json:"provider_advisory,omitempty"`
+	FilePath                            string               `json:"-"`
 }
 
 type Temporal struct {
@@ -731,44 +719,20 @@ func defineRecordRules() []RecordRule {
 			return true, ""
 		}},
 		{"4.1.3", "vuln-id-vector-safe", "MUST", "vuln_id MUST consist only of ALPHA, DIGIT, '-', '_' and '.'", func(rec *CRITRecord) (bool, string) {
-			if !vulnIDRe.MatchString(rec.VulnID) {
+			if !critspec.ValidVulnID(rec.VulnID) {
 				return false, fmt.Sprintf("vuln_id %q contains characters the vector string cannot carry", rec.VulnID)
 			}
 			return true, ""
 		}},
 		{"4.1.4", "vuln-scheme-consistent", "MUST", "scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix", func(rec *CRITRecord) (bool, string) {
-			if rec.Scheme == "" {
-				return true, ""
-			}
-			if !schemeRe.MatchString(rec.Scheme) {
-				return false, fmt.Sprintf("scheme %q invalid", rec.Scheme)
-			}
-			switch rec.Scheme {
-			case "cve":
-				if !cveIDRe.MatchString(rec.VulnID) {
-					return false, fmt.Sprintf("scheme cve but vuln_id %q is not CVE-YYYY-N{4,}", rec.VulnID)
-				}
-			case "gcve":
-				if !strings.HasPrefix(rec.VulnID, "GCVE-") {
-					return false, fmt.Sprintf("scheme gcve but vuln_id %q does not start with GCVE-", rec.VulnID)
-				}
+			if err := critspec.CheckScheme(rec.Scheme, rec.VulnID); err != nil {
+				return false, err.Error()
 			}
 			return true, ""
 		}},
 		{"4.1.5", "aliases-well-formed", "MUST", "aliases MUST be unique, have a valid scheme and non-empty id, and MUST NOT repeat vuln_id", func(rec *CRITRecord) (bool, string) {
-			seen := map[string]bool{}
-			for i, a := range rec.Aliases {
-				if !schemeRe.MatchString(a.Scheme) || a.ID == "" {
-					return false, fmt.Sprintf("aliases[%d] malformed", i)
-				}
-				if a.ID == rec.VulnID {
-					return false, fmt.Sprintf("aliases[%d] repeats vuln_id", i)
-				}
-				k := a.Scheme + "|" + a.ID
-				if seen[k] {
-					return false, fmt.Sprintf("aliases[%d] duplicates an earlier entry", i)
-				}
-				seen[k] = true
+			if err := critspec.CheckAliases(rec.Aliases, rec.VulnID); err != nil {
+				return false, err.Error()
 			}
 			return true, ""
 		}},
