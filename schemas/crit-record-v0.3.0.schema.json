@@ -29,8 +29,38 @@
     },
     "vuln_id": {
       "type": "string",
+      "pattern": "^[A-Za-z0-9._-]+$",
+      "description": "Primary vulnerability identifier in any namespace (e.g., CVE-2024-6387, GCVE-110-CLOUD-2008-0001). Opaque; limited to the characters the vectorString qualifier can carry."
+    },
+    "scheme": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "description": "Identifier namespace of vuln_id (e.g., cve, gcve, ghsa, osv). Optional."
+    },
+    "issuer": {
+      "type": "string",
       "minLength": 1,
-      "description": "Vulnerability identifier (e.g., CVE-2024-6387)."
+      "description": "Authority that assigned vuln_id (e.g., a CNA, a GCVE Numbering Authority, or a feed). Informational; not part of the natural key. Optional."
+    },
+    "aliases": {
+      "type": "array",
+      "uniqueItems": true,
+      "description": "Other identifiers for the same vulnerability. Not part of the natural key. Optional.",
+      "items": {
+        "type": "object",
+        "required": ["scheme", "id"],
+        "additionalProperties": false,
+        "properties": {
+          "scheme": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$"
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
     },
     "provider": {
       "enum": [

@@ -1,13 +1,13 @@
 ---
 title: CRIT Spec Conformance Report
-date: 2026-08-02T23:11:37Z
+date: 2026-11-12T09:51:21Z
 verdict: WARN
-total_checks: 80240
-passed: 80227
+total_checks: 80339
+passed: 80326
 failed: 0
 warnings: 13
 template_rules: 20
-record_rules: 40
+record_rules: 43
 dictionaries: 31
 samples: 3946
 records: 33
@@ -19,9 +19,9 @@ records: 33
 
 This report validates CRIT dictionary entries and sample records against [draft-vulnetix-crit-00](../drafts/draft-vulnetix-crit-00.xml).
 
-**Date:** 2026-08-02 23:11:37 UTC  
+**Date:** 2026-11-12 09:51:21 UTC  
 **Verdict:** ⚠️ WARN  
-**Total Checks:** 80240 | ✅ **Passed:** 80227 | ❌ **Failed:** 0 | ⚠️ **Warnings:** 13  
+**Total Checks:** 80339 | ✅ **Passed:** 80326 | ❌ **Failed:** 0 | ⚠️ **Warnings:** 13  
 
 | Provider | Dictionary Entries | Template Samples | Sample Records |
 |----------|------------------:|----------------:|---------------:|
@@ -72,11 +72,11 @@ pie title "Dictionary Entries by Provider"
 | Suite | Rules | Samples | Checks | ✅ Passed | ❌ Failed | ⚠️ Warnings |
 |-------|------:|--------:|-------:|----------:|----------:|------------:|
 | Template Rules | 20 | 3946 | 78920 | 78920 | 0 | 0 |
-| Sample Record Rules | 40 | 33 | 1320 | 1307 | 0 | 13 |
+| Sample Record Rules | 43 | 33 | 1419 | 1406 | 0 | 13 |
 
 ```mermaid
-pie title "Overall Results (80240 checks)"
-    "✅ Passed (80227)" : 80227
+pie title "Overall Results (80339 checks)"
+    "✅ Passed (80326)" : 80326
     "⚠️ Warnings (13)" : 13
 ```
 
@@ -115,6 +115,9 @@ pie title "Overall Results (80240 checks)"
 |:------:|:-----:|:---:|------|-------:|-------:|--------:|-------------|
 | ✅ | MUST | 4.1 | `dates-iso8601-format` | 11 | 0 | 0 | All date fields in temporal MUST be ISO 8601 full-date (YYYY-MM-DD) |
 | ✅ | MUST | 4.1 | `natural-key-fields-present` | 11 | 0 | 0 | vuln_id, provider, service, resource_type MUST all be non-empty |
+| ✅ | MUST | 4.1.3 | `vuln-id-vector-safe` | 11 | 0 | 0 | vuln_id MUST consist only of ALPHA, DIGIT, '-', '_' and '.' |
+| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 11 | 0 | 0 | scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix |
+| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 11 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id, and MUST NOT repeat vuln_id |
 | ✅ | MUST | 9.1 | `service-key-lowercase-underscore` | 11 | 0 | 0 | service MUST match ^[a-z][a-z0-9_]*$ |
 | ✅ | MUST | 9.1 | `resource-type-valid-pattern` | 11 | 0 | 0 | resource_type MUST match ^[a-zA-Z][a-zA-Z0-9_/-]*$ |
 | ✅ | MUST | 9.1 | `template-format-matches-provider` | 11 | 0 | 0 | template_format MUST match provider |
@@ -155,8 +158,8 @@ pie title "Overall Results (80240 checks)"
 | ✅ | MUST | 4.1.2 | `vector-missing-registered-rejected` | 11 | 0 | 0 | consumer MUST reject vectors missing a registered metric |
 
 ```mermaid
-pie title "AWS — Record Rule Results (440 checks)"
-    "✅ Passed (436)" : 436
+pie title "AWS — Record Rule Results (473 checks)"
+    "✅ Passed (469)" : 469
     "⚠️ Warnings (4)" : 4
 ```
 
@@ -206,6 +209,9 @@ pie title "AWS — Record Rule Results (440 checks)"
 |:------:|:-----:|:---:|------|-------:|-------:|--------:|-------------|
 | ✅ | MUST | 4.1 | `dates-iso8601-format` | 8 | 0 | 0 | All date fields in temporal MUST be ISO 8601 full-date (YYYY-MM-DD) |
 | ✅ | MUST | 4.1 | `natural-key-fields-present` | 8 | 0 | 0 | vuln_id, provider, service, resource_type MUST all be non-empty |
+| ✅ | MUST | 4.1.3 | `vuln-id-vector-safe` | 8 | 0 | 0 | vuln_id MUST consist only of ALPHA, DIGIT, '-', '_' and '.' |
+| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 8 | 0 | 0 | scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix |
+| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 8 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id, and MUST NOT repeat vuln_id |
 | ✅ | MUST | 9.1 | `service-key-lowercase-underscore` | 8 | 0 | 0 | service MUST match ^[a-z][a-z0-9_]*$ |
 | ✅ | MUST | 9.1 | `resource-type-valid-pattern` | 8 | 0 | 0 | resource_type MUST match ^[a-zA-Z][a-zA-Z0-9_/-]*$ |
 | ✅ | MUST | 9.1 | `template-format-matches-provider` | 8 | 0 | 0 | template_format MUST match provider |
@@ -246,8 +252,8 @@ pie title "AWS — Record Rule Results (440 checks)"
 | ✅ | MUST | 4.1.2 | `vector-missing-registered-rejected` | 8 | 0 | 0 | consumer MUST reject vectors missing a registered metric |
 
 ```mermaid
-pie title "Azure — Record Rule Results (320 checks)"
-    "✅ Passed (317)" : 317
+pie title "Azure — Record Rule Results (344 checks)"
+    "✅ Passed (341)" : 341
     "⚠️ Warnings (3)" : 3
 ```
 
@@ -296,6 +302,9 @@ pie title "Azure — Record Rule Results (320 checks)"
 |:------:|:-----:|:---:|------|-------:|-------:|--------:|-------------|
 | ✅ | MUST | 4.1 | `dates-iso8601-format` | 5 | 0 | 0 | All date fields in temporal MUST be ISO 8601 full-date (YYYY-MM-DD) |
 | ✅ | MUST | 4.1 | `natural-key-fields-present` | 5 | 0 | 0 | vuln_id, provider, service, resource_type MUST all be non-empty |
+| ✅ | MUST | 4.1.3 | `vuln-id-vector-safe` | 5 | 0 | 0 | vuln_id MUST consist only of ALPHA, DIGIT, '-', '_' and '.' |
+| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 5 | 0 | 0 | scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix |
+| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 5 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id, and MUST NOT repeat vuln_id |
 | ✅ | MUST | 9.1 | `service-key-lowercase-underscore` | 5 | 0 | 0 | service MUST match ^[a-z][a-z0-9_]*$ |
 | ✅ | MUST | 9.1 | `resource-type-valid-pattern` | 5 | 0 | 0 | resource_type MUST match ^[a-zA-Z][a-zA-Z0-9_/-]*$ |
 | ✅ | MUST | 9.1 | `template-format-matches-provider` | 5 | 0 | 0 | template_format MUST match provider |
@@ -336,8 +345,8 @@ pie title "Azure — Record Rule Results (320 checks)"
 | ✅ | MUST | 4.1.2 | `vector-missing-registered-rejected` | 5 | 0 | 0 | consumer MUST reject vectors missing a registered metric |
 
 ```mermaid
-pie title "GCP — Record Rule Results (200 checks)"
-    "✅ Passed (198)" : 198
+pie title "GCP — Record Rule Results (215 checks)"
+    "✅ Passed (213)" : 213
     "⚠️ Warnings (2)" : 2
 ```
 
@@ -385,6 +394,9 @@ pie title "GCP — Record Rule Results (200 checks)"
 |:------:|:-----:|:---:|------|-------:|-------:|--------:|-------------|
 | ✅ | MUST | 4.1 | `dates-iso8601-format` | 4 | 0 | 0 | All date fields in temporal MUST be ISO 8601 full-date (YYYY-MM-DD) |
 | ✅ | MUST | 4.1 | `natural-key-fields-present` | 4 | 0 | 0 | vuln_id, provider, service, resource_type MUST all be non-empty |
+| ✅ | MUST | 4.1.3 | `vuln-id-vector-safe` | 4 | 0 | 0 | vuln_id MUST consist only of ALPHA, DIGIT, '-', '_' and '.' |
+| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 4 | 0 | 0 | scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix |
+| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 4 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id, and MUST NOT repeat vuln_id |
 | ✅ | MUST | 9.1 | `service-key-lowercase-underscore` | 4 | 0 | 0 | service MUST match ^[a-z][a-z0-9_]*$ |
 | ✅ | MUST | 9.1 | `resource-type-valid-pattern` | 4 | 0 | 0 | resource_type MUST match ^[a-zA-Z][a-zA-Z0-9_/-]*$ |
 | ✅ | MUST | 9.1 | `template-format-matches-provider` | 4 | 0 | 0 | template_format MUST match provider |
@@ -425,8 +437,8 @@ pie title "GCP — Record Rule Results (200 checks)"
 | ✅ | MUST | 4.1.2 | `vector-missing-registered-rejected` | 4 | 0 | 0 | consumer MUST reject vectors missing a registered metric |
 
 ```mermaid
-pie title "Cloudflare — Record Rule Results (160 checks)"
-    "✅ Passed (159)" : 159
+pie title "Cloudflare — Record Rule Results (172 checks)"
+    "✅ Passed (171)" : 171
     "⚠️ Warnings (1)" : 1
 ```
 
@@ -473,6 +485,9 @@ pie title "Cloudflare — Record Rule Results (160 checks)"
 |:------:|:-----:|:---:|------|-------:|-------:|--------:|-------------|
 | ✅ | MUST | 4.1 | `dates-iso8601-format` | 5 | 0 | 0 | All date fields in temporal MUST be ISO 8601 full-date (YYYY-MM-DD) |
 | ✅ | MUST | 4.1 | `natural-key-fields-present` | 5 | 0 | 0 | vuln_id, provider, service, resource_type MUST all be non-empty |
+| ✅ | MUST | 4.1.3 | `vuln-id-vector-safe` | 5 | 0 | 0 | vuln_id MUST consist only of ALPHA, DIGIT, '-', '_' and '.' |
+| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 5 | 0 | 0 | scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix |
+| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 5 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id, and MUST NOT repeat vuln_id |
 | ✅ | MUST | 9.1 | `service-key-lowercase-underscore` | 5 | 0 | 0 | service MUST match ^[a-z][a-z0-9_]*$ |
 | ✅ | MUST | 9.1 | `resource-type-valid-pattern` | 5 | 0 | 0 | resource_type MUST match ^[a-zA-Z][a-zA-Z0-9_/-]*$ |
 | ✅ | MUST | 9.1 | `template-format-matches-provider` | 5 | 0 | 0 | template_format MUST match provider |
@@ -513,8 +528,8 @@ pie title "Cloudflare — Record Rule Results (160 checks)"
 | ✅ | MUST | 4.1.2 | `vector-missing-registered-rejected` | 5 | 0 | 0 | consumer MUST reject vectors missing a registered metric |
 
 ```mermaid
-pie title "Oracle — Record Rule Results (200 checks)"
-    "✅ Passed (197)" : 197
+pie title "Oracle — Record Rule Results (215 checks)"
+    "✅ Passed (212)" : 212
     "⚠️ Warnings (3)" : 3
 ```
 
@@ -619,4 +634,4 @@ pie title "Oracle — Record Rule Results (200 checks)"
 
 *Generated by `crit-test` from [draft-vulnetix-crit-00](../drafts/draft-vulnetix-crit-00.xml)*
 
-<!-- sha256: 233ba4a7bbd6b3a78c3030a795e9792c12d03f8916ed0bcdcc5c6c27090e08f8 -->
+<!-- sha256: 46547f2eff6d063842fb125d708d83cceaa1c4b43a7eb30e7f3338f6d7b7e068 -->

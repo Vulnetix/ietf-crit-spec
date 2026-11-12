@@ -180,6 +180,9 @@ func ComputeVector(v CRITVector) (string, error) {
 	if v.VulnID == "" {
 		return "", errors.New("vuln_id is required")
 	}
+	if !ValidVulnID(v.VulnID) {
+		return "", fmt.Errorf("vuln_id %q contains characters the vector string cannot carry", v.VulnID)
+	}
 	if v.Service == "" {
 		return "", errors.New("service is required")
 	}
@@ -231,6 +234,9 @@ func ParseVector(s string) (*CRITVector, []Warning, error) {
 	quals := strings.SplitN(qualPart, ":", 3)
 	if len(quals) != 3 {
 		return nil, nil, fmt.Errorf("qualifiers must have exactly 3 colon-separated values, got %d", len(quals))
+	}
+	if !ValidVulnID(quals[0]) {
+		return nil, nil, fmt.Errorf("vuln_id %q contains characters the vector string cannot carry", quals[0])
 	}
 
 	v := &CRITVector{
