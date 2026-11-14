@@ -1,16 +1,16 @@
 ---
 title: CRIT Spec Conformance Report
-date: 2026-11-12T09:51:21Z
+date: 2026-11-14T06:22:52Z
 verdict: WARN
-total_checks: 80339
-passed: 80326
+total_checks: 80450
+passed: 80437
 failed: 0
 warnings: 13
 template_rules: 20
-record_rules: 43
+record_rules: 45
 dictionaries: 31
 samples: 3946
-records: 33
+records: 34
 ---
 
 # CRIT Spec Conformance Report
@@ -19,13 +19,13 @@ records: 33
 
 This report validates CRIT dictionary entries and sample records against [draft-vulnetix-crit-00](../drafts/draft-vulnetix-crit-00.xml).
 
-**Date:** 2026-11-12 09:51:21 UTC  
+**Date:** 2026-11-14 06:22:52 UTC  
 **Verdict:** ⚠️ WARN  
-**Total Checks:** 80339 | ✅ **Passed:** 80326 | ❌ **Failed:** 0 | ⚠️ **Warnings:** 13  
+**Total Checks:** 80450 | ✅ **Passed:** 80437 | ❌ **Failed:** 0 | ⚠️ **Warnings:** 13  
 
 | Provider | Dictionary Entries | Template Samples | Sample Records |
 |----------|------------------:|----------------:|---------------:|
-| AWS | 250 | 1250 | 11 |
+| AWS | 250 | 1250 | 12 |
 | Azure | 88 | 440 | 8 |
 | GCP | 77 | 385 | 5 |
 | Cloudflare | 43 | 215 | 4 |
@@ -33,12 +33,12 @@ This report validates CRIT dictionary entries and sample records against [draft-
 | Salesforce | 64 | 303 | 0 |
 | SAP | 79 | 330 | 0 |
 | ServiceNow | 69 | 345 | 0 |
-| **Total** | **737** | **3603** | **33** |
+| **Total** | **737** | **3603** | **34** |
 
 ```mermaid
 graph LR
     subgraph "Cloud Hyperscalers"
-        aws["<b>AWS</b> 250 entries · 11 records"]
+        aws["<b>AWS</b> 250 entries · 12 records"]
         azure["<b>Azure</b> 88 entries · 8 records"]
         gcp["<b>GCP</b> 77 entries · 5 records"]
     end
@@ -72,17 +72,17 @@ pie title "Dictionary Entries by Provider"
 | Suite | Rules | Samples | Checks | ✅ Passed | ❌ Failed | ⚠️ Warnings |
 |-------|------:|--------:|-------:|----------:|----------:|------------:|
 | Template Rules | 20 | 3946 | 78920 | 78920 | 0 | 0 |
-| Sample Record Rules | 43 | 33 | 1419 | 1406 | 0 | 13 |
+| Sample Record Rules | 45 | 34 | 1530 | 1517 | 0 | 13 |
 
 ```mermaid
-pie title "Overall Results (80339 checks)"
-    "✅ Passed (80326)" : 80326
+pie title "Overall Results (80450 checks)"
+    "✅ Passed (80437)" : 80437
     "⚠️ Warnings (13)" : 13
 ```
 
 ## AWS
 
-> 250 dictionary entries · 1250 template samples · 11 sample records
+> 250 dictionary entries · 1250 template samples · 12 sample records
 
 ### Template Rules
 
@@ -113,53 +113,55 @@ pie title "Overall Results (80339 checks)"
 
 | Status | Level | Sec | Rule | ✅ Pass | ❌ Fail | ⚠️ Warn | Requirement |
 |:------:|:-----:|:---:|------|-------:|-------:|--------:|-------------|
-| ✅ | MUST | 4.1 | `dates-iso8601-format` | 11 | 0 | 0 | All date fields in temporal MUST be ISO 8601 full-date (YYYY-MM-DD) |
-| ✅ | MUST | 4.1 | `natural-key-fields-present` | 11 | 0 | 0 | vuln_id, provider, service, resource_type MUST all be non-empty |
-| ✅ | MUST | 4.1.3 | `vuln-id-vector-safe` | 11 | 0 | 0 | vuln_id MUST consist only of ALPHA, DIGIT, '-', '_' and '.' |
-| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 11 | 0 | 0 | scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix |
-| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 11 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id, and MUST NOT repeat vuln_id |
-| ✅ | MUST | 9.1 | `service-key-lowercase-underscore` | 11 | 0 | 0 | service MUST match ^[a-z][a-z0-9_]*$ |
-| ✅ | MUST | 9.1 | `resource-type-valid-pattern` | 11 | 0 | 0 | resource_type MUST match ^[a-zA-Z][a-zA-Z0-9_/-]*$ |
-| ✅ | MUST | 9.1 | `template-format-matches-provider` | 11 | 0 | 0 | template_format MUST match provider |
-| ✅ | MUST | 3.2 | `slot-syntax-abnf-valid` | 11 | 0 | 0 | All slots MUST conform to ABNF grammar |
-| ✅ | MUST | 3.2 | `slot-delimiter-not-in-literal` | 11 | 0 | 0 | { and } MUST NOT appear outside slot expressions |
-| ✅ | MUST | 6.1 | `aws-global-region-hardcoded` | 11 | 0 | 0 | AWS global-only: region MUST be hardcoded to us-east-1 or empty |
-| ✅ | MUST | 6.1 | `aws-regional-region-variable` | 11 | 0 | 0 | AWS regional: region MUST be named-variable, MUST NOT be empty |
-| ✅ | MUST | 6.4 | `cloudflare-no-region-slot` | 11 | 0 | 0 | Cloudflare templates MUST NOT have region slot |
-| ✅ | MUST | 12.1.1 | `dictionary-tuple-resolves` | 11 | 0 | 0 | (provider, service, resource_type) MUST resolve in dictionary |
-| ✅ | MUST | 4.3 | `customer-deadline-source-required` | 11 | 0 | 0 | customer_deadline_source REQUIRED when customer_deadline_date present |
-| ✅ | MUST | 4.3 | `introduced-not-after-published` | 11 | 0 | 0 | vulnerability_introduced_date MUST NOT be after vuln_published_date |
-| ✅ | MUST | 4.4.1 | `false-only-when-auto-provider` | 11 | 0 | 0 | existing_deployments_remain_vulnerable=false ONLY when automatic+provider_only |
-| ✅ | MUST | 4.4.2 | `no-fix-no-provider-fix-date` | 11 | 0 | 0 | no_fix_available -> provider_fix_date MUST be absent |
-| ✅ | MUST | 8.2 | `provider-only-fix-not-vulnerable` | 11 | 0 | 0 | provider_only + fix_date -> existing_deployments_remain_vulnerable MUST be false |
-| ✅ | MUST | 4.4.3 | `sequence-unique-contiguous` | 11 | 0 | 0 | remediation_actions sequence MUST be unique and contiguous from 1 |
-| ✅ | MUST | 4.4.3 | `downtime-range-when-required` | 11 | 0 | 0 | estimated_downtime_range_seconds REQUIRED when requires_downtime=true |
-| ✅ | MUST | 4.4.3 | `compensating-only-means-affected` | 11 | 0 | 0 | All compensating actions -> vex_status MUST be affected |
-| ✅ | MUST | 9.1 | `remediation-actions-present` | 11 | 0 | 0 | At least one remediation_actions for vex_status=affected or fixed |
-| ✅ | MUST | 4.5.1 | `auto-upgrade-false-means-vulnerable` | 11 | 0 | 0 | auto_upgrade=false -> existing_deployments_remain_vulnerable MUST be true |
-| ⚠️ | SHOULD | 4.6 | `detection-recommended` | 7 | 0 | 4 | vex_status=affected or fixed SHOULD include >=1 detection entry |
-| ✅ | MUST | 4.6.3 | `misconfiguration-detection-for-opt-in` | 11 | 0 | 0 | opt_in or config_change MUST include misconfiguration-phase detection (placeholder with pending_reason accepted) |
-| ✅ | MUST | 4.6.4 | `pending-reason-enum` | 11 | 0 | 0 | pending_reason MUST be a valid enum value when present |
-| ✅ | MUST | 4.6.4 | `pending-reason-empty-query` | 11 | 0 | 0 | query MUST be empty string when pending_reason is set |
-| ✅ | MUST | 4.6.4 | `no-empty-query-without-pending` | 11 | 0 | 0 | functional detection with empty query requires pending_reason |
-| ✅ | MUST | 4.1.2 | `vector-string-parseable` | 11 | 0 | 0 | vectorString MUST be a parseable CRIT vector with valid known metrics |
-| ✅ | MUST | 4.1.2 | `vector-provider-matches` | 11 | 0 | 0 | CP metric MUST match record provider field |
-| ✅ | MUST | 4.1.2 | `vector-vex-matches` | 11 | 0 | 0 | VS metric MUST match record vex_status field |
-| ✅ | MUST | 4.1.2 | `vector-propagation-matches` | 11 | 0 | 0 | FP metric MUST match record fix_propagation field |
-| ✅ | MUST | 4.1.2 | `vector-responsibility-matches` | 11 | 0 | 0 | SR metric MUST match record shared_responsibility field |
-| ✅ | MUST | 4.1.2 | `vector-lifecycle-matches` | 11 | 0 | 0 | RL metric MUST match record resource_lifecycle field |
-| ✅ | MUST | 4.1.2 | `vector-existing-vuln-matches` | 11 | 0 | 0 | EV metric MUST match record existing_deployments_remain_vulnerable field |
-| ✅ | MUST | 4.1.2 | `vector-qualifiers-match` | 11 | 0 | 0 | vector qualifiers MUST match record vuln_id, service, resource_type |
-| ✅ | MUST | 4.1.2 | `vector-string-canonical` | 11 | 0 | 0 | vectorString MUST match canonical vector computed from record fields |
-| ✅ | MUST | 4.1.2 | `vector-published-matches` | 11 | 0 | 0 | PP epoch MUST match temporal.vuln_published_date converted to UTC epoch |
-| ✅ | MUST | 4.1.2 | `vector-service-avail-matches` | 11 | 0 | 0 | SA epoch MUST match temporal.service_available_date converted to UTC epoch |
-| ✅ | MUST | 4.1.2 | `vector-metrics-order` | 11 | 0 | 0 | registered metrics MUST appear in canonical order CP VS FP SR RL EV PP SA |
-| ✅ | MUST | 4.1.2 | `vector-unknown-tolerated` | 11 | 0 | 0 | consumer MUST NOT reject vectors with unknown metric keys |
-| ✅ | MUST | 4.1.2 | `vector-missing-registered-rejected` | 11 | 0 | 0 | consumer MUST reject vectors missing a registered metric |
+| ✅ | MUST | 4.1 | `dates-iso8601-format` | 12 | 0 | 0 | All date fields in temporal MUST be ISO 8601 full-date (YYYY-MM-DD) |
+| ✅ | MUST | 4.1 | `natural-key-fields-present` | 12 | 0 | 0 | vuln_id, provider, service, resource_type MUST all be non-empty |
+| ✅ | MUST | 4.1.3 | `vuln-id-vector-safe` | 12 | 0 | 0 | vuln_id MUST consist only of ALPHA, DIGIT, '-', '_' and '.' |
+| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 12 | 0 | 0 | scheme, when present, MUST be a valid token; for cve vuln_id MUST match ^CVE-[0-9]{4}-[0-9]{4,}$, for gcve the GCVE-BCP-04 pattern |
+| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 12 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id (cve/gcve ids matching their scheme), and MUST NOT repeat vuln_id |
+| ✅ | MUST | 4.1.6 | `issuer-gna-matches` | 12 | 0 | 0 | for scheme gcve, an issuer of the form GNA-<n> MUST name the GNA ID in vuln_id |
+| ✅ | SHOULD | 4.1.6 | `issuer-gna-form` | 12 | 0 | 0 | for scheme gcve, issuer SHOULD be GNA-<n> |
+| ✅ | MUST | 9.1 | `service-key-lowercase-underscore` | 12 | 0 | 0 | service MUST match ^[a-z][a-z0-9_]*$ |
+| ✅ | MUST | 9.1 | `resource-type-valid-pattern` | 12 | 0 | 0 | resource_type MUST match ^[a-zA-Z][a-zA-Z0-9_/-]*$ |
+| ✅ | MUST | 9.1 | `template-format-matches-provider` | 12 | 0 | 0 | template_format MUST match provider |
+| ✅ | MUST | 3.2 | `slot-syntax-abnf-valid` | 12 | 0 | 0 | All slots MUST conform to ABNF grammar |
+| ✅ | MUST | 3.2 | `slot-delimiter-not-in-literal` | 12 | 0 | 0 | { and } MUST NOT appear outside slot expressions |
+| ✅ | MUST | 6.1 | `aws-global-region-hardcoded` | 12 | 0 | 0 | AWS global-only: region MUST be hardcoded to us-east-1 or empty |
+| ✅ | MUST | 6.1 | `aws-regional-region-variable` | 12 | 0 | 0 | AWS regional: region MUST be named-variable, MUST NOT be empty |
+| ✅ | MUST | 6.4 | `cloudflare-no-region-slot` | 12 | 0 | 0 | Cloudflare templates MUST NOT have region slot |
+| ✅ | MUST | 12.1.1 | `dictionary-tuple-resolves` | 12 | 0 | 0 | (provider, service, resource_type) MUST resolve in dictionary |
+| ✅ | MUST | 4.3 | `customer-deadline-source-required` | 12 | 0 | 0 | customer_deadline_source REQUIRED when customer_deadline_date present |
+| ✅ | MUST | 4.3 | `introduced-not-after-published` | 12 | 0 | 0 | vulnerability_introduced_date MUST NOT be after vuln_published_date |
+| ✅ | MUST | 4.4.1 | `false-only-when-auto-provider` | 12 | 0 | 0 | existing_deployments_remain_vulnerable=false ONLY when automatic+provider_only |
+| ✅ | MUST | 4.4.2 | `no-fix-no-provider-fix-date` | 12 | 0 | 0 | no_fix_available -> provider_fix_date MUST be absent |
+| ✅ | MUST | 8.2 | `provider-only-fix-not-vulnerable` | 12 | 0 | 0 | provider_only + fix_date -> existing_deployments_remain_vulnerable MUST be false |
+| ✅ | MUST | 4.4.3 | `sequence-unique-contiguous` | 12 | 0 | 0 | remediation_actions sequence MUST be unique and contiguous from 1 |
+| ✅ | MUST | 4.4.3 | `downtime-range-when-required` | 12 | 0 | 0 | estimated_downtime_range_seconds REQUIRED when requires_downtime=true |
+| ✅ | MUST | 4.4.3 | `compensating-only-means-affected` | 12 | 0 | 0 | All compensating actions -> vex_status MUST be affected |
+| ✅ | MUST | 9.1 | `remediation-actions-present` | 12 | 0 | 0 | At least one remediation_actions for vex_status=affected or fixed |
+| ✅ | MUST | 4.5.1 | `auto-upgrade-false-means-vulnerable` | 12 | 0 | 0 | auto_upgrade=false -> existing_deployments_remain_vulnerable MUST be true |
+| ⚠️ | SHOULD | 4.6 | `detection-recommended` | 8 | 0 | 4 | vex_status=affected or fixed SHOULD include >=1 detection entry |
+| ✅ | MUST | 4.6.3 | `misconfiguration-detection-for-opt-in` | 12 | 0 | 0 | opt_in or config_change MUST include misconfiguration-phase detection (placeholder with pending_reason accepted) |
+| ✅ | MUST | 4.6.4 | `pending-reason-enum` | 12 | 0 | 0 | pending_reason MUST be a valid enum value when present |
+| ✅ | MUST | 4.6.4 | `pending-reason-empty-query` | 12 | 0 | 0 | query MUST be empty string when pending_reason is set |
+| ✅ | MUST | 4.6.4 | `no-empty-query-without-pending` | 12 | 0 | 0 | functional detection with empty query requires pending_reason |
+| ✅ | MUST | 4.1.2 | `vector-string-parseable` | 12 | 0 | 0 | vectorString MUST be a parseable CRIT vector with valid known metrics |
+| ✅ | MUST | 4.1.2 | `vector-provider-matches` | 12 | 0 | 0 | CP metric MUST match record provider field |
+| ✅ | MUST | 4.1.2 | `vector-vex-matches` | 12 | 0 | 0 | VS metric MUST match record vex_status field |
+| ✅ | MUST | 4.1.2 | `vector-propagation-matches` | 12 | 0 | 0 | FP metric MUST match record fix_propagation field |
+| ✅ | MUST | 4.1.2 | `vector-responsibility-matches` | 12 | 0 | 0 | SR metric MUST match record shared_responsibility field |
+| ✅ | MUST | 4.1.2 | `vector-lifecycle-matches` | 12 | 0 | 0 | RL metric MUST match record resource_lifecycle field |
+| ✅ | MUST | 4.1.2 | `vector-existing-vuln-matches` | 12 | 0 | 0 | EV metric MUST match record existing_deployments_remain_vulnerable field |
+| ✅ | MUST | 4.1.2 | `vector-qualifiers-match` | 12 | 0 | 0 | vector qualifiers MUST match record vuln_id, service, resource_type |
+| ✅ | MUST | 4.1.2 | `vector-string-canonical` | 12 | 0 | 0 | vectorString MUST match canonical vector computed from record fields |
+| ✅ | MUST | 4.1.2 | `vector-published-matches` | 12 | 0 | 0 | PP epoch MUST match temporal.vuln_published_date converted to UTC epoch |
+| ✅ | MUST | 4.1.2 | `vector-service-avail-matches` | 12 | 0 | 0 | SA epoch MUST match temporal.service_available_date converted to UTC epoch |
+| ✅ | MUST | 4.1.2 | `vector-metrics-order` | 12 | 0 | 0 | registered metrics MUST appear in canonical order CP VS FP SR RL EV PP SA |
+| ✅ | MUST | 4.1.2 | `vector-unknown-tolerated` | 12 | 0 | 0 | consumer MUST NOT reject vectors with unknown metric keys |
+| ✅ | MUST | 4.1.2 | `vector-missing-registered-rejected` | 12 | 0 | 0 | consumer MUST reject vectors missing a registered metric |
 
 ```mermaid
-pie title "AWS — Record Rule Results (473 checks)"
-    "✅ Passed (469)" : 469
+pie title "AWS — Record Rule Results (540 checks)"
+    "✅ Passed (536)" : 536
     "⚠️ Warnings (4)" : 4
 ```
 
@@ -210,8 +212,10 @@ pie title "AWS — Record Rule Results (473 checks)"
 | ✅ | MUST | 4.1 | `dates-iso8601-format` | 8 | 0 | 0 | All date fields in temporal MUST be ISO 8601 full-date (YYYY-MM-DD) |
 | ✅ | MUST | 4.1 | `natural-key-fields-present` | 8 | 0 | 0 | vuln_id, provider, service, resource_type MUST all be non-empty |
 | ✅ | MUST | 4.1.3 | `vuln-id-vector-safe` | 8 | 0 | 0 | vuln_id MUST consist only of ALPHA, DIGIT, '-', '_' and '.' |
-| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 8 | 0 | 0 | scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix |
-| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 8 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id, and MUST NOT repeat vuln_id |
+| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 8 | 0 | 0 | scheme, when present, MUST be a valid token; for cve vuln_id MUST match ^CVE-[0-9]{4}-[0-9]{4,}$, for gcve the GCVE-BCP-04 pattern |
+| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 8 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id (cve/gcve ids matching their scheme), and MUST NOT repeat vuln_id |
+| ✅ | MUST | 4.1.6 | `issuer-gna-matches` | 8 | 0 | 0 | for scheme gcve, an issuer of the form GNA-<n> MUST name the GNA ID in vuln_id |
+| ✅ | SHOULD | 4.1.6 | `issuer-gna-form` | 8 | 0 | 0 | for scheme gcve, issuer SHOULD be GNA-<n> |
 | ✅ | MUST | 9.1 | `service-key-lowercase-underscore` | 8 | 0 | 0 | service MUST match ^[a-z][a-z0-9_]*$ |
 | ✅ | MUST | 9.1 | `resource-type-valid-pattern` | 8 | 0 | 0 | resource_type MUST match ^[a-zA-Z][a-zA-Z0-9_/-]*$ |
 | ✅ | MUST | 9.1 | `template-format-matches-provider` | 8 | 0 | 0 | template_format MUST match provider |
@@ -252,8 +256,8 @@ pie title "AWS — Record Rule Results (473 checks)"
 | ✅ | MUST | 4.1.2 | `vector-missing-registered-rejected` | 8 | 0 | 0 | consumer MUST reject vectors missing a registered metric |
 
 ```mermaid
-pie title "Azure — Record Rule Results (344 checks)"
-    "✅ Passed (341)" : 341
+pie title "Azure — Record Rule Results (360 checks)"
+    "✅ Passed (357)" : 357
     "⚠️ Warnings (3)" : 3
 ```
 
@@ -303,8 +307,10 @@ pie title "Azure — Record Rule Results (344 checks)"
 | ✅ | MUST | 4.1 | `dates-iso8601-format` | 5 | 0 | 0 | All date fields in temporal MUST be ISO 8601 full-date (YYYY-MM-DD) |
 | ✅ | MUST | 4.1 | `natural-key-fields-present` | 5 | 0 | 0 | vuln_id, provider, service, resource_type MUST all be non-empty |
 | ✅ | MUST | 4.1.3 | `vuln-id-vector-safe` | 5 | 0 | 0 | vuln_id MUST consist only of ALPHA, DIGIT, '-', '_' and '.' |
-| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 5 | 0 | 0 | scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix |
-| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 5 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id, and MUST NOT repeat vuln_id |
+| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 5 | 0 | 0 | scheme, when present, MUST be a valid token; for cve vuln_id MUST match ^CVE-[0-9]{4}-[0-9]{4,}$, for gcve the GCVE-BCP-04 pattern |
+| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 5 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id (cve/gcve ids matching their scheme), and MUST NOT repeat vuln_id |
+| ✅ | MUST | 4.1.6 | `issuer-gna-matches` | 5 | 0 | 0 | for scheme gcve, an issuer of the form GNA-<n> MUST name the GNA ID in vuln_id |
+| ✅ | SHOULD | 4.1.6 | `issuer-gna-form` | 5 | 0 | 0 | for scheme gcve, issuer SHOULD be GNA-<n> |
 | ✅ | MUST | 9.1 | `service-key-lowercase-underscore` | 5 | 0 | 0 | service MUST match ^[a-z][a-z0-9_]*$ |
 | ✅ | MUST | 9.1 | `resource-type-valid-pattern` | 5 | 0 | 0 | resource_type MUST match ^[a-zA-Z][a-zA-Z0-9_/-]*$ |
 | ✅ | MUST | 9.1 | `template-format-matches-provider` | 5 | 0 | 0 | template_format MUST match provider |
@@ -345,8 +351,8 @@ pie title "Azure — Record Rule Results (344 checks)"
 | ✅ | MUST | 4.1.2 | `vector-missing-registered-rejected` | 5 | 0 | 0 | consumer MUST reject vectors missing a registered metric |
 
 ```mermaid
-pie title "GCP — Record Rule Results (215 checks)"
-    "✅ Passed (213)" : 213
+pie title "GCP — Record Rule Results (225 checks)"
+    "✅ Passed (223)" : 223
     "⚠️ Warnings (2)" : 2
 ```
 
@@ -395,8 +401,10 @@ pie title "GCP — Record Rule Results (215 checks)"
 | ✅ | MUST | 4.1 | `dates-iso8601-format` | 4 | 0 | 0 | All date fields in temporal MUST be ISO 8601 full-date (YYYY-MM-DD) |
 | ✅ | MUST | 4.1 | `natural-key-fields-present` | 4 | 0 | 0 | vuln_id, provider, service, resource_type MUST all be non-empty |
 | ✅ | MUST | 4.1.3 | `vuln-id-vector-safe` | 4 | 0 | 0 | vuln_id MUST consist only of ALPHA, DIGIT, '-', '_' and '.' |
-| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 4 | 0 | 0 | scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix |
-| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 4 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id, and MUST NOT repeat vuln_id |
+| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 4 | 0 | 0 | scheme, when present, MUST be a valid token; for cve vuln_id MUST match ^CVE-[0-9]{4}-[0-9]{4,}$, for gcve the GCVE-BCP-04 pattern |
+| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 4 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id (cve/gcve ids matching their scheme), and MUST NOT repeat vuln_id |
+| ✅ | MUST | 4.1.6 | `issuer-gna-matches` | 4 | 0 | 0 | for scheme gcve, an issuer of the form GNA-<n> MUST name the GNA ID in vuln_id |
+| ✅ | SHOULD | 4.1.6 | `issuer-gna-form` | 4 | 0 | 0 | for scheme gcve, issuer SHOULD be GNA-<n> |
 | ✅ | MUST | 9.1 | `service-key-lowercase-underscore` | 4 | 0 | 0 | service MUST match ^[a-z][a-z0-9_]*$ |
 | ✅ | MUST | 9.1 | `resource-type-valid-pattern` | 4 | 0 | 0 | resource_type MUST match ^[a-zA-Z][a-zA-Z0-9_/-]*$ |
 | ✅ | MUST | 9.1 | `template-format-matches-provider` | 4 | 0 | 0 | template_format MUST match provider |
@@ -437,8 +445,8 @@ pie title "GCP — Record Rule Results (215 checks)"
 | ✅ | MUST | 4.1.2 | `vector-missing-registered-rejected` | 4 | 0 | 0 | consumer MUST reject vectors missing a registered metric |
 
 ```mermaid
-pie title "Cloudflare — Record Rule Results (172 checks)"
-    "✅ Passed (171)" : 171
+pie title "Cloudflare — Record Rule Results (180 checks)"
+    "✅ Passed (179)" : 179
     "⚠️ Warnings (1)" : 1
 ```
 
@@ -486,8 +494,10 @@ pie title "Cloudflare — Record Rule Results (172 checks)"
 | ✅ | MUST | 4.1 | `dates-iso8601-format` | 5 | 0 | 0 | All date fields in temporal MUST be ISO 8601 full-date (YYYY-MM-DD) |
 | ✅ | MUST | 4.1 | `natural-key-fields-present` | 5 | 0 | 0 | vuln_id, provider, service, resource_type MUST all be non-empty |
 | ✅ | MUST | 4.1.3 | `vuln-id-vector-safe` | 5 | 0 | 0 | vuln_id MUST consist only of ALPHA, DIGIT, '-', '_' and '.' |
-| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 5 | 0 | 0 | scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix |
-| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 5 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id, and MUST NOT repeat vuln_id |
+| ✅ | MUST | 4.1.4 | `vuln-scheme-consistent` | 5 | 0 | 0 | scheme, when present, MUST be a valid token; for cve vuln_id MUST match ^CVE-[0-9]{4}-[0-9]{4,}$, for gcve the GCVE-BCP-04 pattern |
+| ✅ | MUST | 4.1.5 | `aliases-well-formed` | 5 | 0 | 0 | aliases MUST be unique, have a valid scheme and non-empty id (cve/gcve ids matching their scheme), and MUST NOT repeat vuln_id |
+| ✅ | MUST | 4.1.6 | `issuer-gna-matches` | 5 | 0 | 0 | for scheme gcve, an issuer of the form GNA-<n> MUST name the GNA ID in vuln_id |
+| ✅ | SHOULD | 4.1.6 | `issuer-gna-form` | 5 | 0 | 0 | for scheme gcve, issuer SHOULD be GNA-<n> |
 | ✅ | MUST | 9.1 | `service-key-lowercase-underscore` | 5 | 0 | 0 | service MUST match ^[a-z][a-z0-9_]*$ |
 | ✅ | MUST | 9.1 | `resource-type-valid-pattern` | 5 | 0 | 0 | resource_type MUST match ^[a-zA-Z][a-zA-Z0-9_/-]*$ |
 | ✅ | MUST | 9.1 | `template-format-matches-provider` | 5 | 0 | 0 | template_format MUST match provider |
@@ -528,8 +538,8 @@ pie title "Cloudflare — Record Rule Results (172 checks)"
 | ✅ | MUST | 4.1.2 | `vector-missing-registered-rejected` | 5 | 0 | 0 | consumer MUST reject vectors missing a registered metric |
 
 ```mermaid
-pie title "Oracle — Record Rule Results (215 checks)"
-    "✅ Passed (212)" : 212
+pie title "Oracle — Record Rule Results (225 checks)"
+    "✅ Passed (222)" : 222
     "⚠️ Warnings (3)" : 3
 ```
 
@@ -634,4 +644,4 @@ pie title "Oracle — Record Rule Results (215 checks)"
 
 *Generated by `crit-test` from [draft-vulnetix-crit-00](../drafts/draft-vulnetix-crit-00.xml)*
 
-<!-- sha256: 46547f2eff6d063842fb125d708d83cceaa1c4b43a7eb30e7f3338f6d7b7e068 -->
+<!-- sha256: b9503dfbd75afb8f54c25e401f5194609854f30da0a1669d3d131ae1aaac18d3 -->

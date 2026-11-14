@@ -35,32 +35,18 @@
     "scheme": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9_-]*$",
-      "description": "Identifier namespace of vuln_id (e.g., cve, gcve, ghsa, osv). Optional."
+      "description": "Identifier namespace of vuln_id. An open token; well-known values are cve, gcve, ghsa and osv (draft-vulnetix-crit-04, Well-Known Identifier Schemes). Unknown values are opaque. Optional."
     },
     "issuer": {
       "type": "string",
       "minLength": 1,
-      "description": "Authority that assigned vuln_id (e.g., a CNA, a GCVE Numbering Authority, or a feed). Informational; not part of the natural key. Optional."
+      "description": "Authority that assigned vuln_id (e.g., a CNA, a GCVE Numbering Authority, or a feed). For scheme gcve, SHOULD be GNA-<n> where <n> is the GNA ID in vuln_id. Informational; not part of the natural key. Optional."
     },
     "aliases": {
       "type": "array",
       "uniqueItems": true,
-      "description": "Other identifiers for the same vulnerability. Not part of the natural key. Optional.",
-      "items": {
-        "type": "object",
-        "required": ["scheme", "id"],
-        "additionalProperties": false,
-        "properties": {
-          "scheme": {
-            "type": "string",
-            "pattern": "^[a-z][a-z0-9_-]*$"
-          },
-          "id": {
-            "type": "string",
-            "minLength": 1
-          }
-        }
-      }
+      "description": "Other identifiers for the same vulnerability. Carried in the JSON form only, never in vectorString, so ids are not limited to the vector character set. Not part of the natural key. Optional.",
+      "items": { "$ref": "#/$defs/alias" }
     },
     "provider": {
       "enum": [
@@ -135,7 +121,45 @@
     },
     "provider_advisory": { "$ref": "#/$defs/provider_advisory" }
   },
+  "allOf": [
+    {
+      "if": { "required": ["scheme"], "properties": { "scheme": { "const": "cve" } } },
+      "then": { "properties": { "vuln_id": { "pattern": "^CVE-[0-9]{4}-[0-9]{4,}$" } } }
+    },
+    {
+      "$comment": "GCVE-BCP-04 pattern ^GCVE-[0-9]+-[\\x22-\\x7E]+$ (max 255) intersected with the vector character set ^[A-Za-z0-9._-]+$.",
+      "if": { "required": ["scheme"], "properties": { "scheme": { "const": "gcve" } } },
+      "then": { "properties": { "vuln_id": { "pattern": "^GCVE-[0-9]+-[A-Za-z0-9._-]+$", "maxLength": 255 } } }
+    }
+  ],
   "$defs": {
+    "alias": {
+      "type": "object",
+      "required": ["scheme", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "scheme": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_-]*$"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The identifier exactly as its authority assigned it. Only the cve and gcve schemes constrain its syntax."
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "scheme": { "const": "cve" } } },
+          "then": { "properties": { "id": { "pattern": "^CVE-[0-9]{4}-[0-9]{4,}$" } } }
+        },
+        {
+          "$comment": "GCVE-BCP-04 (https://gcve.eu/bcp/gcve-bcp-04/).",
+          "if": { "properties": { "scheme": { "const": "gcve" } } },
+          "then": { "properties": { "id": { "pattern": "^GCVE-[0-9]+-[\\x22-\\x7E]+$", "maxLength": 255 } } }
+        }
+      ]
+    },
     "temporal": {
       "type": "object",
       "required": ["vuln_published_date", "service_available_date"],

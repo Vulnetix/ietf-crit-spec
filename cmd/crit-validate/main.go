@@ -42,7 +42,14 @@ type CVERecord struct {
 	DataVersion string      `json:"dataVersion"`
 	CVEMetadata CVEMetadata `json:"cveMetadata"`
 	Containers  Containers  `json:"containers"`
-	FilePath    string      `json:"-"`
+	// XGCVE is the GCVE-BCP-05 extension object, present on records in the
+	// GCVE Vulnerability Format. Its vulnId is the record's GCVE identifier.
+	XGCVE    []GCVEObject `json:"x_gcve,omitempty"`
+	FilePath string       `json:"-"`
+}
+
+type GCVEObject struct {
+	VulnID string `json:"vulnId"`
 }
 
 type CVEMetadata struct {
@@ -508,14 +515,24 @@ func defineRules(dict DictionaryLookup) []Rule {
 		},
 		{
 			Section: "10.1.1", Name: "x-crit-vuln-id-matches-cve",
-			Requirement: "Each x_crit entry vuln_id MUST match cveMetadata.cveId",
+			Requirement: "Each x_crit entry vuln_id MUST match cveMetadata.cveId, or the x_gcve vulnId of a GCVE-BCP-05 record",
 			Check: func(rec *CVERecord) (bool, string) {
 				vvd := findADP(rec)
 				if vvd == nil {
 					return true, ""
 				}
 				for i, cr := range vvd.XCrit {
-					if cr.VulnID != rec.CVEMetadata.CVEID {
+					if cr.VulnID == rec.CVEMetadata.CVEID {
+						continue
+					}
+					matched := false
+					for _, g := range rec.XGCVE {
+						if g.VulnID != "" && cr.VulnID == g.VulnID {
+							matched = true
+							break
+						}
+					}
+					if !matched {
 						return false, fmt.Sprintf("x_crit[%d].vuln_id=%q != cveId=%q", i, cr.VulnID, rec.CVEMetadata.CVEID)
 					}
 				}
@@ -578,7 +595,7 @@ func defineRules(dict DictionaryLookup) []Rule {
 		},
 		{
 			Section: "4.1.4", Name: "x-crit-vuln-scheme-consistent",
-			Requirement: "Each x_crit entry scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix",
+			Requirement: "Each x_crit entry scheme, when present, MUST be a valid token; for cve/gcve, vuln_id MUST match the scheme's syntax (GCVE-BCP-04 for gcve)",
 			Check: func(rec *CVERecord) (bool, string) {
 				vvd := findADP(rec)
 				if vvd == nil {
@@ -602,6 +619,22 @@ func defineRules(dict DictionaryLookup) []Rule {
 				}
 				for i, cr := range vvd.XCrit {
 					if err := critspec.CheckAliases(cr.Aliases, cr.VulnID); err != nil {
+						return false, fmt.Sprintf("x_crit[%d]: %v", i, err)
+					}
+				}
+				return true, ""
+			},
+		},
+		{
+			Section: "4.1.6", Name: "x-crit-issuer-gna-matches",
+			Requirement: "For scheme gcve, an x_crit entry issuer of the form GNA-<n> MUST name the GNA ID in vuln_id",
+			Check: func(rec *CVERecord) (bool, string) {
+				vvd := findADP(rec)
+				if vvd == nil {
+					return true, ""
+				}
+				for i, cr := range vvd.XCrit {
+					if err := critspec.CheckIssuer(cr.Scheme, cr.Issuer, cr.VulnID); err != nil {
 						return false, fmt.Sprintf("x_crit[%d]: %v", i, err)
 					}
 				}
