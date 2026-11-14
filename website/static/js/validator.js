@@ -399,10 +399,13 @@
       }
       xc.forEach((critRec, ri) => {
         const result = validateRecord(critRec);
-        if (cveId && critRec.vuln_id !== cveId) {
+        // GCVE-BCP-05 records carry their GCVE id in x_gcve[].vulnId; vuln_id
+        // may equal either that or cveMetadata.cveId.
+        const gcveIds = (Array.isArray(rec.x_gcve) ? rec.x_gcve : []).map((g) => g && g.vulnId).filter(Boolean);
+        if (cveId && critRec.vuln_id !== cveId && !gcveIds.includes(critRec.vuln_id)) {
           result.errors.unshift({
             rule: 'vuln_id_match',
-            detail: `x_crit[${ri}].vuln_id="${critRec.vuln_id}" but cveMetadata.cveId="${cveId}"`,
+            detail: `x_crit[${ri}].vuln_id="${critRec.vuln_id}" but cveMetadata.cveId="${cveId}"${gcveIds.length ? ` and x_gcve vulnId="${gcveIds.join('", "')}"` : ''}`,
           });
         }
         out.perRecord.push({ adpIndex: ai, xcritIndex: ri, vulnId: critRec.vuln_id, ...result });

@@ -12,7 +12,10 @@ metadata an operator needs to act on it.
 | Field | Required | Notes |
 |---|---|---|
 | `vectorString` | yes | Canonical CVSS-style encoding of the other identity fields. Always recomputable from the structured fields; reviewers verify by round-trip. |
-| `vuln_id` | yes | CVE-YYYY-NNNN, GHSA-xxxx, or vendor-issued bulletin ID (HCSEC-YYYY-NN, ALAS-YYYY-NNNN, etc.). |
+| `vuln_id` | yes | Primary identifier in any namespace: `CVE-2024-6387`, `GCVE-110-CLOUD-2022-0025`, a GHSA id, or a vendor-issued id. MUST use only `A-Z a-z 0-9 - _ .`, because it is carried in the vector string, which has no escaping. |
+| `scheme` | no | Namespace of `vuln_id`. Open token (`^[a-z][a-z0-9_-]*$`); well-known values `cve`, `gcve`, `ghsa`, `osv`. For `cve` and `gcve` the id syntax is enforced (GCVE: GCVE-BCP-04 pattern). |
+| `issuer` | no | Authority that assigned `vuln_id`. For `gcve`, `GNA-<n>` matching the GNA ID in the id (e.g. `GNA-110`). |
+| `aliases` | no | Other ids for the same vulnerability as `{ "scheme", "id" }` objects. JSON only, never in the vector, so ids may contain `:` `/` `#` etc. MUST NOT repeat `vuln_id`. |
 | `provider` | yes | Spec-registered cloud provider (`aws`, `azure`, `gcp`, …). |
 | `service` | yes | Provider-namespaced service slug (`ec2`, `eks`, `kubernetes_service`, …). |
 | `resource_type` | yes | `instance`, `cluster`, `bucket`, `function`, etc. |

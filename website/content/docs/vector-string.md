@@ -39,6 +39,12 @@ After the `#`: three positional colon-separated values —
 `vuln_id`, `service`, `resource_type` — exactly mirroring the
 record's natural key.
 
+Qualifier values are limited to `A-Z a-z 0-9 - _ .`. The grammar has
+no escape or percent-encoding, so an identifier with other characters
+(for example a GCVE id containing `:`) cannot be the `vuln_id`; it goes
+in `aliases`, which live in the JSON record only and never appear in
+the vector. `scheme` and `issuer` are likewise not carried.
+
 ## Code → value tables
 
 ### `CP` — provider

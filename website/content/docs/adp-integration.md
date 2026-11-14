@@ -37,7 +37,12 @@ enrichment of a CNA's CVE. CRIT lives there as `x_crit`.
 
 - `cveMetadata.state` MUST be `PUBLISHED` for any record carrying
   `x_crit`. The validator checks this.
-- Every `x_crit[i].vuln_id` MUST equal `cveMetadata.cveId`.
+- Every `x_crit[i].vuln_id` MUST equal `cveMetadata.cveId`, or, in a
+  GCVE-BCP-05 record, the GCVE id in `x_gcve[].vulnId`. The other
+  identifier SHOULD be listed in `aliases`.
+- GCVE records in the CVE Record Format (GCVE-BCP-05) use this same
+  `x_crit` mapping unchanged, with `scheme: "gcve"` and
+  `issuer: "GNA-<n>"`.
 - Multiple CRIT records per ADP entry are allowed and expected — one
   CVE often affects multiple `(provider, service, resource_type)`
   natural keys (EKS cluster + EC2 instance + Lambda function for
@@ -61,7 +66,7 @@ JSON record. It:
 1. Confirms `dataType == "CVE_RECORD"` and parses the schema version.
 2. Walks `containers.adp[]` looking for entries with `x_crit`.
 3. Validates each `x_crit[i]` against the CRIT record schema.
-4. Cross-checks `vuln_id == cveMetadata.cveId`.
+4. Cross-checks `vuln_id` against `cveMetadata.cveId` (or `x_gcve[].vulnId`).
 5. Recomputes each `vectorString` and asserts byte-equality.
 6. Resolves each natural key against the spec dictionaries.
 

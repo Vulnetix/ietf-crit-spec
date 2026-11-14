@@ -724,15 +724,27 @@ func defineRecordRules() []RecordRule {
 			}
 			return true, ""
 		}},
-		{"4.1.4", "vuln-scheme-consistent", "MUST", "scheme, when present, MUST be a valid token and, for cve/gcve, vuln_id MUST have the matching prefix", func(rec *CRITRecord) (bool, string) {
+		{"4.1.4", "vuln-scheme-consistent", "MUST", "scheme, when present, MUST be a valid token; for cve vuln_id MUST match ^CVE-[0-9]{4}-[0-9]{4,}$, for gcve the GCVE-BCP-04 pattern", func(rec *CRITRecord) (bool, string) {
 			if err := critspec.CheckScheme(rec.Scheme, rec.VulnID); err != nil {
 				return false, err.Error()
 			}
 			return true, ""
 		}},
-		{"4.1.5", "aliases-well-formed", "MUST", "aliases MUST be unique, have a valid scheme and non-empty id, and MUST NOT repeat vuln_id", func(rec *CRITRecord) (bool, string) {
+		{"4.1.5", "aliases-well-formed", "MUST", "aliases MUST be unique, have a valid scheme and non-empty id (cve/gcve ids matching their scheme), and MUST NOT repeat vuln_id", func(rec *CRITRecord) (bool, string) {
 			if err := critspec.CheckAliases(rec.Aliases, rec.VulnID); err != nil {
 				return false, err.Error()
+			}
+			return true, ""
+		}},
+		{"4.1.6", "issuer-gna-matches", "MUST", "for scheme gcve, an issuer of the form GNA-<n> MUST name the GNA ID in vuln_id", func(rec *CRITRecord) (bool, string) {
+			if err := critspec.CheckIssuer(rec.Scheme, rec.Issuer, rec.VulnID); err != nil {
+				return false, err.Error()
+			}
+			return true, ""
+		}},
+		{"4.1.6", "issuer-gna-form", "SHOULD", "for scheme gcve, issuer SHOULD be GNA-<n>", func(rec *CRITRecord) (bool, string) {
+			if !critspec.IssuerRecommended(rec.Scheme, rec.Issuer) {
+				return false, fmt.Sprintf("issuer %q is not of the form GNA-<n>", rec.Issuer)
 			}
 			return true, ""
 		}},
